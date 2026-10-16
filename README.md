@@ -8,4 +8,36 @@ Platforms: Android, iOS, macOS, Windows. No web.
 - Build spec and ticket backlog for the coding agent: [docs/build-spec.md](docs/build-spec.md)
 - Rules for the coding agent: [CLAUDE.md](CLAUDE.md)
 
-Status: pre-production (ticket T-00 done; next is T-01, the workspace scaffold).
+## Toolchain (pinned)
+
+| Tool | Version |
+| --- | --- |
+| Flutter | 3.47.7 (stable) |
+| Dart | 3.13.5 (bundled with Flutter) |
+| Melos | 8.9.0 |
+
+CI (`.github/workflows/ci.yml`, `build.yml`) uses the same Flutter version.
+
+## Layout
+
+```
+packages/lk_rules     pure Dart rules engine (state, reducer, Yuan AI, seeded RNG)
+packages/lk_content   content parser and validator (bin/validate.dart)
+apps/game             Flutter app; all content JSON in apps/game/assets/content
+tools/sim             headless balance simulator and text-mode player
+```
+
+## Commands
+
+```bash
+dart pub global activate melos 8.9.0   # once; puts `melos` in ~/.pub-cache/bin
+melos bootstrap
+melos run analyze
+melos run test
+melos run generate                     # regenerate freezed / json_serializable code
+dart run packages/lk_content/bin/validate.dart
+dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
+dart run tools/sim/bin/sim.dart --play --mission ch1_m2
+```
+
+Status: M0/M1 in progress (see the ticket backlog in the build spec).

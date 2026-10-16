@@ -1,0 +1,21 @@
+# OS and editors
+.DS_Store
+.idea/
+*.iml
+.vscode/
+
+# Dart and Flutter
+.dart_tool/
+build/
+coverage/
+.flutter-plugins-dependencies
+
+# Simulator reports
+tools/sim/reports/
+
+# Secrets never go in git (build-spec section 10)
+*.jks
+*.keystore
+key.properties
+*.p12
+*.mobileprovision

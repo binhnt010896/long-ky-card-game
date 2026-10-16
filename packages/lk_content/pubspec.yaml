@@ -1,0 +1,15 @@
+name: lk_content
+description: Content models, parser and validator for Long Ký - The Game.
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  lk_rules: any
+
+dev_dependencies:
+  lints: 6.1.0
+  test: 1.31.1
