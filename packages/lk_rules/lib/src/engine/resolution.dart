@@ -1,6 +1,8 @@
 import '../balance.dart';
+import '../model/defs.dart';
 import '../model/enums.dart';
 import '../model/game_state.dart';
+import 'combat.dart';
 import 'evacuation.dart';
 import 'events.dart';
 import 'orders.dart';
@@ -28,6 +30,7 @@ void runResolution(Tx tx) {
   final ctx = ResolutionContext({for (final e in tx.s.nodes.entries) e.key: e.value.controller});
   resolveDaiVietOrders(tx, ctx);
   resolveYuanMoves(tx, ctx);
+  resolveBattles(tx, ctx);
   resolveRaids(tx, ctx);
   updateNodeControl(tx);
 }
@@ -86,12 +89,23 @@ void _rally(Tx tx, String officerId) {
   tx.emit(Rallied(officerId, nodeId, gained));
 }
 
-/// Step 2: Yuan moves, in army-id order.
+/// Step 2: Yuan moves, in army-id order. Crossing an ambushed edge triggers
+/// the ambush first; if the ambusher wins, the army stays where it was.
 void resolveYuanMoves(Tx tx, ResolutionContext ctx) {
   for (final id in tx.activeArmyIds()) {
     final to = tx.army(id).intent?.moveTo;
     if (to == null) continue;
     final from = tx.army(id).nodeId;
+    final key = edgeKey(from, to);
+    final ambush = tx.s.ambushes.where((a) {
+      if (a.edge != key || !tx.isActiveOfficer(a.officerId)) return false;
+      final o = tx.officer(a.officerId);
+      return !o.withdrawn && (o.nodeId == from || o.nodeId == to);
+    }).firstOrNull;
+    if (ambush != null) {
+      tx.s = tx.s.copyWith(ambushes: [...tx.s.ambushes]..remove(ambush));
+      if (resolveAmbush(tx, ctx, ambush, id, from)) continue;
+    }
     tx.updateArmy(id, (a) => a.copyWith(nodeId: to));
     ctx.movedArmies.add(id);
     tx.emit(ArmyMoved(id, from, to, MoveReason.intent));
