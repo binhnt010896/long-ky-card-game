@@ -1,0 +1,124 @@
+[
+  {
+    "id": "vuon-khong-nha-trong",
+    "type": "stratagem",
+    "name": { "vi": "Vườn không nhà trống", "en": "Empty Gardens, Empty Houses" },
+    "text": {
+      "vi": "Sơ tán một nút đang giữ: thu hết lương còn ở đó. Quân Nguyên cướp lương ở nút này sẽ không được gì.",
+      "en": "Evacuate a node you hold and take in its remaining rice. Foraging there yields nothing."
+    },
+    "cost": { "rice": 0, "support": 2 },
+    "target": "ownNode",
+    "conditions": [],
+    "effects": [ { "op": "evacuateNode", "target": "$node" } ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/vuon-khong-nha-trong.png",
+    "sourceRefs": ["vietjack-sbt7-p48"],
+    "todo": ["en text drafted from vi, needs review."]
+  },
+  {
+    "id": "lui-binh-bao-toan",
+    "type": "stratagem",
+    "name": { "vi": "Lui binh bảo toàn", "en": "Withdraw to Preserve the Army" },
+    "text": {
+      "vi": "Rút một tướng lui một chặng về phía vua, không mất quân. Tướng đó không giao chiến trong lượt này.",
+      "en": "Withdraw an officer one step toward the king with no troop loss. They fight no battle this turn."
+    },
+    "cost": { "rice": 1, "support": 0 },
+    "target": "ownOfficer",
+    "conditions": [],
+    "effects": [ { "op": "withdrawOfficer", "target": "$officer" } ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/lui-binh-bao-toan.png",
+    "sourceRefs": ["luatminhkhue-ba-lan-khang-chien"],
+    "todo": ["en name and text drafted from vi, need review.", "longKyEventId: assumed to be the 1258 war event."]
+  },
+  {
+    "id": "phuc-kich-ben-song",
+    "type": "stratagem",
+    "name": { "vi": "Phục kích bến sông", "en": "Ambush at the River Landing" },
+    "text": {
+      "vi": "Đặt phục binh trên một khúc sông. Nếu quân Nguyên vượt qua trong lượt này, tướng có Võ cao nhất ở một đầu khúc sông sẽ đánh úp.",
+      "en": "Set an ambush on a river edge. If a Yuan army crosses it this turn, your highest-War officer at either end strikes."
+    },
+    "cost": { "rice": 2, "support": 0 },
+    "target": "riverEdge",
+    "conditions": [],
+    "effects": [ { "op": "placeAmbush", "target": "$edge" } ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/phuc-kich-ben-song.png",
+    "sourceRefs": ["vietjack-sbt7-p48"],
+    "todo": [
+      "sourceRefs: no source in the docs covers river ambushes in 1258; the general war source is a placeholder. History reviewer to supply one.",
+      "en name and text drafted from vi, need review.",
+      "longKyEventId: assumed to be the 1258 war event."
+    ]
+  },
+  {
+    "id": "phan-cong",
+    "type": "stratagem",
+    "name": { "vi": "Phản công", "en": "Counterattack" },
+    "text": {
+      "vi": "Nhân đôi Sức mạnh của một tướng trong trận kế tiếp, nếu quân địch khi đó còn dưới một nửa Lương thảo.",
+      "en": "Double one officer's Power in their next battle, if the enemy army is below half its Supply."
+    },
+    "cost": { "rice": 2, "support": 1 },
+    "target": "ownOfficer",
+    "conditions": [],
+    "effects": [
+      { "op": "powerMultiplier", "target": "$officer", "value": 2.0, "duration": "nextBattle", "enemySupplyBelow": 0.5 }
+    ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/phan-cong.png",
+    "sourceRefs": ["loigiaihay-tbd7-p19"],
+    "todo": ["en text drafted from vi, needs review.", "longKyEventId: assumed to be the 1258 war event."]
+  },
+  {
+    "id": "su-gia-phuong-bac",
+    "type": "event",
+    "name": { "vi": "Sứ giả phương Bắc", "en": "Envoys from the North" },
+    "text": {
+      "vi": "Khước từ: Dân +1. Chấp thuận: bỏ lượt Ra lệnh này, Triều đình −2.",
+      "en": "Refuse: People +1. Accept: skip this turn's Orders, Court −2."
+    },
+    "cost": { "rice": 0, "support": 0 },
+    "target": "none",
+    "conditions": [],
+    "effects": [
+      {
+        "op": "choice",
+        "options": [
+          {
+            "label": { "vi": "Khước từ", "en": "Refuse" },
+            "effects": [ { "op": "modUnity", "pillar": "people", "delta": 1 } ]
+          },
+          {
+            "label": { "vi": "Chấp thuận", "en": "Accept" },
+            "effects": [ { "op": "skipTurn" }, { "op": "modUnity", "pillar": "court", "delta": -2 } ]
+          }
+        ]
+      }
+    ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/su-gia-phuong-bac.png",
+    "sourceRefs": ["vietjack-ls11-p50", "wikipedia-tran-thai-tong"],
+    "todo": [
+      "Event narration (what the envoys said) is not in section 5; only the mechanical text is written.",
+      "en name and text drafted from vi, need review."
+    ]
+  },
+  {
+    "id": "nang-nong",
+    "type": "event",
+    "name": { "vi": "Nắng nóng", "en": "Heat" },
+    "text": { "vi": "Mọi đạo quân Nguyên mất 1 đơn vị quân.", "en": "Every Yuan army loses 1 troop." },
+    "cost": { "rice": 0, "support": 0 },
+    "target": "none",
+    "conditions": [],
+    "effects": [ { "op": "modArmy", "target": "allArmies", "field": "troops", "delta": -1 } ],
+    "longKyEventId": "khang-chien-mong-co-lan-mot",
+    "art": "cards/nang-nong.png",
+    "sourceRefs": ["weaponsandwarfare-mongol-vietnam"],
+    "todo": ["en text drafted from vi, needs review.", "longKyEventId: assumed to be the 1258 war event."]
+  }
+]

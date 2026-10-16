@@ -1,0 +1,139 @@
+{
+  "id": "ch1_m3",
+  "chapter": 1,
+  "order": 3,
+  "title": {
+    "vi": "Bỏ ngỏ Thăng Long",
+    "en": "Leaving Thăng Long Open"
+  },
+  "briefing": {
+    "vi": "Mục tiêu: trụ vững đủ 6 lượt và đến cuối nhiệm vụ, quân Nguyên còn không quá một phần tư Lương thảo.",
+    "en": "Goal: hold out for 6 turns, ending with the Yuan army at no more than a quarter of its Supply."
+  },
+  "debrief": {
+    "vi": "Kết thúc nhiệm vụ Bỏ ngỏ Thăng Long.",
+    "en": "End of the mission Leaving Thăng Long Open."
+  },
+  "map": "ch1",
+  "seasonTurns": 6,
+  "heatStartTurn": 5,
+  "start": {
+    "rice": 3,
+    "support": 6,
+    "unity": {
+      "court": 5,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "thang-long",
+      "troops": 12
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "thang-long",
+      "troops": 6
+    },
+    {
+      "officerId": "le-phu-tran",
+      "nodeId": "thang-long",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-nhat-hieu",
+      "nodeId": "thang-long",
+      "troops": 4
+    },
+    {
+      "officerId": "tran-khanh-du",
+      "nodeId": "phu-lo",
+      "troops": 8
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "binh-le-nguyen",
+      "troops": 30,
+      "supply": 14,
+      "maxSupply": 20,
+      "morale": 8,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 3
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 2
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 2
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [],
+  "inducements": [],
+  "yuanScript": [],
+  "win": [
+    {
+      "type": "surviveTurns",
+      "turns": 6
+    },
+    {
+      "type": "armySupplyAtMost",
+      "armyId": "mong-co-1258",
+      "fraction": 0.25
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 4
+    },
+    {
+      "type": "noCaptures"
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "m3-tip",
+      "text": {
+        "vi": "Sơ tán các nút trước khi quân Nguyên tới, để họ không cướp được lương.",
+        "en": "Evacuate nodes before the Yuan arrive, so they find no rice to forage."
+      },
+      "highlight": "map"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "loigiaihay-tbd7-p19",
+    "vietjack-sbt7-p48"
+  ],
+  "todo": [
+    "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
+    "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+  ]
+}

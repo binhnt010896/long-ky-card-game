@@ -1,0 +1,161 @@
+{
+  "id": "ch1_m5",
+  "chapter": 1,
+  "order": 5,
+  "title": {
+    "vi": "Đông Bộ Đầu",
+    "en": "Đông Bộ Đầu"
+  },
+  "briefing": {
+    "vi": "Mục tiêu: thắng một trận do bạn chủ động tấn công ở Đông Bộ Đầu khi quân Nguyên còn dưới nửa Lương thảo, hoặc đánh tan họ.",
+    "en": "Goal: win a battle you start at Đông Bộ Đầu while the Yuan are below half Supply, or break their army."
+  },
+  "debrief": {
+    "vi": "Kết thúc nhiệm vụ Đông Bộ Đầu.",
+    "en": "End of the mission Đông Bộ Đầu."
+  },
+  "map": "ch1",
+  "seasonTurns": 6,
+  "heatStartTurn": 1,
+  "start": {
+    "rice": 5,
+    "support": 5,
+    "unity": {
+      "court": 6,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "thien-mac",
+      "troops": 12
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "thien-mac",
+      "troops": 6
+    },
+    {
+      "officerId": "le-phu-tran",
+      "nodeId": "thien-mac",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-nhat-hieu",
+      "nodeId": "thien-mac",
+      "troops": 4
+    },
+    {
+      "officerId": "tran-quoc-tuan",
+      "nodeId": "dong-bo-dau",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-khanh-du",
+      "nodeId": "dong-bo-dau",
+      "troops": 8
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "thang-long",
+      "troops": 24,
+      "supply": 6,
+      "maxSupply": 20,
+      "morale": 5,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 3
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 2
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 2
+    },
+    {
+      "cardId": "phan-cong",
+      "count": 3
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [
+    {
+      "turn": 2,
+      "cardId": "nang-nong"
+    }
+  ],
+  "inducements": [],
+  "yuanScript": [
+    {
+      "turn": 1,
+      "armyId": "mong-co-1258",
+      "intent": "advance",
+      "targetNodeId": "dong-bo-dau"
+    }
+  ],
+  "win": [
+    {
+      "anyOf": [
+        {
+          "type": "counterattackAt",
+          "nodeId": "dong-bo-dau"
+        },
+        {
+          "type": "allArmiesBroken"
+        }
+      ]
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "winByTurn",
+      "turn": 4
+    },
+    {
+      "type": "noCaptures"
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "m5-tip",
+      "text": {
+        "vi": "Phản công khi quân Nguyên còn dưới một nửa Lương thảo: thẻ Phản công nhân đôi Sức mạnh.",
+        "en": "Counterattack once the Yuan are below half Supply: the Counterattack card doubles Power."
+      },
+      "highlight": "hand"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "loigiaihay-tbd7-p19"
+  ],
+  "todo": [
+    "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
+    "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+  ]
+}

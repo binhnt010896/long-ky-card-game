@@ -1,0 +1,174 @@
+{
+  "id": "ch1_m2",
+  "chapter": 1,
+  "order": 2,
+  "title": {
+    "vi": "Bình Lệ Nguyên",
+    "en": "Bình Lệ Nguyên"
+  },
+  "briefing": {
+    "vi": "Mục tiêu: đưa vua tới Sông Lô hoặc Thăng Long trước khi hết lượt 4. Quân Nguyên sẽ đánh Bình Lệ Nguyên ngay lượt đầu.",
+    "en": "Goal: bring the king to the Lô River or Thăng Long by the end of turn 4. The Yuan attack Bình Lệ Nguyên on turn 1."
+  },
+  "debrief": {
+    "vi": "Kết thúc nhiệm vụ Bình Lệ Nguyên.",
+    "en": "End of the mission Bình Lệ Nguyên."
+  },
+  "map": "ch1",
+  "seasonTurns": 4,
+  "heatStartTurn": null,
+  "start": {
+    "rice": 4,
+    "support": 3,
+    "unity": {
+      "court": 6,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "binh-le-nguyen",
+      "troops": 12
+    },
+    {
+      "officerId": "le-phu-tran",
+      "nodeId": "binh-le-nguyen",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "binh-le-nguyen",
+      "troops": 6
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "bach-hac",
+      "troops": 30,
+      "supply": 20,
+      "maxSupply": 20,
+      "morale": 8,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 3
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 2
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 2
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [],
+  "inducements": [],
+  "yuanScript": [
+    {
+      "turn": 1,
+      "armyId": "mong-co-1258",
+      "intent": "assault",
+      "targetNodeId": "binh-le-nguyen"
+    }
+  ],
+  "win": [
+    {
+      "anyOf": [
+        {
+          "type": "kingAt",
+          "nodeId": "song-lo",
+          "turn": 4
+        },
+        {
+          "type": "kingAt",
+          "nodeId": "thang-long",
+          "turn": 4
+        }
+      ]
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "noCaptures"
+    },
+    {
+      "type": "troopsLostAtMost",
+      "value": 10
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "m2-intel",
+      "text": {
+        "vi": "Do thám: mũi tên cho thấy quân Nguyên sẽ tấn công Bình Lệ Nguyên lượt này.",
+        "en": "Intel: the arrow shows the Yuan will attack Bình Lệ Nguyên this turn."
+      },
+      "highlight": "intentArrows"
+    },
+    {
+      "id": "m2-council",
+      "text": {
+        "vi": "Hội nghị: thẻ Lui binh bảo toàn rút một tướng mà không mất quân.",
+        "en": "Council: the card Withdraw to Preserve the Army pulls an officer back with no troop loss."
+      },
+      "highlight": "hand"
+    },
+    {
+      "id": "m2-orders",
+      "text": {
+        "vi": "Ra lệnh: Di chuyển đi một chặng đường bộ, hoặc tối đa hai chặng đường sông.",
+        "en": "Orders: Move goes one land edge, or up to two river edges."
+      },
+      "highlight": "officerStrip"
+    },
+    {
+      "id": "m2-resolution",
+      "text": {
+        "vi": "Giao tranh: xem trước Sức mạnh hai bên. Có những trận không thể thắng.",
+        "en": "Resolution: preview both sides' Power. Some battles cannot be won."
+      },
+      "highlight": "battlePreview"
+    },
+    {
+      "id": "m2-upkeep",
+      "text": {
+        "vi": "Hậu cần: giữ cho vua an toàn đến cuối lượt 4.",
+        "en": "Upkeep: keep the king safe until the end of turn 4."
+      },
+      "highlight": "topBar"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "wikipedia-binh-le-nguyen",
+    "loigiaihay-ls7-cd-b17",
+    "loigiaihay-sbt7-b3-p47"
+  ],
+  "todo": [
+    "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
+    "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+  ]
+}

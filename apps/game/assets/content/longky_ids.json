@@ -1,0 +1,24 @@
+{
+  "generatedFrom": "Hand-made snapshot (Long Ký people.json and events.json are not in this repo); le-phu-tran, tran-nhat-hieu and ngot-luong-hop-thai added 2026-10-16 as agreed for Long Ký. Regenerate with packages/lk_content/bin/build_longky_ids.dart.",
+  "people": [
+    "le-phu-tran",
+    "ngot-luong-hop-thai",
+    "o-ma-nhi",
+    "tran-binh-trong",
+    "tran-hung-dao",
+    "tran-khanh-du",
+    "tran-nhan-tong",
+    "tran-nhat-duat",
+    "tran-nhat-hieu",
+    "tran-quang-khai",
+    "tran-quoc-toan",
+    "tran-thai-tong",
+    "tran-thanh-tong",
+    "tran-thu-do"
+  ],
+  "events": [
+    "bach-dang-1288",
+    "dien-hong-hich-tuong-si",
+    "khang-chien-mong-co-lan-mot"
+  ]
+}

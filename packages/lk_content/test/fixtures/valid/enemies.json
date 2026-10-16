@@ -1,0 +1,10 @@
+[
+  {
+    "id": "khan",
+    "longKyPersonId": null,
+    "name": { "vi": "Hãn", "en": "Khan" },
+    "stats": { "leadership": 9, "war": 9, "intelligence": 7 },
+    "art": { "portrait": "enemies/khan/portrait.png", "card": "enemies/khan/card.png" },
+    "sourceRefs": ["src-a"]
+  }
+]

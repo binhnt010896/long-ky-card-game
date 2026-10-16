@@ -1,0 +1,163 @@
+[
+  {
+    "id": "tran-thai-tong",
+    "longKyPersonId": "tran-thai-tong",
+    "name": { "vi": "Trần Thái Tông", "en": "Trần Thái Tông" },
+    "title": null,
+    "stats": { "leadership": 7, "war": 6, "intelligence": 6, "politics": 8, "loyalty": 10 },
+    "loyaltyLocked": true,
+    "isKing": true,
+    "skill": {
+      "id": "kingPresence",
+      "kind": "passive",
+      "name": { "vi": "Ngự giá thân chinh", "en": "The King in the Field" },
+      "text": {
+        "vi": "Trong trận, mọi đơn vị Đại Việt cùng nút với vua được +1 sĩ khí.",
+        "en": "In battle, every Đại Việt unit at his node gets +1 morale."
+      }
+    },
+    "flaw": {
+      "id": "isKing",
+      "name": { "vi": "Bậc quân vương", "en": "The Sovereign" },
+      "text": { "vi": "Nếu vua bị bắt, nhiệm vụ thất bại.", "en": "If the king is captured, the mission is lost." }
+    },
+    "art": { "portrait": "officers/tran-thai-tong/portrait.png", "card": "officers/tran-thai-tong/card.png" },
+    "sourceRefs": ["loigiaihay-ls7-cd-b17"],
+    "todo": [
+      "title: not given in build-spec section 5.",
+      "skill name from docs/plan.md, not section 5; flaw name is a placeholder; en text drafted from vi, needs review."
+    ]
+  },
+  {
+    "id": "tran-thu-do",
+    "longKyPersonId": "tran-thu-do",
+    "name": { "vi": "Trần Thủ Độ", "en": "Trần Thủ Độ" },
+    "title": { "vi": "Thái sư", "en": "Grand Chancellor" },
+    "stats": { "leadership": 8, "war": 5, "intelligence": 8, "politics": 9, "loyalty": 10 },
+    "loyaltyLocked": true,
+    "isKing": false,
+    "skill": {
+      "id": "dau-than-chua-roi",
+      "kind": "activated",
+      "usesPerMission": 1,
+      "name": { "vi": "Đầu thần chưa rơi", "en": "My Head Has Not Fallen" },
+      "text": { "vi": "Khôi phục Triều đình về tối đa.", "en": "Restore Court to full." },
+      "effects": [ { "op": "setUnity", "pillar": "court", "value": 10 } ]
+    },
+    "flaw": null,
+    "art": { "portrait": "officers/tran-thu-do/portrait.png", "card": "officers/tran-thu-do/card.png" },
+    "sourceRefs": ["vietjack-sbt7-p48"],
+    "todo": ["title and skill text taken from the build-spec section 3 example."]
+  },
+  {
+    "id": "le-phu-tran",
+    "longKyPersonId": "le-phu-tran",
+    "name": { "vi": "Lê Phụ Trần", "en": "Lê Phụ Trần" },
+    "title": null,
+    "stats": { "leadership": 6, "war": 7, "intelligence": 6, "politics": 6, "loyalty": 9 },
+    "loyaltyLocked": true,
+    "isKing": false,
+    "skill": {
+      "id": "shieldKing",
+      "kind": "passive",
+      "name": { "vi": "Ván thuyền che tên", "en": "The Boat-Plank Shield" },
+      "text": {
+        "vi": "Khi cùng nút với vua: vua rút lui thay vì bị bắt; nếu không còn nút trống, Lê Phụ Trần bị bắt thay vua.",
+        "en": "At the king's node: the king withdraws instead of being captured; if no node is free, Lê Phụ Trần is captured in his place."
+      }
+    },
+    "flaw": null,
+    "art": { "portrait": "officers/le-phu-tran/portrait.png", "card": "officers/le-phu-tran/card.png" },
+    "sourceRefs": ["mytour-le-phu-tran"],
+    "todo": [
+      "title: not given in build-spec section 5.",
+      "skill name from docs/plan.md, not section 5; en text drafted from vi, needs review."
+    ]
+  },
+  {
+    "id": "tran-quoc-tuan",
+    "longKyPersonId": "tran-hung-dao",
+    "name": { "vi": "Trần Quốc Tuấn", "en": "Trần Quốc Tuấn" },
+    "title": null,
+    "stats": { "leadership": 9, "war": 8, "intelligence": 10, "politics": 7, "loyalty": 10 },
+    "loyaltyLocked": true,
+    "isKing": false,
+    "skill": {
+      "id": "borderWatch",
+      "kind": "passive",
+      "name": { "vi": "Trấn biên", "en": "Holding the Border" },
+      "text": {
+        "vi": "Khi đứng ở nút biên giới, thấy trước ý đồ của quân Nguyên thêm một lượt.",
+        "en": "On a border node, see the Yuan intents one turn further ahead."
+      }
+    },
+    "flaw": {
+      "id": "troopCap",
+      "value": 6,
+      "name": { "vi": "Chức thấp", "en": "Junior Rank" },
+      "text": { "vi": "Chỉ chỉ huy tối đa 6 đơn vị quân trong Chương 1.", "en": "Commands at most 6 troops in Chapter 1." }
+    },
+    "art": { "portrait": "officers/tran-quoc-tuan/portrait.png", "card": "officers/tran-quoc-tuan/card.png" },
+    "sourceRefs": ["mytour-top7-vi-tuong"],
+    "todo": [
+      "title: not given in build-spec section 5.",
+      "skill and flaw names from docs/plan.md, not section 5; en text drafted from vi, needs review."
+    ]
+  },
+  {
+    "id": "tran-khanh-du",
+    "longKyPersonId": "tran-khanh-du",
+    "name": { "vi": "Trần Khánh Dư", "en": "Trần Khánh Dư" },
+    "title": null,
+    "stats": { "leadership": 7, "war": 9, "intelligence": 7, "politics": 4, "loyalty": 8 },
+    "loyaltyLocked": false,
+    "isKing": false,
+    "skill": {
+      "id": "raider",
+      "kind": "passive",
+      "name": { "vi": "Phiêu Kỵ", "en": "Phiêu Kỵ" },
+      "text": {
+        "vi": "Lệnh Đột kích gây gấp đôi thiệt hại Lương thảo cho quân Nguyên.",
+        "en": "Raid orders deal double Supply damage to the Yuan."
+      }
+    },
+    "flaw": null,
+    "art": { "portrait": "officers/tran-khanh-du/portrait.png", "card": "officers/tran-khanh-du/card.png" },
+    "sourceRefs": ["mytour-top7-vi-tuong"],
+    "todo": [
+      "title: not given in build-spec section 5.",
+      "skill name from docs/plan.md, not section 5; en text drafted from vi, needs review."
+    ]
+  },
+  {
+    "id": "tran-nhat-hieu",
+    "longKyPersonId": "tran-nhat-hieu",
+    "name": { "vi": "Trần Nhật Hiệu", "en": "Trần Nhật Hiệu" },
+    "title": null,
+    "stats": { "leadership": 4, "war": 3, "intelligence": 6, "politics": 6, "loyalty": 5 },
+    "loyaltyLocked": false,
+    "isKing": false,
+    "skill": {
+      "id": "nhap-tong",
+      "kind": "activated",
+      "usesPerMission": 2,
+      "target": "ownNode",
+      "name": { "vi": "Nhập Tống", "en": "Nhập Tống" },
+      "text": {
+        "vi": "Sơ tán một nút đang giữ mà không tốn Lòng dân, sau đó Triều đình −1.",
+        "en": "Evacuate a node you hold at no Support cost, then Court −1."
+      },
+      "effects": [
+        { "op": "evacuateNode", "target": "$node" },
+        { "op": "modUnity", "pillar": "court", "delta": -1 }
+      ]
+    },
+    "flaw": null,
+    "art": { "portrait": "officers/tran-nhat-hieu/portrait.png", "card": "officers/tran-nhat-hieu/card.png" },
+    "sourceRefs": ["znews-10-cau-noi"],
+    "todo": [
+      "title: not given in build-spec section 5.",
+      "en text drafted from vi, needs review."
+    ]
+  }
+]

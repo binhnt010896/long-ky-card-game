@@ -1,0 +1,153 @@
+{
+  "id": "ch1_m4",
+  "chapter": 1,
+  "order": 4,
+  "title": {
+    "vi": "Đầu thần chưa rơi",
+    "en": "My Head Has Not Fallen"
+  },
+  "briefing": {
+    "vi": "Mục tiêu: trụ vững đủ 5 lượt. Triều đình đang lung lay; sứ giả và lời dụ dỗ sẽ thử lòng các tướng.",
+    "en": "Goal: hold out for 5 turns. The Court is wavering; envoys and inducements will test your officers."
+  },
+  "debrief": {
+    "vi": "Kết thúc nhiệm vụ Đầu thần chưa rơi.",
+    "en": "End of the mission My Head Has Not Fallen."
+  },
+  "map": "ch1",
+  "seasonTurns": 5,
+  "heatStartTurn": 3,
+  "start": {
+    "rice": 2,
+    "support": 4,
+    "unity": {
+      "court": 3,
+      "clan": 5,
+      "people": 5
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "thien-mac",
+      "troops": 12
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "thien-mac",
+      "troops": 6
+    },
+    {
+      "officerId": "le-phu-tran",
+      "nodeId": "thien-mac",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-quoc-tuan",
+      "nodeId": "dong-bo-dau",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-nhat-hieu",
+      "nodeId": "dong-bo-dau",
+      "troops": 4
+    },
+    {
+      "officerId": "tran-khanh-du",
+      "nodeId": "phu-lo",
+      "troops": 8
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "thang-long",
+      "troops": 30,
+      "supply": 10,
+      "maxSupply": 20,
+      "morale": 8,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 3
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 2
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 2
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [
+    {
+      "turn": 2,
+      "cardId": "su-gia-phuong-bac"
+    }
+  ],
+  "inducements": [
+    {
+      "turn": 2,
+      "threshold": 8
+    },
+    {
+      "turn": 4,
+      "threshold": 8
+    }
+  ],
+  "yuanScript": [],
+  "win": [
+    {
+      "type": "surviveTurns",
+      "turns": 5
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "noDefections"
+    },
+    {
+      "type": "unityAtLeastAtEnd",
+      "pillar": "court",
+      "value": 7
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "m4-tip",
+      "text": {
+        "vi": "Khi Triều đình xuống thấp, dùng kỹ năng của Trần Thủ Độ để khôi phục.",
+        "en": "When the Court runs low, use Trần Thủ Độ's skill to restore it."
+      },
+      "highlight": "officerStrip"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "vietjack-sbt7-p48"
+  ],
+  "todo": [
+    "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
+    "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+  ]
+}

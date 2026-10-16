@@ -1,0 +1,14 @@
+[
+  {
+    "id": "ngot-luong-hop-thai",
+    "longKyPersonId": "ngot-luong-hop-thai",
+    "name": { "vi": "Ngột Lương Hợp Thai", "en": "Uriyangkhadai" },
+    "title": null,
+    "stats": { "leadership": 9, "war": 9, "intelligence": 7 },
+    "art": { "portrait": "enemies/ngot-luong-hop-thai/portrait.png", "card": "enemies/ngot-luong-hop-thai/card.png" },
+    "sourceRefs": ["vietjack-ls11-p50"],
+    "todo": [
+      "title: not given in build-spec section 5."
+    ]
+  }
+]

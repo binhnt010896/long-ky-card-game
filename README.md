@@ -40,4 +40,4 @@ dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
 dart run tools/sim/bin/sim.dart --play --mission ch1_m2
 ```
 
-Status: M0/M1 in progress (see the ticket backlog in the build spec).
+Status: M0 and M1 (T-01 to T-13) done on branch m0-m1; next is T-14, the app shell.
