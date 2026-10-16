@@ -271,6 +271,768 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không đọc được dữ liệu nguồn.'**
   String get creditsLoadError;
+
+  /// Battle top bar: current turn out of the mission length (the season clock).
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt {turn}/{total}'**
+  String battleTurnClock(int turn, int total);
+
+  /// Screen-reader label of the season clock.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đồng hồ mùa: lượt {turn} trên {total}'**
+  String battleSeasonClockSemantics(int turn, int total);
+
+  /// Turn phase 1.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trinh sát'**
+  String get phaseIntel;
+
+  /// Turn phase 2: play cards.
+  ///
+  /// In vi, this message translates to:
+  /// **'Triều nghị'**
+  String get phaseCouncil;
+
+  /// Turn phase 3: give each officer an order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hạ lệnh'**
+  String get phaseOrders;
+
+  /// Turn phase 4: moves, battles and foraging resolve.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao tranh'**
+  String get phaseResolution;
+
+  /// Turn phase 5.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hậu cần'**
+  String get phaseUpkeep;
+
+  /// The mission is over.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết thúc'**
+  String get phaseEnded;
+
+  /// Player resource: Rice (Lương).
+  ///
+  /// In vi, this message translates to:
+  /// **'Lương'**
+  String get resourceRice;
+
+  /// Player resource: Popular Support (Lòng dân).
+  ///
+  /// In vi, this message translates to:
+  /// **'Lòng dân'**
+  String get resourceSupport;
+
+  /// Unity pillar: Court.
+  ///
+  /// In vi, this message translates to:
+  /// **'Triều đình'**
+  String get unityCourt;
+
+  /// Unity pillar: Clan.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tông thất'**
+  String get unityClan;
+
+  /// Unity pillar: People.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dân chúng'**
+  String get unityPeople;
+
+  /// Screen-reader label of a Unity gauge.
+  ///
+  /// In vi, this message translates to:
+  /// **'{pillar}: {value} trên 10'**
+  String unitySemantics(String pillar, int value);
+
+  /// Screen-reader label of a Unity gauge below 4.
+  ///
+  /// In vi, this message translates to:
+  /// **'{pillar}: {value} trên 10, thấp'**
+  String unitySemanticsLow(String pillar, int value);
+
+  /// Screen-reader label of Rice or Support.
+  ///
+  /// In vi, this message translates to:
+  /// **'{resource}: {value}'**
+  String resourceSemantics(String resource, int value);
+
+  /// Screen-reader label of the officer strip.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tướng lĩnh'**
+  String get officerStripLabel;
+
+  /// Troops in thousands, short form.
+  ///
+  /// In vi, this message translates to:
+  /// **'{n}k'**
+  String troopsShort(int n);
+
+  /// Troops in thousands, full form.
+  ///
+  /// In vi, this message translates to:
+  /// **'{n}.000 quân'**
+  String troopsFull(int n);
+
+  /// Morale value.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sĩ khí {n}'**
+  String moraleShort(int n);
+
+  /// Officer status.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã đào ngũ'**
+  String get statusDefected;
+
+  /// Officer status.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bị bắt'**
+  String get statusCaptured;
+
+  /// Officer has no order yet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có lệnh'**
+  String get orderNone;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cố thủ'**
+  String get orderHold;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hành quân'**
+  String get orderMove;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sơ tán'**
+  String get orderEvacuate;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tập kích'**
+  String get orderRaid;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phục kích'**
+  String get orderAmbush;
+
+  /// Order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chiêu mộ'**
+  String get orderRally;
+
+  /// An order with its target.
+  ///
+  /// In vi, this message translates to:
+  /// **'{order} → {target}'**
+  String orderWithTarget(String order, String target);
+
+  /// Screen-reader label of an officer tile.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name}, {troops}, {state}'**
+  String officerSemantics(String name, String troops, String state);
+
+  /// Hand of cards header.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài trên tay ({count})'**
+  String handTitle(int count);
+
+  /// Hand is empty.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không còn lá bài nào.'**
+  String get handEmpty;
+
+  /// Compact layout: open the hand drawer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở bài trên tay'**
+  String get handShow;
+
+  /// Compact layout: close the hand drawer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thu bài lại'**
+  String get handHide;
+
+  /// Cards left in the draw pile and the discard pile.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rút: {deck} · Bỏ: {discard}'**
+  String handPiles(int deck, int discard);
+
+  /// Shown while Court is below 4.
+  ///
+  /// In vi, this message translates to:
+  /// **'Triều đình thấp: mỗi lá bài tốn thêm {extra} lòng dân.'**
+  String handCourtSurcharge(int extra);
+
+  /// Card type.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mưu kế'**
+  String get cardTypeStratagem;
+
+  /// Card type.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sự kiện'**
+  String get cardTypeEvent;
+
+  /// Card type.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ý đồ địch'**
+  String get cardTypeIntent;
+
+  /// A card with no cost.
+  ///
+  /// In vi, this message translates to:
+  /// **'Miễn phí'**
+  String get cardFree;
+
+  /// Shown on a card the player cannot pay for.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không đủ để dùng'**
+  String get cardCannotAfford;
+
+  /// Screen-reader label of a card cost.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giá: {rice} lương, {support} lòng dân'**
+  String cardCostSemantics(int rice, int support);
+
+  /// Screen-reader label of a card.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name}, {type}, {cost}'**
+  String cardSemantics(String name, String type, String cost);
+
+  /// Ends Council and moves to Orders.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sang hạ lệnh'**
+  String get phaseButtonCouncil;
+
+  /// Ends Orders and resolves the turn.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chốt lệnh'**
+  String get phaseButtonOrders;
+
+  /// Disabled while a choice is pending.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hãy chọn trước'**
+  String get phaseButtonChoice;
+
+  /// Disabled once the mission has ended.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã kết thúc'**
+  String get phaseButtonEnded;
+
+  /// Disabled while the turn is resolving.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang diễn ra'**
+  String get phaseButtonWait;
+
+  /// Event log title.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhật ký'**
+  String get logTitle;
+
+  /// Open the event log.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở nhật ký'**
+  String get logShow;
+
+  /// Close the event log.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đóng nhật ký'**
+  String get logHide;
+
+  /// Collapse the left log panel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thu nhật ký'**
+  String get logCollapse;
+
+  /// Expand the left log panel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở rộng nhật ký'**
+  String get logExpand;
+
+  /// Empty event log.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa có gì xảy ra.'**
+  String get logEmpty;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt {turn} bắt đầu.'**
+  String logTurnStarted(int turn);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giai đoạn: {phase}.'**
+  String logPhaseChanged(String phase);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng bài {card}.'**
+  String logCardPlayed(String card);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng bài {card} tại {target}.'**
+  String logCardPlayedOn(String card, String target);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} dùng kỹ năng {skill}.'**
+  String logSkillUsed(String officer, String skill);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer}: {order}.'**
+  String logOrderSet(String officer, String order);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer}: bỏ lệnh.'**
+  String logOrderCleared(String officer);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt này bỏ qua giai đoạn hạ lệnh.'**
+  String get logOrdersSkipped;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{unit} đi từ {from} đến {to}.'**
+  String logUnitMoved(String unit, String from, String to);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sơ tán {node}: thu {rice} lương.'**
+  String logNodeEvacuated(String node, int rice);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} chiêu mộ thêm {troops} nghìn quân tại {node}.'**
+  String logRallied(String officer, String node, int troops);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} mai phục tại {edge}.'**
+  String logAmbushPlaced(String officer, String edge);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trận {node}: Đại Việt thắng.'**
+  String logBattleWon(String node);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trận {node}: quân Nguyên thắng.'**
+  String logBattleLost(String node);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trận {node}: không phân thắng bại.'**
+  String logBattleDraw(String node);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} bị bắt tại {node}.'**
+  String logOfficerCaptured(String officer, String node);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{shield} che chắn cho {king}.'**
+  String logKingShielded(String king, String shield);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} tập kích {army}: tiếp tế -{supply}, quân -{troops}k.'**
+  String logRaided(String officer, String army, int supply, int troops);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{army} cướp lương tại {node}: tiếp tế +{supply}.'**
+  String logForaged(String army, String node, int supply);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{node} nay thuộc về {side}.'**
+  String logNodeControl(String node, String side);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{army} tan vỡ.'**
+  String logArmyRouted(String army);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{army} thiếu ăn: sĩ khí -{morale}, quân -{troops}k.'**
+  String logStarvation(String army, int morale, int troops);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{army} hao quân -{troops}k.'**
+  String logAttrition(String army, int troops);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thu {gained} lương, chi {upkeep} lương.'**
+  String logIncome(int gained, int upkeep);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thiếu lương: sĩ khí các tướng giảm.'**
+  String get logIncomeShortfall;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} đã đào ngũ.'**
+  String logDefected(String officer);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{officer} khước từ lời dụ hàng.'**
+  String logInducementResisted(String officer);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cần đưa ra quyết định.'**
+  String get logChoiceRequested;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{pillar}: {from} → {to}.'**
+  String logUnityChanged(String pillar, int from, int to);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'{resource}: {from} → {to}.'**
+  String logResourceChanged(String resource, int from, int to);
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chiến thắng!'**
+  String get logMissionWon;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thất bại.'**
+  String get logMissionLost;
+
+  /// Closes the inspector.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đóng bảng thông tin'**
+  String get inspectorClose;
+
+  /// Terrain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thành'**
+  String get terrainCity;
+
+  /// Terrain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đồng bằng'**
+  String get terrainPlain;
+
+  /// Terrain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sông'**
+  String get terrainRiver;
+
+  /// Terrain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đầm lầy'**
+  String get terrainMarsh;
+
+  /// Terrain.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đồi núi'**
+  String get terrainHill;
+
+  /// Side. A proper name.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đại Việt'**
+  String get sideDaiViet;
+
+  /// Side.
+  ///
+  /// In vi, this message translates to:
+  /// **'quân Nguyên'**
+  String get sideYuan;
+
+  /// Side.
+  ///
+  /// In vi, this message translates to:
+  /// **'không ai'**
+  String get sideNone;
+
+  /// Node flag.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kinh đô'**
+  String get nodeCapital;
+
+  /// Node flag.
+  ///
+  /// In vi, this message translates to:
+  /// **'Biên giới'**
+  String get nodeBorder;
+
+  /// Node flag.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã sơ tán'**
+  String get nodeEvacuated;
+
+  /// Who controls a node.
+  ///
+  /// In vi, this message translates to:
+  /// **'Do {side} kiểm soát'**
+  String nodeControlledBy(String side);
+
+  /// Node rice stock.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kho lương: {n}'**
+  String nodeRiceStock(int n);
+
+  /// Heading of the units standing at a node.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang ở đây'**
+  String get nodeUnits;
+
+  /// No units at a node.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có ai.'**
+  String get nodeNoUnits;
+
+  /// Officer stat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thống'**
+  String get statLeadership;
+
+  /// Officer stat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Võ'**
+  String get statWar;
+
+  /// Officer stat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trí'**
+  String get statIntelligence;
+
+  /// Officer stat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chính'**
+  String get statPolitics;
+
+  /// Officer stat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trung'**
+  String get statLoyalty;
+
+  /// Heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lệnh'**
+  String get inspectorOrder;
+
+  /// Heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kỹ năng'**
+  String get inspectorSkill;
+
+  /// Heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Điểm yếu'**
+  String get inspectorFlaw;
+
+  /// Skill kind.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nội tại'**
+  String get skillPassive;
+
+  /// Uses of an activated skill.
+  ///
+  /// In vi, this message translates to:
+  /// **'Còn {n} lần'**
+  String skillUsesLeft(int n);
+
+  /// Badge on the king.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quân vương'**
+  String get officerIsKing;
+
+  /// Heading of an army.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chủ tướng'**
+  String get inspectorCommander;
+
+  /// Army supply.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiếp tế {supply}/{max}'**
+  String inspectorSupply(int supply, int max);
+
+  /// Heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ý đồ'**
+  String get inspectorIntent;
+
+  /// Yuan intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giữ nguyên'**
+  String get intentHold;
+
+  /// Yuan intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiến quân'**
+  String get intentAdvance;
+
+  /// Yuan intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tấn công'**
+  String get intentAssault;
+
+  /// Yuan intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cướp lương'**
+  String get intentForage;
+
+  /// Yuan intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rút lui'**
+  String get intentRetreat;
+
+  /// Yuan intent not known yet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa rõ'**
+  String get intentUnknown;
+
+  /// An intent with its destination.
+  ///
+  /// In vi, this message translates to:
+  /// **'{intent} → {node}'**
+  String intentToward(String intent, String node);
+
+  /// A predicted intent.
+  ///
+  /// In vi, this message translates to:
+  /// **'Lượt sau: {intent}'**
+  String intentPredicted(String intent);
+
+  /// Army status.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tan vỡ'**
+  String get armyRouted;
+
+  /// Names an army by its commander.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quân của {commander}'**
+  String armyOf(String commander);
 }
 
 class _AppLocalizationsDelegate

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lk_content/lk_content.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../data/content_repository.dart';
-import 'board/battle_board.dart';
-import 'board/board_scene.dart';
+import 'battle_cubit.dart';
+import 'battle_screen.dart';
 
-/// Debug-only screen that draws the start state of a mission, until the
-/// full battle screen exists (T-16, T-17).
+/// Debug-only route: the battle screen on a mission's start state, until the
+/// briefing hands over a real mission (T-17, T-18).
 class BoardPreviewScreen extends StatefulWidget {
   const BoardPreviewScreen({super.key, this.missionId = 'ch1_m2', this.seed = 1, this.bundle});
 
@@ -21,53 +22,29 @@ class BoardPreviewScreen extends StatefulWidget {
 }
 
 class _BoardPreviewScreenState extends State<BoardPreviewScreen> {
-  late final Future<(Ruleset, GameState)> _loaded = _load();
-  Selection? _selection;
+  late final Future<Ruleset> _loaded = _load();
 
-  Future<(Ruleset, GameState)> _load() async {
+  Future<Ruleset> _load() async {
     final ContentBundle content = await loadContentFromAssets(widget.bundle ?? rootBundle);
-    final ruleset = content.ruleset(widget.missionId);
-    return (ruleset, GameEngine(ruleset).newGame(widget.seed).state);
+    return content.ruleset(widget.missionId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final lang = Localizations.localeOf(context).languageCode;
-    return Scaffold(
-      body: FutureBuilder<(Ruleset, GameState)>(
-        future: _loaded,
-        builder: (context, snap) {
-          if (!snap.hasData) return Center(child: snap.hasError ? Text('${snap.error}') : const CircularProgressIndicator());
-          final (ruleset, state) = snap.data!;
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: BattleBoard(
-                  ruleset: ruleset,
-                  state: state,
-                  languageCode: lang,
-                  onSelectionChanged: (s) => setState(() => _selection = s),
-                ),
-              ),
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        BackButton(onPressed: () => Navigator.maybePop(context)),
-                        Text(_selection == null ? '${widget.missionId} · turn ${state.turn}' : '$_selection'),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+    return FutureBuilder<Ruleset>(
+      future: _loaded,
+      builder: (context, snap) {
+        if (!snap.hasData) {
+          return Scaffold(
+            body: Center(child: snap.hasError ? Text('${snap.error}') : const CircularProgressIndicator()),
           );
-        },
-      ),
+        }
+        final ruleset = snap.data!;
+        return BlocProvider(
+          create: (_) => BattleCubit(GameEngine(ruleset), seed: widget.seed),
+          child: BattleScreen(ruleset: ruleset, onExit: () => Navigator.maybePop(context)),
+        );
+      },
     );
   }
 }

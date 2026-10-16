@@ -99,4 +99,483 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creditsLoadError => 'Could not read the source list.';
+
+  @override
+  String battleTurnClock(int turn, int total) {
+    return 'Turn $turn/$total';
+  }
+
+  @override
+  String battleSeasonClockSemantics(int turn, int total) {
+    return 'Season clock: turn $turn of $total';
+  }
+
+  @override
+  String get phaseIntel => 'Intel';
+
+  @override
+  String get phaseCouncil => 'Council';
+
+  @override
+  String get phaseOrders => 'Orders';
+
+  @override
+  String get phaseResolution => 'Resolution';
+
+  @override
+  String get phaseUpkeep => 'Upkeep';
+
+  @override
+  String get phaseEnded => 'Ended';
+
+  @override
+  String get resourceRice => 'Rice';
+
+  @override
+  String get resourceSupport => 'Support';
+
+  @override
+  String get unityCourt => 'Court';
+
+  @override
+  String get unityClan => 'Clan';
+
+  @override
+  String get unityPeople => 'People';
+
+  @override
+  String unitySemantics(String pillar, int value) {
+    return '$pillar: $value of 10';
+  }
+
+  @override
+  String unitySemanticsLow(String pillar, int value) {
+    return '$pillar: $value of 10, low';
+  }
+
+  @override
+  String resourceSemantics(String resource, int value) {
+    return '$resource: $value';
+  }
+
+  @override
+  String get officerStripLabel => 'Officers';
+
+  @override
+  String troopsShort(int n) {
+    return '${n}k';
+  }
+
+  @override
+  String troopsFull(int n) {
+    return '$n,000 troops';
+  }
+
+  @override
+  String moraleShort(int n) {
+    return 'Morale $n';
+  }
+
+  @override
+  String get statusDefected => 'Defected';
+
+  @override
+  String get statusCaptured => 'Captured';
+
+  @override
+  String get orderNone => 'No order';
+
+  @override
+  String get orderHold => 'Hold';
+
+  @override
+  String get orderMove => 'Move';
+
+  @override
+  String get orderEvacuate => 'Evacuate';
+
+  @override
+  String get orderRaid => 'Raid';
+
+  @override
+  String get orderAmbush => 'Ambush';
+
+  @override
+  String get orderRally => 'Rally';
+
+  @override
+  String orderWithTarget(String order, String target) {
+    return '$order → $target';
+  }
+
+  @override
+  String officerSemantics(String name, String troops, String state) {
+    return '$name, $troops, $state';
+  }
+
+  @override
+  String handTitle(int count) {
+    return 'Hand ($count)';
+  }
+
+  @override
+  String get handEmpty => 'No cards in hand.';
+
+  @override
+  String get handShow => 'Show hand';
+
+  @override
+  String get handHide => 'Hide hand';
+
+  @override
+  String handPiles(int deck, int discard) {
+    return 'Draw: $deck · Discard: $discard';
+  }
+
+  @override
+  String handCourtSurcharge(int extra) {
+    return 'Court is low: every card costs $extra more Support.';
+  }
+
+  @override
+  String get cardTypeStratagem => 'Stratagem';
+
+  @override
+  String get cardTypeEvent => 'Event';
+
+  @override
+  String get cardTypeIntent => 'Enemy intent';
+
+  @override
+  String get cardFree => 'Free';
+
+  @override
+  String get cardCannotAfford => 'Cannot afford';
+
+  @override
+  String cardCostSemantics(int rice, int support) {
+    return 'Cost: $rice Rice, $support Support';
+  }
+
+  @override
+  String cardSemantics(String name, String type, String cost) {
+    return '$name, $type, $cost';
+  }
+
+  @override
+  String get phaseButtonCouncil => 'To Orders';
+
+  @override
+  String get phaseButtonOrders => 'Resolve turn';
+
+  @override
+  String get phaseButtonChoice => 'Choose first';
+
+  @override
+  String get phaseButtonEnded => 'Mission over';
+
+  @override
+  String get phaseButtonWait => 'In progress';
+
+  @override
+  String get logTitle => 'Log';
+
+  @override
+  String get logShow => 'Open log';
+
+  @override
+  String get logHide => 'Close log';
+
+  @override
+  String get logCollapse => 'Collapse log';
+
+  @override
+  String get logExpand => 'Expand log';
+
+  @override
+  String get logEmpty => 'Nothing has happened yet.';
+
+  @override
+  String logTurnStarted(int turn) {
+    return 'Turn $turn begins.';
+  }
+
+  @override
+  String logPhaseChanged(String phase) {
+    return 'Phase: $phase.';
+  }
+
+  @override
+  String logCardPlayed(String card) {
+    return 'Played $card.';
+  }
+
+  @override
+  String logCardPlayedOn(String card, String target) {
+    return 'Played $card on $target.';
+  }
+
+  @override
+  String logSkillUsed(String officer, String skill) {
+    return '$officer used $skill.';
+  }
+
+  @override
+  String logOrderSet(String officer, String order) {
+    return '$officer: $order.';
+  }
+
+  @override
+  String logOrderCleared(String officer) {
+    return '$officer: order cleared.';
+  }
+
+  @override
+  String get logOrdersSkipped => 'Orders are skipped this turn.';
+
+  @override
+  String logUnitMoved(String unit, String from, String to) {
+    return '$unit moved from $from to $to.';
+  }
+
+  @override
+  String logNodeEvacuated(String node, int rice) {
+    return '$node evacuated: +$rice Rice.';
+  }
+
+  @override
+  String logRallied(String officer, String node, int troops) {
+    return '$officer rallied $troops,000 more troops at $node.';
+  }
+
+  @override
+  String logAmbushPlaced(String officer, String edge) {
+    return '$officer set an ambush on $edge.';
+  }
+
+  @override
+  String logBattleWon(String node) {
+    return 'Battle at $node: Đại Việt wins.';
+  }
+
+  @override
+  String logBattleLost(String node) {
+    return 'Battle at $node: the Yuan win.';
+  }
+
+  @override
+  String logBattleDraw(String node) {
+    return 'Battle at $node: no winner.';
+  }
+
+  @override
+  String logOfficerCaptured(String officer, String node) {
+    return '$officer was captured at $node.';
+  }
+
+  @override
+  String logKingShielded(String king, String shield) {
+    return '$shield shielded $king.';
+  }
+
+  @override
+  String logRaided(String officer, String army, int supply, int troops) {
+    return '$officer raided $army: Supply -$supply, troops -${troops}k.';
+  }
+
+  @override
+  String logForaged(String army, String node, int supply) {
+    return '$army foraged at $node: Supply +$supply.';
+  }
+
+  @override
+  String logNodeControl(String node, String side) {
+    return '$node now belongs to $side.';
+  }
+
+  @override
+  String logArmyRouted(String army) {
+    return '$army is routed.';
+  }
+
+  @override
+  String logStarvation(String army, int morale, int troops) {
+    return '$army is starving: morale -$morale, troops -${troops}k.';
+  }
+
+  @override
+  String logAttrition(String army, int troops) {
+    return '$army lost ${troops}k to attrition.';
+  }
+
+  @override
+  String logIncome(int gained, int upkeep) {
+    return 'Income $gained Rice, upkeep $upkeep Rice.';
+  }
+
+  @override
+  String get logIncomeShortfall => 'Rice ran short: every officer lost morale.';
+
+  @override
+  String logDefected(String officer) {
+    return '$officer defected.';
+  }
+
+  @override
+  String logInducementResisted(String officer) {
+    return '$officer resisted the offer.';
+  }
+
+  @override
+  String get logChoiceRequested => 'A decision is needed.';
+
+  @override
+  String logUnityChanged(String pillar, int from, int to) {
+    return '$pillar: $from → $to.';
+  }
+
+  @override
+  String logResourceChanged(String resource, int from, int to) {
+    return '$resource: $from → $to.';
+  }
+
+  @override
+  String get logMissionWon => 'Mission won.';
+
+  @override
+  String get logMissionLost => 'Mission lost.';
+
+  @override
+  String get inspectorClose => 'Close inspector';
+
+  @override
+  String get terrainCity => 'City';
+
+  @override
+  String get terrainPlain => 'Plain';
+
+  @override
+  String get terrainRiver => 'River';
+
+  @override
+  String get terrainMarsh => 'Marsh';
+
+  @override
+  String get terrainHill => 'Hill';
+
+  @override
+  String get sideDaiViet => 'Đại Việt';
+
+  @override
+  String get sideYuan => 'the Yuan';
+
+  @override
+  String get sideNone => 'nobody';
+
+  @override
+  String get nodeCapital => 'Capital';
+
+  @override
+  String get nodeBorder => 'Border';
+
+  @override
+  String get nodeEvacuated => 'Evacuated';
+
+  @override
+  String nodeControlledBy(String side) {
+    return 'Held by $side';
+  }
+
+  @override
+  String nodeRiceStock(int n) {
+    return 'Rice stock: $n';
+  }
+
+  @override
+  String get nodeUnits => 'Here now';
+
+  @override
+  String get nodeNoUnits => 'Nobody here.';
+
+  @override
+  String get statLeadership => 'Leadership';
+
+  @override
+  String get statWar => 'War';
+
+  @override
+  String get statIntelligence => 'Intelligence';
+
+  @override
+  String get statPolitics => 'Politics';
+
+  @override
+  String get statLoyalty => 'Loyalty';
+
+  @override
+  String get inspectorOrder => 'Order';
+
+  @override
+  String get inspectorSkill => 'Skill';
+
+  @override
+  String get inspectorFlaw => 'Flaw';
+
+  @override
+  String get skillPassive => 'Passive';
+
+  @override
+  String skillUsesLeft(int n) {
+    return '$n uses left';
+  }
+
+  @override
+  String get officerIsKing => 'King';
+
+  @override
+  String get inspectorCommander => 'Commander';
+
+  @override
+  String inspectorSupply(int supply, int max) {
+    return 'Supply $supply/$max';
+  }
+
+  @override
+  String get inspectorIntent => 'Intent';
+
+  @override
+  String get intentHold => 'Hold';
+
+  @override
+  String get intentAdvance => 'Advance';
+
+  @override
+  String get intentAssault => 'Assault';
+
+  @override
+  String get intentForage => 'Forage';
+
+  @override
+  String get intentRetreat => 'Retreat';
+
+  @override
+  String get intentUnknown => 'Unknown';
+
+  @override
+  String intentToward(String intent, String node) {
+    return '$intent → $node';
+  }
+
+  @override
+  String intentPredicted(String intent) {
+    return 'Next turn: $intent';
+  }
+
+  @override
+  String get armyRouted => 'Routed';
+
+  @override
+  String armyOf(String commander) {
+    return '$commander\'s army';
+  }
 }
