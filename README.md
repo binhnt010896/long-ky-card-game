@@ -41,4 +41,4 @@ dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
 dart run tools/sim/bin/sim.dart --play --mission ch1_m2
 ```
 
-Status: T-01 to T-26 are on `main`. T-27 is prepared (names, signing hooks, icons, release workflow, store notes) but needs the owner's signing keys and store accounts: see `docs/release/RELEASE.md`.
+Status: T-01 to T-29 are on `main`; what is left needs the owner's inputs, devices and assets. See `docs/status.md` for the handoff: what is done, what is open, and the suggested order.

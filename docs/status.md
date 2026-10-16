@@ -1,0 +1,60 @@
+# Status and next steps (handoff)
+
+Last updated 2026-10-16. Source of truth stays `docs/build-spec.md` (implementation) and `docs/plan.md` (design intent); rules in `CLAUDE.md`.
+
+## Done: T-01 to T-29, all on `main`
+
+| Tickets | What | Where to look |
+| --- | --- | --- |
+| T-01 to T-14 | Workspace, rules engine, content validator, Chapter 1 content, simulator, app shell | `packages/`, `tools/sim`, `apps/game` |
+| T-15 to T-17 | Flame board, battle overlays at both layouts, orders/cards/preview/choice/animations | `apps/game/lib/features/battle` |
+| T-18 | Autosave and resume, Result screen, stars | `lib/data/battle_save_*`, `battle_page.dart` |
+| T-19 | Desktop window, shortcuts, hover tooltips, landscape lock, safe areas | `lib/platform`, `battle_keys.dart` |
+| T-20 | Audio behind `AudioBackend`, Briefing with subtitles | `lib/audio`, `features/briefing` |
+| T-21 | Art by id with placeholders, lacquer card frame, goldens | `lib/art`, `features/cards` |
+| T-22 | Coach marks for missions 1–2, tips for 3–5 | `features/tutorial` |
+| T-23 | Campaign and chapter screens, unlock flow, Next mission | `features/campaign`, `data/campaign.dart` |
+| T-24 | Codex, Long Ký links (phone link / desktop QR), unlock codes, incoming unlock link | `features/codex`, `data/unlock_code.dart`, `config/long_ky_config.dart` |
+| T-25 | Balance pass; every Chapter 1 target met | `docs/balance/t25-report.md` |
+| T-26 | CSV of all 75 vi/en texts for the history reviewer | `docs/review/` |
+| T-27 | Prepared only (see "Needs the owner") | `docs/release/RELEASE.md`, `docs/store/`, `.github/workflows/release.yml` |
+| T-28 | Performance measured here; device checklist written, not run | `docs/qa/checklist.md` |
+| T-29 | Offline guard test and privacy answers | `apps/game/test/offline_guard_test.dart`, `docs/store/privacy.md` |
+
+State at last push: analyze clean; tests app 528, `lk_rules` 156, `lk_content` 37, sim 46, all passing; content validates (0 errors, 30 art/audio warnings, expected until assets ship). The `build` workflow succeeded for Android, iOS, macOS and Windows on the T-28 commit.
+
+Commands: see `README.md`. Flutter 3.47.7 (needs `/opt/fl/flutter/bin` on PATH in the cloud container). Commit messages end with the attribution lines; no force-push.
+
+## Needs the owner (the agent cannot do these)
+
+1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).
+2. **T-27:** Android upload keystore and Play service account, Apple signing for iOS/macOS and TestFlight, Windows distribution channel, the painted icon (`tools/icons/master.png`, then `python3 tools/icons/make_icons.py --master …`). Add the secrets listed in `docs/release/RELEASE.md`, then run `release.yml` once with `android_track: none`. It has never been run.
+3. **T-28:** the device passes in `docs/qa/checklist.md` (Android phone, iPhone/iPad, Mac, Windows PC) including real 60 fps on the busiest missions, the T-16 phone check, and the T-29 per-platform "no network call" checks.
+4. **Art and audio:** painted Chapter 1 map and node positions, card and officer art, narration, character lines, music, effects. Until then placeholders and silence ship. Validator warnings go to errors under `--release`.
+5. **History reviewer:** read `docs/review/content-text.csv`; briefings and debriefs are placeholders; map-place rows have no `sourceRefs`; several `todo` notes (en text drafted from vi). Lore text and a bonus card per unlock do not exist in the content yet.
+6. **Store:** screenshots, privacy-policy URL, support contact, price, final age-rating answers (`docs/store/`).
+
+## Decisions to make
+
+- `ch1_m4` is lost on troops (more than 14,000 lost) because a survive-only mission cannot be lost otherwise (one army never captures the king). Alternative: a rules change (e.g. an officer at 0 troops is captured). Details in `docs/balance/t25-report.md`.
+- T-25 changed spec numbers (m2 win adds `surviveTurns 4` and troops ≤ 16,000; m3 troops 60%; m4 troops 80%, Yuan morale 10, star 2 `noCaptures`; m5 Yuan 30 troops, morale 9, heat from turn 6). Confirm or ask for different levers.
+- The expert wins 100% because it is a scripted deterministic player; a human playtest is needed for real difficulty and stars.
+- `http` is in the shipped tree through `audioplayers` (not called). To close it on iOS too, replace the audio backend behind `AudioBackend`.
+
+## Known gaps in the app (candidates for the next session)
+
+- Settings is not reachable from the battle menu (Resume/Leave only).
+- Orders are picked from a list; no tap-a-node mode and no orders drawn on the map. Preview only covers where the ordered officer fights.
+- Chapter names are not in the content (UI says "Chương n" / "Chapter n").
+- Windows has no incoming unlock link or installer; desktop uses typed codes and the QR.
+- Briefing text for `ch1_m2` and others should mention the new win/loss rules once the narration is rewritten.
+- Strategy "expert" is brittle: results flip between 0% and 100% for small parameter changes. Rerun `dart run tools/sim/bin/sim.dart --mission all --strategy all --games 1000 --seed 1` (and `melos run test`, which has `balance_test.dart`) after any content or rules change.
+
+## Suggested order for the next session
+
+1. Supply the T-24 inputs, then verify codes and links end to end with Long Ký.
+2. Do the device QA pass and fix what it finds (start with phone landscape and safe areas).
+3. Decide the `ch1_m4` loss approach and the Windows channel.
+4. Drop in art and audio as it arrives; run the validator with `--release`.
+5. Run `release.yml` for Android, do TestFlight by hand, build the Windows package.
+6. Chapter 2 content once the above is stable (not in the current spec).
