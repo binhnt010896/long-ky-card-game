@@ -449,7 +449,7 @@ abstract class AppLocalizations {
   /// An order with its target.
   ///
   /// In vi, this message translates to:
-  /// **'{order} → {target}'**
+  /// **'{order}: {target}'**
   String orderWithTarget(String order, String target);
 
   /// Screen-reader label of an officer tile.
@@ -773,13 +773,13 @@ abstract class AppLocalizations {
   /// Log line.
   ///
   /// In vi, this message translates to:
-  /// **'{pillar}: {from} → {to}.'**
+  /// **'{pillar}: {from} sang {to}.'**
   String logUnityChanged(String pillar, int from, int to);
 
   /// Log line.
   ///
   /// In vi, this message translates to:
-  /// **'{resource}: {from} → {to}.'**
+  /// **'{resource}: {from} sang {to}.'**
   String logResourceChanged(String resource, int from, int to);
 
   /// Log line.
@@ -1013,7 +1013,7 @@ abstract class AppLocalizations {
   /// An intent with its destination.
   ///
   /// In vi, this message translates to:
-  /// **'{intent} → {node}'**
+  /// **'{intent} đến {node}'**
   String intentToward(String intent, String node);
 
   /// A predicted intent.
@@ -1033,6 +1033,210 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Quân của {commander}'**
   String armyOf(String commander);
+
+  /// Button: play this card.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng bài'**
+  String get cardPlay;
+
+  /// Button: play this card on a target.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng tại {target}'**
+  String cardPlayOn(String target);
+
+  /// Heading of the target list.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chọn mục tiêu:'**
+  String get cardPickTarget;
+
+  /// Card cannot be played anywhere now.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có mục tiêu hợp lệ.'**
+  String get cardNoTargets;
+
+  /// Shown when a card is opened outside Council.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chỉ dùng được bài trong giai đoạn Triều nghị.'**
+  String get cardOnlyCouncil;
+
+  /// Warning on the card dialog.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài đã dùng thì không rút lại được.'**
+  String get cardFinal;
+
+  /// Closes a dialog.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đóng'**
+  String get cardClose;
+
+  /// Button: use the officer skill.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng kỹ năng'**
+  String get skillUse;
+
+  /// Button: use the officer skill on a target.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dùng kỹ năng tại {target}'**
+  String skillUseOn(String target);
+
+  /// Heading of the order list.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao lệnh'**
+  String get ordersTitle;
+
+  /// Button: remove the officer order.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bỏ lệnh'**
+  String get orderClear;
+
+  /// Shown when orders cannot be given now.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao lệnh ở giai đoạn Hạ lệnh.'**
+  String get ordersOnlyInOrders;
+
+  /// No legal order for this officer.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không có lệnh nào hợp lệ.'**
+  String get ordersNone;
+
+  /// Officer withdrawn or inactive.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không nhận lệnh lượt này.'**
+  String get orderNoOrders;
+
+  /// An order that costs Support.
+  ///
+  /// In vi, this message translates to:
+  /// **'{order} ({support} {n})'**
+  String orderCostSupport(String order, String support, int n);
+
+  /// Title of the battle preview.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dự báo giao tranh'**
+  String get previewTitle;
+
+  /// Preview heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giao tranh tại {node}'**
+  String previewField(String node);
+
+  /// Preview heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phục kích tại {edge}'**
+  String previewAmbush(String edge);
+
+  /// Preview line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tướng ta: {names}'**
+  String previewOfficers(String names);
+
+  /// Preview line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quân địch: {names}'**
+  String previewArmies(String names);
+
+  /// Preview line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sức mạnh: Đại Việt {dv}, quân Nguyên {yuan}'**
+  String previewPowers(String dv, String yuan);
+
+  /// Preview line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dự kiến: {side} thắng'**
+  String previewWinner(String side);
+
+  /// Preview line for an ambush whose winner changes with the roll.
+  ///
+  /// In vi, this message translates to:
+  /// **'Kết quả còn tùy vận may: {low} thắng nếu xui, {high} thắng nếu may.'**
+  String previewUncertain(String low, String high);
+
+  /// Preview line; losses in thousands, possibly a range.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thiệt hại dự kiến: Đại Việt {dv}k, quân Nguyên {yuan}k'**
+  String previewLosses(String dv, String yuan);
+
+  /// Button in the battle preview.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vẫn giao lệnh này'**
+  String get previewConfirm;
+
+  /// Title of the choice dialog.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cần đưa ra quyết định'**
+  String get choiceTitle;
+
+  /// The mission is won.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chiến thắng'**
+  String get outcomeWon;
+
+  /// The mission is lost.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thất bại'**
+  String get outcomeLost;
+
+  /// Stars at the end of a won mission.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sao đạt được: {n}/{total}'**
+  String outcomeStars(int n, int total);
+
+  /// Loss reason.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quân vương đã bị bắt.'**
+  String get lossKingCaptured;
+
+  /// Loss reason.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hết mùa chiến dịch.'**
+  String get lossSeasonEnded;
+
+  /// Loss reason.
+  ///
+  /// In vi, this message translates to:
+  /// **'{pillar} đã cạn kiệt.'**
+  String lossUnity(String pillar);
+
+  /// Loss reason.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không đạt được mục tiêu nhiệm vụ.'**
+  String get lossObjective;
+
+  /// Leaves the finished battle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Về màn hình trước'**
+  String get outcomeBack;
 }
 
 class _AppLocalizationsDelegate

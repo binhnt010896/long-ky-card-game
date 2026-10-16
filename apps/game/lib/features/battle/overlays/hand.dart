@@ -163,10 +163,13 @@ class _HandNotes extends StatelessWidget {
 
 /// Regular layout: the hand is a column on the right, always visible.
 class HandColumn extends StatefulWidget {
-  const HandColumn({super.key, required this.state, required this.ruleset});
+  const HandColumn({super.key, required this.state, required this.ruleset, this.onCardTap});
 
   final GameState state;
   final Ruleset ruleset;
+
+  /// Opens the card (to play it). Without it, tapping only selects.
+  final ValueChanged<CardDef>? onCardTap;
 
   static const double width = 280;
 
@@ -214,7 +217,13 @@ class _HandColumnState extends State<HandColumn> {
                         state: widget.state,
                         width: double.infinity,
                         selected: _selected == key,
-                        onTap: () => setState(() => _selected = _selected == key ? null : key),
+                        onTap: () {
+                          if (widget.onCardTap != null) {
+                            widget.onCardTap!(card);
+                          } else {
+                            setState(() => _selected = _selected == key ? null : key);
+                          }
+                        },
                       );
                     },
                   ),
@@ -276,11 +285,14 @@ class HandDrawer extends StatelessWidget {
 /// Compact layout: the cards of the hand fanned out above the bottom bar.
 /// Tapping a card lifts it and shows its full text; playing comes in T-17.
 class HandFan extends StatefulWidget {
-  const HandFan({super.key, required this.state, required this.ruleset, required this.availableWidth});
+  const HandFan({super.key, required this.state, required this.ruleset, required this.availableWidth, this.onCardTap});
 
   final GameState state;
   final Ruleset ruleset;
   final double availableWidth;
+
+  /// Opens the card (to play it). Without it, tapping only lifts the card.
+  final ValueChanged<CardDef>? onCardTap;
 
   static const double cardWidth = 118;
   static const double height = 168;
@@ -335,7 +347,13 @@ class _HandFanState extends State<HandFan> {
                   width: w,
                   selected: i == _selected,
                   maxTextLines: 2,
-                  onTap: () => setState(() => _selected = _selected == i ? null : i),
+                  onTap: () {
+                    if (widget.onCardTap != null) {
+                      widget.onCardTap!(cards[i]);
+                    } else {
+                      setState(() => _selected = _selected == i ? null : i);
+                    }
+                  },
                 ),
               ),
             ),

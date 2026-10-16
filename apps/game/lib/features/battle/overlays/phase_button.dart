@@ -9,11 +9,14 @@ import 'panel.dart';
 /// The one button that moves the turn on: Council → Orders → next turn.
 /// Disabled while a choice is pending and once the mission has ended.
 class PhaseButton extends StatelessWidget {
-  const PhaseButton({super.key, required this.state, required this.mode, required this.onPressed});
+  const PhaseButton({super.key, required this.state, required this.mode, required this.onPressed, this.busy = false});
 
   final GameState state;
   final BattleLayoutMode mode;
   final VoidCallback onPressed;
+
+  /// The board is still playing the last step; wait for it.
+  final bool busy;
 
   /// The player can end the phase now.
   static bool canEnd(GameState s) =>
@@ -22,7 +25,9 @@ class PhaseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final label = state.isOver
+    final label = busy
+        ? l.phaseButtonWait
+        : state.isOver
         ? l.phaseButtonEnded
         : state.pendingChoice != null
         ? l.phaseButtonChoice
@@ -36,7 +41,7 @@ class PhaseButton extends StatelessWidget {
       constraints: BoxConstraints(minWidth: compact ? 132 : 200, minHeight: minTouch),
       child: FilledButton(
         key: const Key('phase-button'),
-        onPressed: canEnd(state) ? onPressed : null,
+        onPressed: canEnd(state) && !busy ? onPressed : null,
         style: FilledButton.styleFrom(
           minimumSize: Size(compact ? 132 : 200, minTouch),
           padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 20),

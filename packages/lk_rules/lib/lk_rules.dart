@@ -6,6 +6,7 @@ library;
 
 export 'src/actions/game_action.dart';
 export 'src/balance.dart';
+export 'src/engine/council.dart' show choiceEffectOf;
 export 'src/engine/engine.dart';
 export 'src/engine/events.dart';
 export 'src/engine/forecast.dart' show BattleForecast;

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/theme.dart';
+import 'board_animator.dart';
 import 'board_painter.dart';
 import 'board_scene.dart';
 
@@ -24,6 +25,12 @@ class BoardGame extends FlameGame {
   final ValueNotifier<Selection?> selection = ValueNotifier(null);
 
   final BoardPainter painter = BoardPainter();
+
+  /// Plays the events of each step (moves, battles, forage, defections).
+  final BoardAnimator animator = BoardAnimator();
+
+  /// True while [animator] has something left to play.
+  final ValueNotifier<bool> busy = ValueNotifier(false);
 
   /// What the board shows now; null until the game has a size.
   BoardScene? get scene => _scene;
@@ -49,6 +56,32 @@ class BoardGame extends FlameGame {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     _rebuild();
+  }
+
+  /// Plays [events], which led to the state now shown. With [reduceMotion]
+  /// nothing plays and the board shows the new state at once.
+  void play(Iterable<GameEvent> events, {required bool reduceMotion}) {
+    if (reduceMotion) {
+      animator.clear();
+    } else {
+      animator.enqueue(events, nodeOfOfficer: (id) => _state.officers[id]?.nodeId);
+    }
+    busy.value = animator.isBusy;
+  }
+
+  /// Shows everything at once, dropping what is still playing.
+  void skipAnimation() {
+    animator.clear();
+    busy.value = false;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (animator.isBusy) {
+      animator.update(dt);
+      busy.value = animator.isBusy;
+    }
   }
 
   /// Shows [state] (and [languageCode] for node names).
@@ -88,7 +121,7 @@ class _BoardComponent extends PositionComponent with TapCallbacks, HasGameRefere
   @override
   void render(Canvas canvas) {
     final scene = game.scene;
-    if (scene != null) game.painter.paint(canvas, scene);
+    if (scene != null) game.painter.paint(canvas, scene, animator: game.animator);
   }
 
   @override

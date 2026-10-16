@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,7 +27,7 @@ const layouts = <(String, Size, BattleLayoutMode)>[
 /// The strings of [lang], for expectations.
 AppLocalizations strings(String lang) => lookupAppLocalizations(Locale(lang));
 
-Widget appAround(Widget child, {String lang = 'vi', double textScale = 1}) => MaterialApp(
+Widget appAround(Widget child, {String lang = 'vi', double textScale = 1, bool reduceMotion = false}) => MaterialApp(
   debugShowCheckedModeBanner: false,
   theme: buildLongKyTheme(),
   locale: Locale(lang),
@@ -38,7 +39,7 @@ Widget appAround(Widget child, {String lang = 'vi', double textScale = 1}) => Ma
     GlobalCupertinoLocalizations.delegate,
   ],
   builder: (context, child) => MediaQuery(
-    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale)),
+    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale), disableAnimations: reduceMotion),
     child: child!,
   ),
   home: child,
@@ -80,6 +81,7 @@ Future<BattleCubit> pumpBattle(
   double textScale = 1,
   String missionId = mission,
   VoidCallback? onExit,
+  bool reduceMotion = false,
 }) async {
   setViewSize(tester, size);
   final cubit = BattleCubit(GameEngine(ruleset(missionId)), seed: 1);
@@ -92,6 +94,7 @@ Future<BattleCubit> pumpBattle(
       ),
       lang: lang,
       textScale: textScale,
+      reduceMotion: reduceMotion,
     ),
   );
   await settle(tester);
@@ -114,3 +117,27 @@ Rect rectOf(WidgetTester tester, Finder f) => tester.getRect(f);
 GameState withUnity(GameState s, {int? court, int? clan, int? people}) => s.copyWith(
   unity: Unity(court: court ?? s.unity.court, clan: clan ?? s.unity.clan, people: people ?? s.unity.people),
 );
+
+/// Lets the board play every queued animation to its end.
+Future<void> playOut(WidgetTester tester) async {
+  for (var i = 0; i < 100; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+    if (!boardGame(tester).busy.value) break;
+  }
+  expect(boardGame(tester).busy.value, isFalse, reason: 'animations should end');
+  await tester.pump(const Duration(milliseconds: 50));
+}
+
+/// A click with a mouse: it hovers first, as a real one does.
+Future<void> mouseTap(WidgetTester tester, Finder f) async {
+  final at = tester.getCenter(f);
+  final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+  await mouse.addPointer(location: at);
+  await mouse.moveTo(at);
+  await tester.pump();
+  await mouse.down(at);
+  await tester.pump();
+  await mouse.up();
+  await mouse.removePointer();
+  await tester.pump(const Duration(milliseconds: 50));
+}

@@ -1,9 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/theme.dart';
+import 'board_animator.dart';
 import 'board_scene.dart';
 
 /// Draws a [BoardScene]. Everything is vector placeholder art: lacquer
@@ -22,7 +24,11 @@ final class BoardPainter {
         IntentKind.hold => const Color(0xFFB8B0A0),
       };
 
-  void paint(Canvas canvas, BoardScene scene) {
+  /// [animator] holds the effects that are playing: tokens that travel are
+  /// drawn on their way, intents are hidden until the step has played out,
+  /// and battle, forage and defection marks go on top.
+  void paint(Canvas canvas, BoardScene scene, {BoardAnimator? animator}) {
+    final busy = animator != null && animator.isBusy;
     _paintMapPanel(canvas, scene);
     for (final e in scene.edges) {
       _paintEdge(canvas, e);
@@ -31,16 +37,98 @@ final class BoardPainter {
       _paintNode(canvas, scene, n);
     }
     for (final t in scene.tokens) {
-      _paintToken(canvas, scene, t);
+      _paintToken(canvas, scene, busy ? _travelling(scene, t, animator) : t);
     }
-    // Intents go on top: they are what the player must not miss.
-    for (final a in scene.arrows) {
-      _paintArrow(canvas, scene, a);
-    }
-    for (final b in scene.badges) {
-      _paintBadge(canvas, scene, b);
+    // Intents go on top: they are what the player must not miss. While the
+    // turn plays out they are the next turn's, so they wait.
+    if (!busy) {
+      for (final a in scene.arrows) {
+        _paintArrow(canvas, scene, a);
+      }
+      for (final b in scene.badges) {
+        _paintBadge(canvas, scene, b);
+      }
     }
     _paintSelection(canvas, scene);
+    if (busy) {
+      for (final e in animator.active) {
+        _paintEffect(canvas, scene, e);
+      }
+    }
+  }
+
+  /// [t] where the animation has it: still at its start, on its way, or (no
+  /// move left to play) where the scene put it.
+  TokenView _travelling(BoardScene scene, TokenView t, BoardAnimator animator) {
+    final m = animator.moveOf(t.id);
+    if (m == null) return t;
+    final from = scene.nodes.where((n) => n.id == m.move.from).firstOrNull?.center;
+    if (from == null) return t;
+    final to = scene.nodes.where((n) => n.id == m.move.to).firstOrNull?.center ?? t.center;
+    final eased = Curves.easeInOut.transform(m.progress);
+    return TokenView(
+      id: t.id,
+      kind: t.kind,
+      nodeId: t.nodeId,
+      center: Offset.lerp(from, to, eased)!,
+      radius: t.radius,
+      initials: t.initials,
+      troops: t.troops,
+      isKing: t.isKing,
+    );
+  }
+
+  // -- Effects -----------------------------------------------------------------
+
+  void _paintEffect(Canvas canvas, BoardScene scene, ActiveEffect a) {
+    final e = a.effect;
+    final p = a.progress;
+    switch (e) {
+      case MoveEffect():
+        break; // the token itself travels
+      case BattleEffect():
+        final n = scene.nodes.where((x) => x.id == e.nodeId).firstOrNull;
+        if (n == null) return;
+        final color = switch (e.winner) {
+          Side.daiViet => LongKyColors.goldLeaf,
+          Side.yuan => LongKyColors.cinnabar,
+          Side.none => LongKyColors.ivory,
+        };
+        final r = n.radius * (1.1 + 1.4 * p);
+        canvas.drawCircle(
+          n.center,
+          r,
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 4 * (1 - p) + 1
+            ..color = color.withValues(alpha: 1 - p),
+        );
+        // Crossed blades.
+        final k = n.radius * 0.8 * (0.6 + 0.4 * math.sin(math.pi * p));
+        final blade = Paint()
+          ..strokeWidth = 3.5
+          ..strokeCap = StrokeCap.round
+          ..color = LongKyColors.ivory.withValues(alpha: 1 - 0.6 * p);
+        canvas.drawLine(n.center + Offset(-k, -k), n.center + Offset(k, k), blade);
+        canvas.drawLine(n.center + Offset(k, -k), n.center + Offset(-k, k), blade);
+      case ForageEffect():
+        final n = scene.nodes.where((x) => x.id == e.nodeId).firstOrNull;
+        if (n == null) return;
+        // A ring drawing in: the army takes the node's stores.
+        canvas.drawCircle(
+          n.center,
+          n.radius * (2.2 - 1.2 * p),
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 3
+            ..color = LongKyColors.goldLeaf.withValues(alpha: 0.2 + 0.8 * p),
+        );
+      case DefectEffect():
+        final n = scene.nodes.where((x) => x.id == e.nodeId).firstOrNull;
+        if (n == null) return;
+        // A cinnabar flash fading out where the officer turned.
+        canvas.drawCircle(n.center, n.radius * (1.0 + 0.8 * p), Paint()..color = LongKyColors.cinnabar.withValues(alpha: 0.55 * (1 - p)));
+    }
   }
 
   // -- Map ---------------------------------------------------------------------

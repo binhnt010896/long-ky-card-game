@@ -327,6 +327,19 @@ void main() {
       expect(attacking.daiVietPower, closeTo(12.75, 1e-9));
     });
 
+    test('expected losses are the losses of the battle that then happens', () {
+      final m = duel('cap');
+      final e = engineFor(m);
+      final s = e.newGame(1).state;
+      final f = e.forecastBattle(s, 'cap', officerIds: ['plain']);
+      final r = battle(turn(m));
+      expect(f.daiVietLosses, r.officerLosses.values.single);
+      expect(f.yuanLosses, r.armyLosses.values.single);
+      expect(f.daiVietLosses, 3);
+      expect(f.yuanLosses, 3);
+      expect(f.daiVietLossesAtMaxRoll, f.daiVietLosses, reason: 'no roll in a field battle');
+    });
+
     test('an ambush shows the roll range', () {
       final e = engineFor(mission(officers: [at('raider', 'cap', 12)], armies: [army('rv1', troops: 10)]));
       final f = e.forecastAmbush(e.newGame(1).state, 'raider', 'y1');
@@ -334,6 +347,15 @@ void main() {
       expect(f.daiVietPowerMax, closeTo(12 * 1.9 * 1.2 * 0.85 * 1.5 * 1.1, 1e-9));
       expect(f.yuanPower, closeTo(15.39, 1e-9));
       expect(f.winner, Side.daiViet);
+    });
+
+    test('an ambush forecasts losses at both ends of the roll', () {
+      final e = engineFor(mission(officers: [at('raider', 'cap', 12)], armies: [army('rv1', troops: 10)]));
+      final f = e.forecastAmbush(e.newGame(1).state, 'raider', 'y1');
+      // Higher roll, more Power: the ambusher loses no more and the army no less.
+      expect(f.daiVietLossesAtMaxRoll, lessThanOrEqualTo(f.daiVietLosses));
+      expect(f.yuanLossesAtMaxRoll, greaterThanOrEqualTo(f.yuanLosses));
+      expect(f.yuanLosses, greaterThan(0));
     });
   });
 }

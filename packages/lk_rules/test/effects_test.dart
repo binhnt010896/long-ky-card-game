@@ -224,6 +224,17 @@ void main() {
       expect(s3.unity.court, 7);
       expect(s3.pendingChoice, isNull);
     });
+
+    test('choiceEffectOf finds the choice a pending choice waits on, nested or not', () {
+      final (e, s) = council(standard, hand: ['nested']);
+      final s1 = playCard(e, s, 'nested');
+      final first = choiceEffectOf(e.def, s1.pendingChoice!);
+      expect(first.options, hasLength(s1.pendingChoice!.optionCount));
+      final s2 = e.apply(s1, const GameAction.resolveChoice(index: 1)).state;
+      final inner = choiceEffectOf(e.def, s2.pendingChoice!);
+      expect(inner, same((first.options[1].effects[1] as ChoiceEffect)));
+      expect(inner.options, hasLength(s2.pendingChoice!.optionCount));
+    });
   });
 
   group('scripted events', () {
