@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="long_ky_game"
+        android:label="Long Ký - The Game"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

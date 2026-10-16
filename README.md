@@ -41,4 +41,4 @@ dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
 dart run tools/sim/bin/sim.dart --play --mission ch1_m2
 ```
 
-Status: M0, M1 and T-14 (app shell) merged; T-15 (Flame board) in review; next is T-16, the battle overlays.
+Status: T-01 to T-26 are on `main`. T-27 is prepared (names, signing hooks, icons, release workflow, store notes) but needs the owner's signing keys and store accounts: see `docs/release/RELEASE.md`.

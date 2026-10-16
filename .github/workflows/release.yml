@@ -1,0 +1,103 @@
+name: release
+
+# Manual releases (build-spec section 8, T-27). Nothing here runs on its own;
+# start it from the Actions tab. Needs the secrets listed in docs/release/RELEASE.md.
+# iOS and macOS go to TestFlight from Xcode for now (see that file).
+#
+# NOT YET RUN: written without access to the signing secrets or the stores.
+
+on:
+  workflow_dispatch:
+    inputs:
+      android_track:
+        description: Play track for the Android bundle ("none" only builds and signs it)
+        type: choice
+        default: none
+        options: [none, internal]
+
+env:
+  # Keep in sync with ci.yml, build.yml, the README and apps/game/pubspec.yaml.
+  FLUTTER_VERSION: 3.47.7
+  # Given to every build with --dart-define; none of them is in the repo.
+  LONG_KY_LINK_TEMPLATE: ${{ secrets.LONG_KY_LINK_TEMPLATE }}
+  LONG_KY_STORE_URL: ${{ secrets.LONG_KY_STORE_URL }}
+  LK_UNLOCK_SECRET: ${{ secrets.LK_UNLOCK_SECRET }}
+
+defaults:
+  run:
+    working-directory: apps/game
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - name: Write the upload key (from secrets, never committed)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          test -n "$KEYSTORE_BASE64" || { echo "ANDROID_KEYSTORE_BASE64 is not set"; exit 1; }
+          echo "$KEYSTORE_BASE64" | base64 --decode > android/upload-keystore.jks
+          {
+            echo "storeFile=upload-keystore.jks"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+            echo "storePassword=$STORE_PASSWORD"
+          } > android/key.properties
+      - run: flutter pub get
+      - run: |
+          flutter build appbundle --release \
+            --dart-define="LONG_KY_LINK_TEMPLATE=$LONG_KY_LINK_TEMPLATE" \
+            --dart-define="LONG_KY_STORE_URL=$LONG_KY_STORE_URL" \
+            --dart-define="LK_UNLOCK_SECRET=$LK_UNLOCK_SECRET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-aab-signed
+          path: apps/game/build/app/outputs/bundle/release/*.aab
+          if-no-files-found: error
+      - name: Upload to Play internal testing
+        if: ${{ inputs.android_track == 'internal' }}
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: app.longky.long_ky_game
+          releaseFiles: apps/game/build/app/outputs/bundle/release/*.aab
+          track: internal
+          status: draft
+
+  windows:
+    # The distribution channel is an open decision (docs/plan.md); this builds the
+    # folder a zip, MSIX or installer would be made from.
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get
+      - run: >-
+          flutter build windows --release
+          --dart-define="LONG_KY_LINK_TEMPLATE=$env:LONG_KY_LINK_TEMPLATE"
+          --dart-define="LONG_KY_STORE_URL=$env:LONG_KY_STORE_URL"
+          --dart-define="LK_UNLOCK_SECRET=$env:LK_UNLOCK_SECRET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: apps/game/build/windows/x64/runner/Release
+          if-no-files-found: error
