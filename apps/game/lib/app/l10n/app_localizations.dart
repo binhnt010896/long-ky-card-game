@@ -62,8 +62,7 @@ import 'app_localizations_vi.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('vi'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('vi')];
 
   /// Product name. A proper name, the same in every language.
   ///
@@ -1555,10 +1549,117 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Nhiệm vụ tiếp theo'**
   String get resultNext;
+
+  /// Codex section: our officers.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhân vật Đại Việt'**
+  String get codexOfficers;
+
+  /// Codex section: enemy commanders.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tướng Mông–Nguyên'**
+  String get codexEnemies;
+
+  /// Codex section: cards.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mưu kế và sự kiện'**
+  String get codexCards;
+
+  /// Mark on a Codex entry whose Long Ký code was entered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã mở khoá'**
+  String get codexUnlocked;
+
+  /// Heading of the list of sources of a Codex entry.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nguồn'**
+  String get codexSources;
+
+  /// Codex: heading of the unlock code box.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhập mã mở khoá'**
+  String get codexCodeTitle;
+
+  /// Codex: help under the unlock code box.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã hiện ra sau khi hoàn thành một bài học trong Long Ký.'**
+  String get codexCodeHelp;
+
+  /// Label of the unlock code text field.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã mở khoá'**
+  String get codexCodeField;
+
+  /// Button: check the unlock code.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở khoá'**
+  String get codexCodeRedeem;
+
+  /// A valid code was entered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã mở khoá: {name}.'**
+  String codexCodeOk(String name);
+
+  /// A valid code was entered again.
+  ///
+  /// In vi, this message translates to:
+  /// **'{name} đã được mở khoá từ trước.'**
+  String codexCodeAlready(String name);
+
+  /// A wrong code was entered.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã không đúng. Kiểm tra lại và thử lần nữa.'**
+  String get codexCodeInvalid;
+
+  /// No unlock secret is configured.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bản này chưa kiểm tra được mã.'**
+  String get codexCodeUnavailable;
+
+  /// Button: open Long Ký at this person or event.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đọc thêm trong Long Ký'**
+  String get longKyReadMore;
+
+  /// Desktop: text under the QR code.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quét bằng điện thoại để mở Long Ký'**
+  String get longKyScan;
+
+  /// Screen-reader label of the QR code.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mã QR mở Long Ký'**
+  String get longKyQrSemantics;
+
+  /// Neither the link nor the store page could be opened.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không mở được Long Ký.'**
+  String get longKyOpenFailed;
+
+  /// Button: close a dialog.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đóng'**
+  String get actionClose;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1567,8 +1668,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'vi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'vi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

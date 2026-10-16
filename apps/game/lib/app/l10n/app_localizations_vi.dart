@@ -72,8 +72,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resetConfirmTitle => 'Xoá toàn bộ tiến trình?';
 
   @override
-  String get resetConfirmBody =>
-      'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
+  String get resetConfirmBody => 'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
 
   @override
   String get actionCancel => 'Huỷ';
@@ -88,8 +87,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsCredits => 'Ghi công và nguồn tư liệu';
 
   @override
-  String get creditsFont =>
-      'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
+  String get creditsFont => 'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Giấy phép phần mềm';
@@ -794,8 +792,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resumeUnusableTitle => 'Không thể tiếp tục ván đã lưu';
 
   @override
-  String get resumeUnusableBody =>
-      'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
+  String get resumeUnusableBody => 'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
 
   @override
   String get resumeRestart => 'Bắt đầu lại';
@@ -892,8 +889,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get campaignReplaceTitle => 'Thay ván đang chơi?';
 
   @override
-  String get campaignReplaceBody =>
-      'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.';
+  String get campaignReplaceBody => 'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.';
 
   @override
   String get campaignStartAnyway => 'Vẫn bắt đầu';
@@ -905,4 +901,62 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get resultNext => 'Nhiệm vụ tiếp theo';
+
+  @override
+  String get codexOfficers => 'Nhân vật Đại Việt';
+
+  @override
+  String get codexEnemies => 'Tướng Mông–Nguyên';
+
+  @override
+  String get codexCards => 'Mưu kế và sự kiện';
+
+  @override
+  String get codexUnlocked => 'Đã mở khoá';
+
+  @override
+  String get codexSources => 'Nguồn';
+
+  @override
+  String get codexCodeTitle => 'Nhập mã mở khoá';
+
+  @override
+  String get codexCodeHelp => 'Mã hiện ra sau khi hoàn thành một bài học trong Long Ký.';
+
+  @override
+  String get codexCodeField => 'Mã mở khoá';
+
+  @override
+  String get codexCodeRedeem => 'Mở khoá';
+
+  @override
+  String codexCodeOk(String name) {
+    return 'Đã mở khoá: $name.';
+  }
+
+  @override
+  String codexCodeAlready(String name) {
+    return '$name đã được mở khoá từ trước.';
+  }
+
+  @override
+  String get codexCodeInvalid => 'Mã không đúng. Kiểm tra lại và thử lần nữa.';
+
+  @override
+  String get codexCodeUnavailable => 'Bản này chưa kiểm tra được mã.';
+
+  @override
+  String get longKyReadMore => 'Đọc thêm trong Long Ký';
+
+  @override
+  String get longKyScan => 'Quét bằng điện thoại để mở Long Ký';
+
+  @override
+  String get longKyQrSemantics => 'Mã QR mở Long Ký';
+
+  @override
+  String get longKyOpenFailed => 'Không mở được Long Ký.';
+
+  @override
+  String get actionClose => 'Đóng';
 }

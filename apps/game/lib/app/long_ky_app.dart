@@ -6,12 +6,14 @@ import '../art/art_library.dart';
 import '../audio/audio_service.dart';
 import '../data/battle_save_repository.dart';
 import '../data/battle_save_store.dart';
+import '../data/long_ky_access.dart';
 import '../data/progress.dart';
 import '../data/progress_repository.dart';
 import '../features/settings/progress_cubit.dart';
 import 'audio_scope.dart';
 import 'l10n/app_localizations.dart';
 import 'routes.dart';
+import 'unlock_link_listener.dart';
 import 'theme.dart';
 
 /// Root widget: progress and settings, theme, localization and routes.
@@ -23,9 +25,12 @@ class LongKyApp extends StatelessWidget {
     BattleSaveRepository? saves,
     AudioService? audio,
     ArtLibrary? art,
+    LongKyAccess? access,
+    this.unlockLinks = const Stream.empty(),
   }) : saves = saves ?? BattleSaveRepository(MemoryBattleSaveStore()),
        audio = audio ?? AudioService.silent(),
-       art = art ?? ArtLibrary.empty();
+       art = art ?? ArtLibrary.empty(),
+       access = access ?? LongKyAccess.fromConfig();
 
   final ProgressRepository repository;
   final Progress initial;
@@ -39,6 +44,12 @@ class LongKyApp extends StatelessWidget {
   /// The painted art that ships; none until it is delivered, so placeholders show.
   final ArtLibrary art;
 
+  /// Links to Long Ký, the unlock codes and how links are opened.
+  final LongKyAccess access;
+
+  /// Unlock links that open the game (mobile only; none elsewhere).
+  final Stream<Uri> unlockLinks;
+
   /// The product name. It is a proper name, identical in vi and en.
   static const String productName = 'Long Ký - The Game';
 
@@ -49,6 +60,7 @@ class LongKyApp extends StatelessWidget {
         RepositoryProvider.value(value: saves),
         RepositoryProvider.value(value: audio),
         RepositoryProvider.value(value: art),
+        RepositoryProvider.value(value: access),
       ],
       child: BlocProvider(
         create: (_) => ProgressCubit(repository, initial),
@@ -79,7 +91,7 @@ class LongKyApp extends StatelessWidget {
                       textScaler: TextScaler.linear(settings.textScale),
                       disableAnimations: mq.disableAnimations || settings.reduceMotion,
                     ),
-                    child: child!,
+                    child: UnlockLinkListener(links: unlockLinks, child: child!),
                   );
                 },
               );

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lk_rules/lk_rules.dart';
+import 'package:long_ky_game/data/long_ky_access.dart';
+import 'package:long_ky_game/data/long_ky_links.dart';
+import 'package:long_ky_game/data/unlock_code.dart';
 import 'package:long_ky_game/features/battle/labels.dart';
 import 'package:long_ky_game/features/battle/overlays/result_screen.dart';
 
@@ -139,6 +143,26 @@ void main() {
         expect(find.text('Next mission'), findsOneWidget);
       });
 
+      testWidgets('"Read more in Long Ký" appears only when the build has a link format', (tester) async {
+        LongKyAccess access(LongKyLinks links) =>
+            LongKyAccess(links: links, codes: UnlockCodes(''), launcher: _NoLauncher(), isDesktop: false);
+        Widget withAccess(LongKyAccess a) => RepositoryProvider.value(
+          value: a,
+          child: screen(won([true, false, false]), onBack: () {}),
+        );
+        await pumpOverlay(tester, size, withAccess(access(const LongKyLinks())));
+        expect(find.byKey(const Key('read-more')), findsNothing);
+
+        await pumpOverlay(
+          tester,
+          size,
+          withAccess(access(const LongKyLinks(template: 'https://lk.example.test/{kind}/{id}'))),
+        );
+        expect(find.byKey(const Key('read-more')), findsOneWidget);
+        expect(find.text(l.longKyReadMore), findsOneWidget);
+        expect(tester.getSize(find.byKey(const Key('read-more'))).height, greaterThanOrEqualTo(48));
+      });
+
       testWidgets('buttons only appear when they have somewhere to go', (tester) async {
         await pumpOverlay(tester, size, screen(won([true, false, false])));
         expect(find.byKey(const Key('result-back')), findsNothing);
@@ -229,4 +253,9 @@ void main() {
       }
     });
   });
+}
+
+class _NoLauncher implements LinkLauncher {
+  @override
+  Future<bool> open(Uri uri) async => false;
 }

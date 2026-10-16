@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +37,8 @@ Future<void> main() async {
       saves: BattleSaveRepository(FileBattleSaveStore(directory)),
       audio: audio,
       art: art,
+      // Unlock links open the game on phones only (build-spec section 6).
+      unlockLinks: Platform.isAndroid || Platform.isIOS ? AppLinks().uriLinkStream : const Stream.empty(),
     ),
   );
 }

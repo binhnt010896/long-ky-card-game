@@ -3,6 +3,7 @@ import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/l10n/app_localizations.dart';
 import '../../../app/theme.dart';
+import '../../codex/read_more.dart';
 import '../labels.dart';
 import 'panel.dart';
 
@@ -13,8 +14,8 @@ import 'panel.dart';
 /// After a win, [nextTitle] names the next mission: it is announced as
 /// unlocked when [newlyUnlocked], and [onNext] opens its briefing.
 ///
-/// TODO(T-24): "Read more in Long Ký" (needs the deep-link format, an open
-/// input) and unlocks from codes.
+/// "Read more in Long Ký" opens the mission's event in Long Ký (shown only
+/// when the build has a link format; see `LongKyConfig`).
 class ResultScreen extends StatelessWidget {
   const ResultScreen({
     super.key,
@@ -165,6 +166,8 @@ class ResultScreen extends StatelessWidget {
                           style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
                           child: Text(l.resultRetry),
                         ),
+                      if (ruleset.mission.longKyEventId != null)
+                        ReadMoreButton(longKyId: ruleset.mission.longKyEventId!, isPerson: false),
                       if (won && onNext != null)
                         FilledButton(
                           key: const Key('result-next'),

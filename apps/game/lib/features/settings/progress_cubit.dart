@@ -23,6 +23,13 @@ class ProgressCubit extends Cubit<Progress> {
 
   Future<void> setReduceMotion(bool on) => updateSettings((s) => s.copyWith(reduceMotion: on));
 
+  /// Remembers that the Long Ký id [id] is unlocked (by a code). Unlocking
+  /// twice changes nothing.
+  Future<void> unlock(String id) async {
+    if (state.unlocks.contains(id)) return;
+    await _update(state.copyWith(unlocks: [...state.unlocks, id]));
+  }
+
   /// Keeps the best stars per mission: a star once earned is never lost by
   /// a later, worse run.
   Future<void> recordStars(String missionId, List<bool> stars) {

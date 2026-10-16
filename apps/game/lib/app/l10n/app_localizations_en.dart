@@ -72,8 +72,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetConfirmTitle => 'Reset all progress?';
 
   @override
-  String get resetConfirmBody =>
-      'Stars and unlocks will be erased. Settings are kept.';
+  String get resetConfirmBody => 'Stars and unlocks will be erased. Settings are kept.';
 
   @override
   String get actionCancel => 'Cancel';
@@ -88,8 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCredits => 'Credits and sources';
 
   @override
-  String get creditsFont =>
-      'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
+  String get creditsFont => 'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Software licences';
@@ -794,8 +792,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resumeUnusableTitle => 'The saved battle cannot be continued';
 
   @override
-  String get resumeUnusableBody =>
-      'The game content has changed or the save is damaged. Start this mission again?';
+  String get resumeUnusableBody => 'The game content has changed or the save is damaged. Start this mission again?';
 
   @override
   String get resumeRestart => 'Start again';
@@ -881,8 +878,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignLocked => 'Locked';
 
   @override
-  String get campaignLockedHint =>
-      'Win the previous mission to unlock this one.';
+  String get campaignLockedHint => 'Win the previous mission to unlock this one.';
 
   @override
   String campaignStarsSemantics(int n, int total) {
@@ -893,8 +889,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignReplaceTitle => 'Replace the saved battle?';
 
   @override
-  String get campaignReplaceBody =>
-      'The saved battle is lost if you start this mission.';
+  String get campaignReplaceBody => 'The saved battle is lost if you start this mission.';
 
   @override
   String get campaignStartAnyway => 'Start anyway';
@@ -906,4 +901,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resultNext => 'Next mission';
+
+  @override
+  String get codexOfficers => 'Đại Việt officers';
+
+  @override
+  String get codexEnemies => 'Mongol–Yuan commanders';
+
+  @override
+  String get codexCards => 'Stratagems and events';
+
+  @override
+  String get codexUnlocked => 'Unlocked';
+
+  @override
+  String get codexSources => 'Sources';
+
+  @override
+  String get codexCodeTitle => 'Enter an unlock code';
+
+  @override
+  String get codexCodeHelp => 'The code appears after you finish a lesson in Long Ký.';
+
+  @override
+  String get codexCodeField => 'Unlock code';
+
+  @override
+  String get codexCodeRedeem => 'Unlock';
+
+  @override
+  String codexCodeOk(String name) {
+    return 'Unlocked: $name.';
+  }
+
+  @override
+  String codexCodeAlready(String name) {
+    return '$name was already unlocked.';
+  }
+
+  @override
+  String get codexCodeInvalid => 'That code is not valid. Check it and try again.';
+
+  @override
+  String get codexCodeUnavailable => 'Codes cannot be checked in this build.';
+
+  @override
+  String get longKyReadMore => 'Read more in Long Ký';
+
+  @override
+  String get longKyScan => 'Scan with your phone to open Long Ký';
+
+  @override
+  String get longKyQrSemantics => 'QR code that opens Long Ký';
+
+  @override
+  String get longKyOpenFailed => 'Could not open Long Ký.';
+
+  @override
+  String get actionClose => 'Close';
 }
