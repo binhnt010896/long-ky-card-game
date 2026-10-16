@@ -2,7 +2,8 @@
 .DS_Store
 .idea/
 *.iml
-.vscode/
+.vscode/*
+!.vscode/launch.json
 
 # Dart and Flutter
 .dart_tool/

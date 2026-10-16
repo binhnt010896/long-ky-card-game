@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Long Ký (debug)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "apps/game",
+      "program": "lib/main.dart"
+    },
+    {
+      "name": "Long Ký (profile, for frame timings)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "apps/game",
+      "program": "lib/main.dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Long Ký (release)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "apps/game",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
+    }
+  ]
+}
