@@ -1,0 +1,55 @@
+name: long_ky_workspace
+description: Workspace root for Long Ký - The Game.
+publish_to: none
+
+environment:
+  sdk: ^3.13.0
+
+workspace:
+  - packages/lk_rules
+  - packages/lk_content
+  - tools/sim
+  - apps/game
+
+dev_dependencies:
+  melos: 8.9.0
+
+melos:
+  repository: https://github.com/binhnt010896/long-ky-card-game
+  scripts:
+    analyze:
+      description: Analyze every package; infos and warnings fail the run.
+      run: dart analyze --fatal-infos .
+    test:
+      description: Run all tests (pure Dart packages, then the Flutter app).
+      steps:
+        - test:dart
+        - test:flutter
+    test:dart:
+      description: Run tests for the pure Dart packages.
+      exec:
+        command: dart test
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: false
+        dirExists: test
+    test:flutter:
+      description: Run the Flutter app's widget tests.
+      exec:
+        command: flutter test
+        concurrency: 1
+        failFast: true
+      packageFilters:
+        flutter: true
+        dirExists: test
+    generate:
+      description: Regenerate freezed and json_serializable code.
+      exec:
+        command: dart run build_runner build --delete-conflicting-outputs
+        concurrency: 1
+      packageFilters:
+        dependsOn: build_runner
+    validate:
+      description: Validate the game content JSON.
+      run: dart run packages/lk_content/bin/validate.dart

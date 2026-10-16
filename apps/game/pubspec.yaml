@@ -1,0 +1,23 @@
+name: long_ky_game
+description: "Long Ký - The Game: a single-player, offline card strategy game about the Trần dynasty and the Mongol–Yuan invasions."
+publish_to: none
+version: 0.1.0+1
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: 3.47.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  lk_content: any
+  lk_rules: any
+
+dev_dependencies:
+  flutter_lints: 6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

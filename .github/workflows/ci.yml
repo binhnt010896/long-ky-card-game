@@ -1,0 +1,67 @@
+name: ci
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep in sync with the README and apps/game/pubspec.yaml.
+  FLUTTER_VERSION: 3.47.7
+  MELOS_VERSION: 8.9.0
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install Melos
+        run: |
+          dart pub global activate melos ${{ env.MELOS_VERSION }}
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+
+      - name: Bootstrap
+        run: melos bootstrap
+
+      - name: Analyze (zero warnings)
+        run: melos run analyze
+
+      - name: Test
+        run: melos run test
+
+      - name: Validate content
+        run: |
+          if [ -f packages/lk_content/bin/validate.dart ]; then
+            dart run packages/lk_content/bin/validate.dart
+          else
+            echo "Content validator not present yet (T-11)."
+          fi
+
+      - name: Simulator smoke run
+        # Invariant checks only. The win-rate gate (T-25 target minus 10 points)
+        # is switched on in T-25.
+        run: |
+          if [ -d apps/game/assets/content/missions ]; then
+            dart run tools/sim/bin/sim.dart --mission all --strategy expert --games 200 --seed 1 --json build/sim-smoke.json
+          else
+            echo "No mission content yet (T-12)."
+          fi
+
+      - name: Upload simulator report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sim-smoke
+          path: build/sim-smoke.json
+          if-no-files-found: ignore
