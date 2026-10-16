@@ -8,6 +8,7 @@ export 'src/actions/game_action.dart';
 export 'src/balance.dart';
 export 'src/engine/engine.dart';
 export 'src/engine/events.dart';
+export 'src/engine/forecast.dart' show BattleForecast;
 export 'src/engine/graph.dart';
 export 'src/engine/objectives.dart' show LossReasons;
 export 'src/engine/state_hash.dart';

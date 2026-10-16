@@ -314,4 +314,26 @@ void main() {
       expect(r.state.missionStats.counterattackNodes, isEmpty);
     });
   });
+
+  group('forecast (battle preview)', () {
+    test('matches the resolved battle', () {
+      final e = engineFor(duel('cap'));
+      final s = e.newGame(1).state;
+      final f = e.forecastBattle(s, 'cap', officerIds: ['plain']);
+      expect(f.daiVietPower, closeTo(18.36, 1e-9));
+      expect(f.yuanPower, closeTo(17.1, 1e-9));
+      expect(f.winner, Side.daiViet);
+      final attacking = e.forecastBattle(s, 'cap', officerIds: ['plain'], moving: {'plain'});
+      expect(attacking.daiVietPower, closeTo(12.75, 1e-9));
+    });
+
+    test('an ambush shows the roll range', () {
+      final e = engineFor(mission(officers: [at('raider', 'cap', 12)], armies: [army('rv1', troops: 10)]));
+      final f = e.forecastAmbush(e.newGame(1).state, 'raider', 'y1');
+      expect(f.daiVietPower, closeTo(12 * 1.9 * 1.2 * 0.85 * 1.5 * 0.9, 1e-9));
+      expect(f.daiVietPowerMax, closeTo(12 * 1.9 * 1.2 * 0.85 * 1.5 * 1.1, 1e-9));
+      expect(f.yuanPower, closeTo(15.39, 1e-9));
+      expect(f.winner, Side.daiViet);
+    });
+  });
 }

@@ -6,6 +6,7 @@ import '../model/game_state.dart';
 import '../rng/seeded_rng.dart';
 import 'council.dart';
 import 'events.dart';
+import 'forecast.dart';
 import 'graph.dart';
 import 'intel.dart';
 import 'legal_actions.dart';
@@ -157,6 +158,22 @@ final class GameEngine {
 
   /// Every legal action in [state], in a deterministic order.
   List<GameAction> legalActions(GameState state) => enumerateLegalActions(this, state);
+
+  /// Preview of a field battle at [nodeId] in [state] (see [forecastFieldBattleIn]).
+  BattleForecast forecastBattle(
+    GameState state,
+    String nodeId, {
+    required List<String> officerIds,
+    List<String>? armyIds,
+    Set<String> moving = const {},
+    Map<String, Order?> orders = const {},
+  }) =>
+      forecastFieldBattleIn(Tx(def, graph, state), nodeId,
+          officerIds: officerIds, armyIds: armyIds, moving: moving, orders: orders);
+
+  /// Preview of an ambush by [officerId] on [armyId], over the roll range.
+  BattleForecast forecastAmbush(GameState state, String officerId, String armyId) =>
+      forecastAmbushIn(Tx(def, graph, state), officerId, armyId);
 
   /// Replays [actions] from the mission start with [seed].
   GameState replay(int seed, Iterable<GameAction> actions) {
