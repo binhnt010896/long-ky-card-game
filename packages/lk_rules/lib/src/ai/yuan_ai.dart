@@ -20,3 +20,6 @@ Intent chooseIntent(Tx tx, String armyId) {
   }
   return const Intent(kind: IntentKind.hold);
 }
+
+/// Next turn's intents, shown as "predicted" while `revealDepth` ≥ 2 (T-10).
+void assignPredictions(Tx tx) {}

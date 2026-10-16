@@ -181,6 +181,64 @@ final List<CardDef> testCards = [
     text: t('heat'),
     effects: const [ModArmyEffect(ModArmyEffect.allArmies, ArmyField.troops, -1)],
   ),
+  // Test-only cards exercising the remaining ops and conditions.
+  CardDef(
+    id: 'boost',
+    type: CardType.stratagem,
+    name: t('boost'),
+    text: t('boost'),
+    effects: const [
+      ModResourceEffect(Resource.rice, 3),
+      ModResourceEffect(Resource.support, -10),
+      ModUnityEffect(Pillar.clan, 9),
+      SetUnityEffect(Pillar.people, 2),
+    ],
+  ),
+  CardDef(
+    id: 'scout',
+    type: CardType.stratagem,
+    name: t('scout'),
+    text: t('scout'),
+    effects: const [RevealIntentEffect(1)],
+  ),
+  CardDef(
+    id: 'harass',
+    type: CardType.stratagem,
+    name: t('harass'),
+    text: t('harass'),
+    target: TargetKind.yuanArmy,
+    conditions: const [ArmySupplyBelowFractionCondition(r'$army', 0.5)],
+    effects: const [ModArmyEffect(r'$army', ArmyField.supply, -5), ModArmyEffect(r'$army', ArmyField.morale, 5)],
+  ),
+  CardDef(
+    id: 'ford',
+    type: CardType.stratagem,
+    name: t('ford'),
+    text: t('ford'),
+    target: TargetKind.anyNode,
+    conditions: const [NodeTerrainCondition(r'$node', Terrain.river), UnityAtLeastCondition(Pillar.court, 5)],
+    effects: const [ModResourceEffect(Resource.rice, 1)],
+  ),
+  CardDef(
+    id: 'nested',
+    type: CardType.event,
+    name: t('nested'),
+    text: t('nested'),
+    effects: [
+      const ModResourceEffect(Resource.rice, 1),
+      ChoiceEffect([
+        ChoiceOption(label: t('a'), effects: const [ModResourceEffect(Resource.rice, 10)]),
+        ChoiceOption(label: t('b'), effects: [
+          const ModResourceEffect(Resource.support, 1),
+          ChoiceEffect([
+            ChoiceOption(label: t('b1'), effects: const [ModUnityEffect(Pillar.court, 1)]),
+            ChoiceOption(label: t('b2'), effects: const [ModUnityEffect(Pillar.court, -1)]),
+          ]),
+        ]),
+      ]),
+    ],
+  ),
+  CardDef(id: 'omen', type: CardType.intent, name: t('omen'), text: t('omen')),
 ];
 
 PlayerOfficerSetup at(String officerId, String nodeId, int troops) =>
