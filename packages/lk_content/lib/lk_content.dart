@@ -4,6 +4,7 @@
 /// validator CLI and the simulator (dart:io) can all use it.
 library;
 
+export 'src/export_text.dart';
 export 'src/issues.dart';
 export 'src/longky_ids.dart';
 export 'src/model.dart';

@@ -22,7 +22,7 @@ CI (`.github/workflows/ci.yml`, `build.yml`) uses the same Flutter version.
 
 ```
 packages/lk_rules     pure Dart rules engine (state, reducer, Yuan AI, seeded RNG)
-packages/lk_content   content parser and validator (bin/validate.dart)
+packages/lk_content   content parser, validator (bin/validate.dart) and text export (bin/export_text.dart)
 apps/game             Flutter app; all content JSON in apps/game/assets/content
 tools/sim             headless balance simulator and text-mode player
 ```
@@ -36,6 +36,7 @@ melos run analyze
 melos run test
 melos run generate                     # regenerate freezed / json_serializable code
 dart run packages/lk_content/bin/validate.dart
+dart run packages/lk_content/bin/export_text.dart   # every vi/en text + sourceRefs as CSV, for the history reviewer
 dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
 dart run tools/sim/bin/sim.dart --play --mission ch1_m2
 ```
