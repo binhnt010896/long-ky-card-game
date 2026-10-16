@@ -1,6 +1,7 @@
 /// Headless balance simulator and text-mode player for Long Ký - The Game.
 library;
 
+export 'src/bench.dart';
 export 'src/describe.dart';
 export 'src/invariants.dart';
 export 'src/play.dart';

@@ -14,6 +14,7 @@ Usage:
                                   [--games 1000] [--seed 1] [--json report.json|-] [--content <dir>]
   dart run tools/sim/bin/sim.dart --play --mission ch1_m2 [--seed 1]
   dart run tools/sim/bin/sim.dart --trace --mission ch1_m3 --strategy expert [--seed 1]
+  dart run tools/sim/bin/sim.dart --bench [--mission ch1_m3|all] [--strategy expert|...] [--games 200]
 
 Prints win rate, average turns, average Supply left per army, defections and
 card play counts per mission and strategy, and checks the build-spec section 7
@@ -27,6 +28,7 @@ void main(List<String> args) {
   var seed = 1;
   var play = false;
   var trace = false;
+  var bench = false;
   String? jsonOut;
   String? contentPath;
   for (var i = 0; i < args.length; i++) {
@@ -53,6 +55,8 @@ void main(List<String> args) {
           play = true;
         case '--trace':
           trace = true;
+        case '--bench':
+          bench = true;
         case '-h' || '--help':
           stdout.write(_usage);
           return;
@@ -100,6 +104,21 @@ void main(List<String> args) {
   if (trace) {
     final engine = GameEngine(content.ruleset(missionIds.first));
     traceGame(engine, strategyByName(names.first.trim()), seed, stdout);
+    return;
+  }
+  if (bench) {
+    stdout.writeln('mission  strategy  steps   mean µs  p50  p95  p99  max   | Resolution steps: p99  max (µs)');
+    for (final id in missionIds) {
+      final engine = GameEngine(content.ruleset(id));
+      for (final name in names) {
+        final t = benchSteps(engine, strategyByName(name.trim()), games: games, seed: seed);
+        stdout.writeln('${id.padRight(8)} ${name.trim().padRight(9)} ${t.count.toString().padLeft(5)} '
+            '${t.mean.round().toString().padLeft(8)} ${t.percentile(0.5).toString().padLeft(4)} '
+            '${t.percentile(0.95).toString().padLeft(4)} ${t.percentile(0.99).toString().padLeft(4)} '
+            '${t.max.toString().padLeft(5)}   | ${t.resolutionPercentile(0.99).toString().padLeft(5)} '
+            '${t.resolutionMax.toString().padLeft(5)}');
+      }
+    }
     return;
   }
   final reports = <StrategyReport>[];
