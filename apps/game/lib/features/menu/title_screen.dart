@@ -97,6 +97,10 @@ class _TitleScreenState extends State<TitleScreen> {
                     onPressed: () => Navigator.pushNamed(context, Routes.boardPreview).then((_) => _refresh()),
                     child: const Text('Board preview (debug)'),
                   ),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, Routes.briefingPreview),
+                    child: const Text('Briefing preview (debug)'),
+                  ),
                 ],
               ],
             ),

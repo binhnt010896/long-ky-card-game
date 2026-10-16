@@ -417,5 +417,21 @@
   "battleMenuLeave": "Rời trận (đã tự lưu)",
   "@battleMenuLeave": {"description": "Leaves the battle; progress is saved."},
   "shortcutHint": "{label} ({keys})",
-  "@shortcutHint": {"description": "A tooltip with its keyboard shortcut.", "placeholders": {"label": {"type": "String"}, "keys": {"type": "String"}}}
+  "@shortcutHint": {"description": "A tooltip with its keyboard shortcut.", "placeholders": {"label": {"type": "String"}, "keys": {"type": "String"}}},
+  "briefingObjectives": "Mục tiêu",
+  "@briefingObjectives": {"description": "Briefing: heading of the win conditions."},
+  "briefingOfficers": "Tướng lĩnh xuất trận",
+  "@briefingOfficers": {"description": "Briefing: heading of the starting officers."},
+  "briefingOfficerLine": "{troops} tại {node}",
+  "@briefingOfficerLine": {"description": "Briefing: a starting officer with troops and place.", "placeholders": {"troops": {"type": "String"}, "node": {"type": "String"}}},
+  "briefingStart": "Xuất quân",
+  "@briefingStart": {"description": "Briefing: begin the battle."},
+  "briefingSubtitles": "Phụ đề lời dẫn",
+  "@briefingSubtitles": {"description": "Screen-reader label of the narration text."},
+  "briefingPlayVoice": "Nghe lời dẫn",
+  "@briefingPlayVoice": {"description": "Button: play the spoken narration."},
+  "briefingStopVoice": "Dừng lời dẫn",
+  "@briefingStopVoice": {"description": "Button: stop the spoken narration."},
+  "briefingLoadError": "Không tải được phần dẫn nhiệm vụ.",
+  "@briefingLoadError": {"description": "Shown when a briefing cannot be loaded."}
 }

@@ -218,5 +218,13 @@
   "battleMenuTitle": "Paused",
   "battleMenuResume": "Resume",
   "battleMenuLeave": "Leave the battle (saved)",
-  "shortcutHint": "{label} ({keys})"
+  "shortcutHint": "{label} ({keys})",
+  "briefingObjectives": "Objectives",
+  "briefingOfficers": "Officers in the field",
+  "briefingOfficerLine": "{troops} at {node}",
+  "briefingStart": "Start the mission",
+  "briefingSubtitles": "Narration subtitles",
+  "briefingPlayVoice": "Play the narration",
+  "briefingStopVoice": "Stop the narration",
+  "briefingLoadError": "Could not load the briefing."
 }

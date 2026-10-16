@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +8,11 @@ import 'package:lk_rules/lk_rules.dart';
 
 import '../../app/l10n/app_localizations.dart';
 import '../../app/theme.dart';
+import '../../audio/audio_service.dart';
 import '../../data/battle_save_repository.dart';
 import '../../data/content_repository.dart';
 import '../settings/progress_cubit.dart';
+import 'battle_audio.dart';
 import 'battle_cubit.dart';
 import 'battle_screen.dart';
 import 'overlays/panel.dart';
@@ -28,6 +32,7 @@ class BattlePage extends StatefulWidget {
     this.bundle,
     this.saves,
     this.progress,
+    this.audio,
   });
 
   final String missionId;
@@ -42,6 +47,9 @@ class BattlePage extends StatefulWidget {
   final BattleSaveRepository? saves;
   final ProgressCubit? progress;
 
+  /// Music, effects and the debrief voice; by default the app's, if any.
+  final AudioService? audio;
+
   @override
   State<BattlePage> createState() => _BattlePageState();
 }
@@ -53,6 +61,9 @@ class _BattlePageState extends State<BattlePage> {
   ContentBundle? _content;
   Ruleset? _ruleset;
   BattleCubit? _cubit;
+  AudioService? _audio;
+  BattleAudio? _sounds;
+  StreamSubscription<BattleViewState>? _soundSub;
 
   BattleSaveRepository? _saves;
   ProgressCubit? _progress;
@@ -64,6 +75,7 @@ class _BattlePageState extends State<BattlePage> {
     // Looked up once, before the first await.
     _saves = widget.saves ?? _maybe<BattleSaveRepository>();
     _progress = widget.progress ?? _maybe<ProgressCubit>();
+    _audio = widget.audio ?? _maybe<AudioService>();
     _bundle = widget.bundle ?? context.getInheritedWidgetOfExactType<DefaultAssetBundle>()?.bundle ?? rootBundle;
     _start(resume: widget.resume);
   }
@@ -78,6 +90,8 @@ class _BattlePageState extends State<BattlePage> {
 
   @override
   void dispose() {
+    _soundSub?.cancel();
+    _sounds?.stop();
     _cubit?.close();
     super.dispose();
   }
@@ -141,6 +155,15 @@ class _BattlePageState extends State<BattlePage> {
       _stage = _Stage.ready;
     });
     old?.close();
+    // The battle's sounds follow its steps.
+    _soundSub?.cancel();
+    final audio = _audio;
+    if (audio != null) {
+      final sounds = BattleAudio(audio, missionId: widget.missionId, chapter: ruleset.mission.chapter);
+      _sounds = sounds;
+      sounds.start();
+      _soundSub = cubit.stream.listen(sounds.onStep);
+    }
   }
 
   /// Autosave after every step; a finished mission clears the save and

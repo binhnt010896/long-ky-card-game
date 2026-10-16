@@ -62,8 +62,7 @@ import 'app_localizations_vi.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -71,8 +70,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -84,19 +82,15 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[
-    Locale('en'),
-    Locale('vi'),
-  ];
+  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('vi')];
 
   /// Product name. A proper name, the same in every language.
   ///
@@ -1411,10 +1405,57 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'{label} ({keys})'**
   String shortcutHint(String label, String keys);
+
+  /// Briefing: heading of the win conditions.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mục tiêu'**
+  String get briefingObjectives;
+
+  /// Briefing: heading of the starting officers.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tướng lĩnh xuất trận'**
+  String get briefingOfficers;
+
+  /// Briefing: a starting officer with troops and place.
+  ///
+  /// In vi, this message translates to:
+  /// **'{troops} tại {node}'**
+  String briefingOfficerLine(String troops, String node);
+
+  /// Briefing: begin the battle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xuất quân'**
+  String get briefingStart;
+
+  /// Screen-reader label of the narration text.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phụ đề lời dẫn'**
+  String get briefingSubtitles;
+
+  /// Button: play the spoken narration.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nghe lời dẫn'**
+  String get briefingPlayVoice;
+
+  /// Button: stop the spoken narration.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng lời dẫn'**
+  String get briefingStopVoice;
+
+  /// Shown when a briefing cannot be loaded.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tải được phần dẫn nhiệm vụ.'**
+  String get briefingLoadError;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1423,8 +1464,7 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'vi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'vi'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;

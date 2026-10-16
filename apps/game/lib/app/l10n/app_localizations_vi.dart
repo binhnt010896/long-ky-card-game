@@ -72,8 +72,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resetConfirmTitle => 'Xoá toàn bộ tiến trình?';
 
   @override
-  String get resetConfirmBody =>
-      'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
+  String get resetConfirmBody => 'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
 
   @override
   String get actionCancel => 'Huỷ';
@@ -88,8 +87,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsCredits => 'Ghi công và nguồn tư liệu';
 
   @override
-  String get creditsFont =>
-      'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
+  String get creditsFont => 'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Giấy phép phần mềm';
@@ -794,8 +792,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resumeUnusableTitle => 'Không thể tiếp tục ván đã lưu';
 
   @override
-  String get resumeUnusableBody =>
-      'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
+  String get resumeUnusableBody => 'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
 
   @override
   String get resumeRestart => 'Bắt đầu lại';
@@ -816,4 +813,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String shortcutHint(String label, String keys) {
     return '$label ($keys)';
   }
+
+  @override
+  String get briefingObjectives => 'Mục tiêu';
+
+  @override
+  String get briefingOfficers => 'Tướng lĩnh xuất trận';
+
+  @override
+  String briefingOfficerLine(String troops, String node) {
+    return '$troops tại $node';
+  }
+
+  @override
+  String get briefingStart => 'Xuất quân';
+
+  @override
+  String get briefingSubtitles => 'Phụ đề lời dẫn';
+
+  @override
+  String get briefingPlayVoice => 'Nghe lời dẫn';
+
+  @override
+  String get briefingStopVoice => 'Dừng lời dẫn';
+
+  @override
+  String get briefingLoadError => 'Không tải được phần dẫn nhiệm vụ.';
 }

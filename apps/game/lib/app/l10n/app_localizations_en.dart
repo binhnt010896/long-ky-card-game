@@ -72,8 +72,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetConfirmTitle => 'Reset all progress?';
 
   @override
-  String get resetConfirmBody =>
-      'Stars and unlocks will be erased. Settings are kept.';
+  String get resetConfirmBody => 'Stars and unlocks will be erased. Settings are kept.';
 
   @override
   String get actionCancel => 'Cancel';
@@ -88,8 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCredits => 'Credits and sources';
 
   @override
-  String get creditsFont =>
-      'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
+  String get creditsFont => 'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Software licences';
@@ -794,8 +792,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resumeUnusableTitle => 'The saved battle cannot be continued';
 
   @override
-  String get resumeUnusableBody =>
-      'The game content has changed or the save is damaged. Start this mission again?';
+  String get resumeUnusableBody => 'The game content has changed or the save is damaged. Start this mission again?';
 
   @override
   String get resumeRestart => 'Start again';
@@ -816,4 +813,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String shortcutHint(String label, String keys) {
     return '$label ($keys)';
   }
+
+  @override
+  String get briefingObjectives => 'Objectives';
+
+  @override
+  String get briefingOfficers => 'Officers in the field';
+
+  @override
+  String briefingOfficerLine(String troops, String node) {
+    return '$troops at $node';
+  }
+
+  @override
+  String get briefingStart => 'Start the mission';
+
+  @override
+  String get briefingSubtitles => 'Narration subtitles';
+
+  @override
+  String get briefingPlayVoice => 'Play the narration';
+
+  @override
+  String get briefingStopVoice => 'Stop the narration';
+
+  @override
+  String get briefingLoadError => 'Could not load the briefing.';
 }

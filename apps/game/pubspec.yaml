@@ -20,6 +20,7 @@ dependencies:
   lk_rules: any
   path_provider: 2.1.6
   window_manager: 0.5.2
+  flame_audio: 2.12.2
 
 dev_dependencies:
   flutter_lints: 6.0.0
@@ -33,6 +34,11 @@ flutter:
     - assets/content/
     - assets/content/maps/
     - assets/content/missions/
+    # Narration, music and effects, named by content id (build-spec section 6).
+    # The files come with the audio production; until then they are skipped.
+    - assets/audio/voice/
+    - assets/audio/music/
+    - assets/audio/effects/
     - assets/fonts/BeVietnamPro/OFL.txt
   fonts:
     - family: BeVietnamPro
