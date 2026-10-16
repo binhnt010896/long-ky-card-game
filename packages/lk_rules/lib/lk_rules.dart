@@ -6,7 +6,12 @@ library;
 
 export 'src/actions/game_action.dart';
 export 'src/balance.dart';
+export 'src/engine/engine.dart';
+export 'src/engine/events.dart';
+export 'src/engine/graph.dart';
+export 'src/engine/objectives.dart' show LossReasons;
 export 'src/engine/state_hash.dart';
+export 'src/engine/tx.dart' show IllegalAction, IllegalCodes, StepResult;
 export 'src/model/defs.dart';
 export 'src/model/enums.dart';
 export 'src/model/game_state.dart';
