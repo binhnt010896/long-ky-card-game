@@ -4,6 +4,7 @@ import '../model/defs.dart';
 import '../model/enums.dart';
 import '../model/game_state.dart';
 import 'events.dart';
+import 'objectives.dart';
 import 'tx.dart';
 import 'unity.dart';
 
@@ -87,7 +88,10 @@ ChoiceEffect _choiceAt(Tx tx, PendingChoice pc) {
 /// Plays this turn's queued scripted Event cards until one asks a choice.
 /// Scripted cards cost nothing and are not discarded into the deck.
 void processScriptedQueue(Tx tx) {
-  while (tx.s.scriptedQueue.isNotEmpty && tx.s.pendingChoice == null && !tx.s.isOver) {
+  while (tx.s.scriptedQueue.isNotEmpty && tx.s.pendingChoice == null) {
+    // An earlier card or choice may already have lost the mission.
+    checkEnd(tx, endOfTurn: false);
+    if (tx.s.isOver) return;
     final cardId = tx.s.scriptedQueue.first;
     tx.s = tx.s.copyWith(scriptedQueue: tx.s.scriptedQueue.sublist(1));
     final card = tx.def.cards[cardId]!;

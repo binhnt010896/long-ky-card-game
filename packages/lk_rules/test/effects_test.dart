@@ -263,6 +263,27 @@ void main() {
     });
   });
 
+  group('scripted events and losses', () {
+    test('a loss from a choice stops the rest of the scripted queue', () {
+      // Found by the invariant run: Court hit 0 in a choice, and the next
+      // queued event then opened another choice on a finished mission.
+      final m = mission(
+        officers: [at('king', 'cap', 12)],
+        unity: const StartingUnity(court: 1, clan: 6, people: 6),
+        scriptedEvents: const [ScriptedEvent(turn: 1, cardId: 'nested'), ScriptedEvent(turn: 1, cardId: 'envoy')],
+      );
+      final e = engineFor(m);
+      var s = e.newGame(1).state;
+      s = e.apply(s, const GameAction.resolveChoice(index: 1)).state;
+      final r = e.apply(s, const GameAction.resolveChoice(index: 1));
+      expect(r.state.outcome, Outcome.lost);
+      expect(r.state.lossReason, 'unity:court');
+      expect(r.state.pendingChoice, isNull);
+      expect(r.state.scriptedQueue, isEmpty);
+      expect(r.events.whereType<CardPlayed>(), isEmpty, reason: 'envoy is never played');
+    });
+  });
+
   group('activated skills', () {
     test('setUnity court 10, once per mission', () {
       final m = mission(officers: [at('chancellor', 'cap', 6)], unity: const StartingUnity(court: 3, clan: 6, people: 6));

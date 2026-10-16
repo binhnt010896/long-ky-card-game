@@ -84,6 +84,8 @@ String? _lossReason(Tx tx) {
 void endMission(Tx tx, Outcome outcome, String? reason) {
   tx.s = tx.s.copyWith(
     phase: Phase.ended,
+    pendingChoice: null,
+    scriptedQueue: const [],
     outcome: outcome,
     lossReason: reason,
     missionStats: outcome == Outcome.won
