@@ -8,9 +8,13 @@ import 'data/battle_save_repository.dart';
 import 'data/battle_save_store.dart';
 import 'data/progress_repository.dart';
 import 'data/progress_store.dart';
+import 'platform/desktop_window.dart';
+import 'platform/mobile_orientation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await lockLandscape();
+  await configureDesktopWindow();
   LicenseRegistry.addLicense(() async* {
     final ofl = await rootBundle.loadString('assets/fonts/BeVietnamPro/OFL.txt');
     yield LicenseEntryWithLineBreaks(['Be Vietnam Pro'], ofl);

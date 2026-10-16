@@ -802,4 +802,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get battleLoadError => 'Không tải được nhiệm vụ.';
+
+  @override
+  String get battleMenuTitle => 'Tạm dừng';
+
+  @override
+  String get battleMenuResume => 'Chơi tiếp';
+
+  @override
+  String get battleMenuLeave => 'Rời trận (đã tự lưu)';
+
+  @override
+  String shortcutHint(String label, String keys) {
+    return '$label ($keys)';
+  }
 }

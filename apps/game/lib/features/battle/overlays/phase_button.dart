@@ -39,29 +39,32 @@ class PhaseButton extends StatelessWidget {
     final compact = mode.isCompact;
     return ConstrainedBox(
       constraints: BoxConstraints(minWidth: compact ? 132 : 200, minHeight: minTouch),
-      child: FilledButton(
-        key: const Key('phase-button'),
-        onPressed: canEnd(state) && !busy ? onPressed : null,
-        style: FilledButton.styleFrom(
-          minimumSize: Size(compact ? 132 : 200, minTouch),
-          padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 20),
-          disabledBackgroundColor: LongKyColors.lacquerRaised,
-          disabledForegroundColor: LongKyColors.ivory.withValues(alpha: 0.7),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              l.phaseName(state.phase),
-              style: TextStyle(fontSize: compact ? 10 : 12, fontWeight: FontWeight.w500, height: 1.1),
-            ),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: compact ? 14 : 17, fontWeight: FontWeight.w700, height: 1.15),
-            ),
-          ],
+      child: Tooltip(
+        message: l.shortcutHint(label, 'Space / Enter'),
+        child: FilledButton(
+          key: const Key('phase-button'),
+          onPressed: canEnd(state) && !busy ? onPressed : null,
+          style: FilledButton.styleFrom(
+            minimumSize: Size(compact ? 132 : 200, minTouch),
+            padding: EdgeInsets.symmetric(horizontal: compact ? 12 : 20),
+            disabledBackgroundColor: LongKyColors.lacquerRaised,
+            disabledForegroundColor: LongKyColors.ivory.withValues(alpha: 0.7),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.phaseName(state.phase),
+                style: TextStyle(fontSize: compact ? 10 : 12, fontWeight: FontWeight.w500, height: 1.1),
+              ),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: compact ? 14 : 17, fontWeight: FontWeight.w700, height: 1.15),
+              ),
+            ],
+          ),
         ),
       ),
     );

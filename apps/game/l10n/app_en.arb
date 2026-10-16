@@ -214,5 +214,9 @@
   "resumeUnusableTitle": "The saved battle cannot be continued",
   "resumeUnusableBody": "The game content has changed or the save is damaged. Start this mission again?",
   "resumeRestart": "Start again",
-  "battleLoadError": "Could not load the mission."
+  "battleLoadError": "Could not load the mission.",
+  "battleMenuTitle": "Paused",
+  "battleMenuResume": "Resume",
+  "battleMenuLeave": "Leave the battle (saved)",
+  "shortcutHint": "{label} ({keys})"
 }

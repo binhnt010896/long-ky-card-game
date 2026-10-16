@@ -409,5 +409,13 @@
   "resumeRestart": "Bắt đầu lại",
   "@resumeRestart": {"description": "Button: discard the save and start the mission again."},
   "battleLoadError": "Không tải được nhiệm vụ.",
-  "@battleLoadError": {"description": "Shown when a mission cannot be loaded."}
+  "@battleLoadError": {"description": "Shown when a mission cannot be loaded."},
+  "battleMenuTitle": "Tạm dừng",
+  "@battleMenuTitle": {"description": "Title of the battle menu (Esc)."},
+  "battleMenuResume": "Chơi tiếp",
+  "@battleMenuResume": {"description": "Closes the battle menu."},
+  "battleMenuLeave": "Rời trận (đã tự lưu)",
+  "@battleMenuLeave": {"description": "Leaves the battle; progress is saved."},
+  "shortcutHint": "{label} ({keys})",
+  "@shortcutHint": {"description": "A tooltip with its keyboard shortcut.", "placeholders": {"label": {"type": "String"}, "keys": {"type": "String"}}}
 }

@@ -802,4 +802,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get battleLoadError => 'Could not load the mission.';
+
+  @override
+  String get battleMenuTitle => 'Paused';
+
+  @override
+  String get battleMenuResume => 'Resume';
+
+  @override
+  String get battleMenuLeave => 'Leave the battle (saved)';
+
+  @override
+  String shortcutHint(String label, String keys) {
+    return '$label ($keys)';
+  }
 }

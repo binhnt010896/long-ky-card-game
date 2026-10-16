@@ -106,63 +106,66 @@ class OfficerTile extends StatelessWidget {
       selected: selected,
       label: l.officerSemantics(name, troops, detail),
       excludeSemantics: true,
-      child: Opacity(
-        opacity: active ? 1 : 0.5,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: active ? onTap : null,
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              constraints: BoxConstraints(minWidth: compact ? 112 : 168, minHeight: minTouch),
-              padding: EdgeInsets.symmetric(horizontal: compact ? 6 : 10),
-              decoration: lacquerPanel(selected: selected),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InitialsBadge(initials: initialsOf(def.name.vi), size: compact ? 30 : 40, heavy: def.isKing),
-                  SizedBox(width: compact ? 6 : 8),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: compact ? 120 : 150),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: LongKyColors.ivory,
-                            fontSize: compact ? 12 : 14,
-                            fontWeight: FontWeight.w600,
-                            height: 1.15,
-                          ),
-                        ),
-                        Text(
-                          active ? '$troops · $detail' : detail,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: LongKyColors.ivory.withValues(alpha: 0.85),
-                            fontSize: compact ? 11 : 12,
-                            height: 1.15,
-                          ),
-                        ),
-                        if (!compact && active)
+      child: Tooltip(
+        message: l.shortcutHint('$name · ${l.troopsFull(o.troops)} · ${l.moraleShort(o.morale)}', 'Tab'),
+        child: Opacity(
+          opacity: active ? 1 : 0.5,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: active ? onTap : null,
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                constraints: BoxConstraints(minWidth: compact ? 112 : 168, minHeight: minTouch),
+                padding: EdgeInsets.symmetric(horizontal: compact ? 6 : 10),
+                decoration: lacquerPanel(selected: selected),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    InitialsBadge(initials: initialsOf(def.name.vi), size: compact ? 30 : 40, heavy: def.isKing),
+                    SizedBox(width: compact ? 6 : 8),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: compact ? 120 : 150),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            l.moraleShort(o.morale),
+                            name,
                             maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: LongKyColors.ivory.withValues(alpha: 0.7),
-                              fontSize: 11,
+                              color: LongKyColors.ivory,
+                              fontSize: compact ? 12 : 14,
+                              fontWeight: FontWeight.w600,
                               height: 1.15,
                             ),
                           ),
-                      ],
+                          Text(
+                            active ? '$troops · $detail' : detail,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: LongKyColors.ivory.withValues(alpha: 0.85),
+                              fontSize: compact ? 11 : 12,
+                              height: 1.15,
+                            ),
+                          ),
+                          if (!compact && active)
+                            Text(
+                              l.moraleShort(o.morale),
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: LongKyColors.ivory.withValues(alpha: 0.7),
+                                fontSize: 11,
+                                height: 1.15,
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

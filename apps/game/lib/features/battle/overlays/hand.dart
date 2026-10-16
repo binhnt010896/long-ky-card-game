@@ -39,6 +39,7 @@ class CardTile extends StatelessWidget {
     required this.onTap,
     this.showText = true,
     this.maxTextLines = 3,
+    this.shortcut,
   });
 
   final CardDef card;
@@ -48,6 +49,9 @@ class CardTile extends StatelessWidget {
   final VoidCallback onTap;
   final bool showText;
   final int maxTextLines;
+
+  /// The key that opens this card (1–9), named in its tooltip.
+  final String? shortcut;
 
   @override
   Widget build(BuildContext context) {
@@ -71,59 +75,62 @@ class CardTile extends StatelessWidget {
         affordable ? costText : '$costText, ${l.cardCannotAfford}',
       ),
       excludeSemantics: true,
-      child: Opacity(
-        opacity: affordable ? 1 : 0.6,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(6),
-            child: Container(
-              width: width,
-              constraints: const BoxConstraints(minHeight: minTouch),
-              padding: const EdgeInsets.all(8),
-              decoration: lacquerPanel(selected: selected, radius: 6, fill: LongKyColors.lacquerRaised),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: LongKyColors.goldLeaf,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      height: 1.2,
+      child: Tooltip(
+        message: shortcut == null ? name : l.shortcutHint(name, shortcut!),
+        child: Opacity(
+          opacity: affordable ? 1 : 0.6,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(6),
+              child: Container(
+                width: width,
+                constraints: const BoxConstraints(minHeight: minTouch),
+                padding: const EdgeInsets.all(8),
+                decoration: lacquerPanel(selected: selected, radius: 6, fill: LongKyColors.lacquerRaised),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: LongKyColors.goldLeaf,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    l.cardTypeName(card.type),
-                    style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.75), fontSize: 11, height: 1.2),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    affordable ? costText : '$costText · ${l.cardCannotAfford}',
-                    maxLines: 2,
-                    style: const TextStyle(
-                      color: LongKyColors.ivory,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      height: 1.2,
+                    const SizedBox(height: 2),
+                    Text(
+                      l.cardTypeName(card.type),
+                      style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.75), fontSize: 11, height: 1.2),
                     ),
-                  ),
-                  if (showText) ...[
                     const SizedBox(height: 4),
                     Text(
-                      l.content(card.text),
-                      maxLines: selected ? 8 : maxTextLines,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.9), fontSize: 11, height: 1.25),
+                      affordable ? costText : '$costText · ${l.cardCannotAfford}',
+                      maxLines: 2,
+                      style: const TextStyle(
+                        color: LongKyColors.ivory,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                      ),
                     ),
+                    if (showText) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        l.content(card.text),
+                        maxLines: selected ? 8 : maxTextLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.9), fontSize: 11, height: 1.25),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
@@ -215,6 +222,7 @@ class _HandColumnState extends State<HandColumn> {
                         key: Key('card-$i-${card.id}'),
                         card: card,
                         state: widget.state,
+                        shortcut: i < 9 ? '${i + 1}' : null,
                         width: double.infinity,
                         selected: _selected == key,
                         onTap: () {
@@ -344,6 +352,7 @@ class _HandFanState extends State<HandFan> {
                   key: Key('card-$i-${cards[i].id}'),
                   card: cards[i],
                   state: widget.state,
+                  shortcut: i < 9 ? '${i + 1}' : null,
                   width: w,
                   selected: i == _selected,
                   maxTextLines: 2,

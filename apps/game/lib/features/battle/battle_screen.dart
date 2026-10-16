@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lk_rules/lk_rules.dart';
@@ -5,11 +6,14 @@ import 'package:lk_rules/lk_rules.dart';
 import '../../app/l10n/app_localizations.dart';
 import '../../app/theme.dart';
 import 'battle_cubit.dart';
+import 'battle_keys.dart';
 import 'battle_preview.dart';
 import 'board/battle_board.dart';
+import 'board/board_hover.dart';
 import 'board/board_layout.dart';
 import 'board/board_scene.dart';
 import 'labels.dart';
+import 'overlays/battle_menu.dart';
 import 'overlays/card_dialog.dart';
 import 'overlays/choice_overlay.dart';
 import 'overlays/event_log.dart';
@@ -96,9 +100,69 @@ class _BattleScreenState extends State<BattleScreen> {
 
   void _select(Selection? s) => _boardKey.currentState?.select(s);
 
+  Future<void> _openMenu() async {
+    final choice = await showBattleMenu(context);
+    if (choice == BattleMenuChoice.leave && mounted) widget.onExit?.call();
+  }
+
+  /// A battle key (build-spec section 6). Returns whether it was used.
+  /// Nothing happens under the Result screen or a pending choice, which have
+  /// their own buttons.
+  bool _onCommand(BattleCommand command) {
+    final game = _cubit.game;
+    if (game.isOver || game.pendingChoice != null) return false;
+    switch (command) {
+      case EndPhaseCommand():
+        _endPhase();
+        return true;
+      case EscapeCommand():
+        // Closes what is open, the most temporary first; with nothing open it
+        // opens the menu.
+        if (_handOpen) {
+          setState(() => _handOpen = false);
+        } else if (_logOpen) {
+          setState(() => _logOpen = false);
+        } else if (_selection != null) {
+          _select(null);
+        } else {
+          _openMenu();
+        }
+        return true;
+      case PickCardCommand(:final index):
+        final cards = handCards(game, widget.ruleset);
+        if (index >= cards.length) return false;
+        _openCard(cards[index]);
+        return true;
+      case CycleOfficerCommand(:final step):
+        final ids = [
+          for (final id in (game.officers.keys.toList()..sort()))
+            if (game.officers[id]!.status == OfficerStatus.active) id,
+        ];
+        final next = cycleOfficer(ids, _selection?.kind == SelectionKind.officer ? _selection!.id : null, step);
+        if (next == null) return false;
+        _select(Selection(SelectionKind.officer, next));
+        return true;
+    }
+  }
+
+  /// A right click cancels the current selection.
+  void _onPointerDown(PointerDownEvent e) {
+    if (e.kind == PointerDeviceKind.mouse && e.buttons == kSecondaryMouseButton && _selection != null) {
+      final game = _cubit.game;
+      if (!game.isOver && game.pendingChoice == null) _select(null);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    return BattleKeyboard(
+      onCommand: _onCommand,
+      child: Listener(onPointerDown: _onPointerDown, child: _scaffold(context, l)),
+    );
+  }
+
+  Widget _scaffold(BuildContext context, AppLocalizations l) {
     return Scaffold(
       backgroundColor: LongKyColors.lacquer,
       body: LayoutBuilder(
@@ -135,16 +199,36 @@ class _BattleScreenState extends State<BattleScreen> {
     );
   }
 
-  Widget _board(BattleViewState view, AppLocalizations l) => BattleBoard(
-    key: _boardKey,
-    ruleset: widget.ruleset,
-    state: view.state,
-    languageCode: l.localeName,
-    onSelectionChanged: (s) => setState(() => _selection = s),
-    events: view.lastEvents,
-    step: view.step,
-    onBusyChanged: (busy) => setState(() => _busy = busy),
+  Widget _board(BattleViewState view, AppLocalizations l) => BoardHover(
+    sceneOf: () => _boardKey.currentState?.game.scene,
+    describe: (s) => _hoverText(l, view.state, s),
+    child: BattleBoard(
+      key: _boardKey,
+      ruleset: widget.ruleset,
+      state: view.state,
+      languageCode: l.localeName,
+      onSelectionChanged: (s) => setState(() => _selection = s),
+      events: view.lastEvents,
+      step: view.step,
+      onBusyChanged: (busy) => setState(() => _busy = busy),
+    ),
   );
+
+  /// What the pointer rests on, in a few words.
+  String? _hoverText(AppLocalizations l, GameState state, Selection s) {
+    final namer = Namer(l, widget.ruleset);
+    switch (s.kind) {
+      case SelectionKind.node:
+        final def = widget.ruleset.map.nodes.firstWhere((n) => n.id == s.id);
+        return '${l.content(def.name)} · ${l.terrainName(def.terrain)}';
+      case SelectionKind.officer:
+        final o = state.officers[s.id];
+        return o == null ? null : '${namer.officer(s.id)} · ${l.troopsFull(o.troops)}';
+      case SelectionKind.army:
+        final a = state.armies[s.id];
+        return a == null ? null : '${namer.army(state, s.id)} · ${l.troopsFull(a.troops)}';
+    }
+  }
 
   Widget _topBar(BattleViewState view, BattleLayoutMode mode, {Widget? trailing}) => BattleTopBar(
     state: view.state,

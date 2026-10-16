@@ -1387,6 +1387,30 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Không tải được nhiệm vụ.'**
   String get battleLoadError;
+
+  /// Title of the battle menu (Esc).
+  ///
+  /// In vi, this message translates to:
+  /// **'Tạm dừng'**
+  String get battleMenuTitle;
+
+  /// Closes the battle menu.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp'**
+  String get battleMenuResume;
+
+  /// Leaves the battle; progress is saved.
+  ///
+  /// In vi, this message translates to:
+  /// **'Rời trận (đã tự lưu)'**
+  String get battleMenuLeave;
+
+  /// A tooltip with its keyboard shortcut.
+  ///
+  /// In vi, this message translates to:
+  /// **'{label} ({keys})'**
+  String shortcutHint(String label, String keys);
 }
 
 class _AppLocalizationsDelegate
