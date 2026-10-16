@@ -5,16 +5,22 @@ import 'package:lk_rules/lk_rules.dart';
 import '../../app/l10n/app_localizations.dart';
 import '../../app/theme.dart';
 import 'battle_cubit.dart';
+import 'battle_preview.dart';
 import 'board/battle_board.dart';
 import 'board/board_layout.dart';
 import 'board/board_scene.dart';
 import 'labels.dart';
+import 'overlays/card_dialog.dart';
+import 'overlays/choice_overlay.dart';
 import 'overlays/event_log.dart';
 import 'overlays/hand.dart';
 import 'overlays/inspector.dart';
+import 'overlays/officer_actions.dart';
 import 'overlays/officer_strip.dart';
+import 'overlays/outcome_banner.dart';
 import 'overlays/panel.dart';
 import 'overlays/phase_button.dart';
+import 'overlays/preview_dialog.dart';
 import 'overlays/top_bar.dart';
 
 /// The battle screen: the Flame board with Flutter overlays around it
@@ -46,6 +52,45 @@ class _BattleScreenState extends State<BattleScreen> {
   bool _logOpen = false;
   bool _handOpen = false;
 
+  /// The board is playing the last step's animations.
+  bool _busy = false;
+
+  /// Also true in the frame between a step and the board starting to play it.
+  bool get _isBusy => _busy || (_boardKey.currentState?.game.busy.value ?? false);
+
+  BattleCubit get _cubit => context.read<BattleCubit>();
+
+  void _endPhase() {
+    if (!_isBusy) _cubit.endPhase();
+  }
+
+  /// Gives an order, after a battle preview if the order would cause a battle.
+  Future<void> _setOrder(String officerId, Order order) async {
+    if (_isBusy) return;
+    final cubit = _cubit;
+    final previews = battlePreviewsFor(cubit.engine, cubit.game, officerId, order);
+    if (previews.isNotEmpty) {
+      final ok = await showBattlePreviewDialog(context, previews: previews, state: cubit.game, ruleset: widget.ruleset);
+      if (!ok || !mounted) return;
+    }
+    cubit.setOrder(officerId, order);
+  }
+
+  Future<void> _openCard(CardDef card) {
+    final cubit = _cubit;
+    return showCardDialog(
+      context,
+      card: card,
+      state: cubit.game,
+      ruleset: widget.ruleset,
+      legal: cubit.legalActions,
+      enabled: !_isBusy,
+      onPlay: (target) {
+        if (!_isBusy) cubit.playCard(card.id, target: target);
+      },
+    );
+  }
+
   void _select(Selection? s) => _boardKey.currentState?.select(s);
 
   @override
@@ -58,7 +103,26 @@ class _BattleScreenState extends State<BattleScreen> {
           final mode = BattleLayoutMode.forWidth(constraints.maxWidth);
           return SafeArea(
             child: BlocBuilder<BattleCubit, BattleViewState>(
-              builder: (context, view) => mode.isCompact ? _compact(context, l, view) : _regular(context, l, view),
+              builder: (context, view) => Stack(
+                children: [
+                  Positioned.fill(child: mode.isCompact ? _compact(context, l, view) : _regular(context, l, view)),
+                  if (view.state.isOver && !_busy)
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: OutcomeBanner(state: view.state, onBack: widget.onExit),
+                      ),
+                    ),
+                  if (view.state.pendingChoice != null && !_busy)
+                    Positioned.fill(
+                      child: ChoiceOverlay(
+                        choice: view.state.pendingChoice!,
+                        ruleset: widget.ruleset,
+                        onChoose: _cubit.resolveChoice,
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
         },
@@ -72,6 +136,9 @@ class _BattleScreenState extends State<BattleScreen> {
     state: view.state,
     languageCode: l.localeName,
     onSelectionChanged: (s) => setState(() => _selection = s),
+    events: view.lastEvents,
+    step: view.step,
+    onBusyChanged: (busy) => setState(() => _busy = busy),
   );
 
   Widget _topBar(BattleViewState view, BattleLayoutMode mode, {Widget? trailing}) => BattleTopBar(
@@ -99,6 +166,20 @@ class _BattleScreenState extends State<BattleScreen> {
     ruleset: widget.ruleset,
     mode: mode,
     onClose: () => _select(null),
+    actions: _selection!.kind == SelectionKind.officer
+        ? OfficerActions(
+            officerId: _selection!.id,
+            state: view.state,
+            ruleset: widget.ruleset,
+            legal: _cubit.legalActions,
+            enabled: !_busy,
+            onSetOrder: (o) => _setOrder(_selection!.id, o),
+            onClearOrder: () => _cubit.clearOrder(_selection!.id),
+            onUseSkill: (t) {
+              if (!_isBusy) _cubit.useSkill(_selection!.id, target: t);
+            },
+          )
+        : null,
   );
 
   // ---- compact (< 900 wide)
@@ -107,7 +188,6 @@ class _BattleScreenState extends State<BattleScreen> {
     const mode = BattleLayoutMode.compact;
     final top = BattleTopBar.heightFor(mode);
     final bottom = OfficerStrip.heightFor(mode);
-    final cubit = context.read<BattleCubit>();
     final lines = logLines(l, widget.ruleset, view.state, view.events);
     return LayoutBuilder(
       builder: (context, c) {
@@ -139,7 +219,7 @@ class _BattleScreenState extends State<BattleScreen> {
                       onToggle: () => setState(() => _handOpen = !_handOpen),
                     ),
                     const SizedBox(width: 4),
-                    PhaseButton(state: view.state, mode: mode, onPressed: cubit.endPhase),
+                    PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
                     const SizedBox(width: 4),
                   ],
                 ),
@@ -151,7 +231,12 @@ class _BattleScreenState extends State<BattleScreen> {
                 right: 8,
                 bottom: bottom + 4,
                 child: Center(
-                  child: HandFan(state: view.state, ruleset: widget.ruleset, availableWidth: c.maxWidth - 16),
+                  child: HandFan(
+                    state: view.state,
+                    ruleset: widget.ruleset,
+                    availableWidth: c.maxWidth - 16,
+                    onCardTap: _openCard,
+                  ),
                 ),
               ),
             if (_selection != null)
@@ -161,7 +246,7 @@ class _BattleScreenState extends State<BattleScreen> {
                 bottom: bottom,
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 560, maxHeight: free * 0.65),
+                    constraints: BoxConstraints(maxWidth: 560, maxHeight: free * 0.85),
                     child: _inspector(view, mode),
                   ),
                 ),
@@ -188,7 +273,6 @@ class _BattleScreenState extends State<BattleScreen> {
     final bottom = OfficerStrip.heightFor(mode);
     final left = _logExpanded ? LogSidePanel.expandedWidth : LogSidePanel.collapsedWidth;
     const right = HandColumn.width;
-    final cubit = context.read<BattleCubit>();
     final lines = logLines(l, widget.ruleset, view.state, view.events);
     return LayoutBuilder(
       builder: (context, c) {
@@ -222,7 +306,7 @@ class _BattleScreenState extends State<BattleScreen> {
               child: Column(
                 children: [
                   Expanded(
-                    child: HandColumn(state: view.state, ruleset: widget.ruleset),
+                    child: HandColumn(state: view.state, ruleset: widget.ruleset, onCardTap: _openCard),
                   ),
                   ColoredBox(
                     color: LongKyColors.lacquer,
@@ -230,7 +314,7 @@ class _BattleScreenState extends State<BattleScreen> {
                       padding: const EdgeInsets.all(8),
                       child: SizedBox(
                         width: double.infinity,
-                        child: PhaseButton(state: view.state, mode: mode, onPressed: cubit.endPhase),
+                        child: PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
                       ),
                     ),
                   ),

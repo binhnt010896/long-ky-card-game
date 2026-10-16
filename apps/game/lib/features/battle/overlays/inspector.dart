@@ -19,6 +19,7 @@ class InspectorPanel extends StatelessWidget {
     required this.ruleset,
     required this.mode,
     required this.onClose,
+    this.actions,
   });
 
   final Selection selection;
@@ -26,6 +27,10 @@ class InspectorPanel extends StatelessWidget {
   final Ruleset ruleset;
   final BattleLayoutMode mode;
   final VoidCallback onClose;
+
+  /// Right under an officer's name and troops: what the player can do with
+  /// them now.
+  final Widget? actions;
 
   static const double floatingWidth = 300;
 
@@ -50,7 +55,13 @@ class InspectorPanel extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.fromLTRB(12, mode.isCompact ? 12 : 10, 12 + minTouch, 10),
-            child: SingleChildScrollView(child: body),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [body],
+              ),
+            ),
           ),
           Positioned(
             top: 0,
@@ -113,6 +124,8 @@ class InspectorPanel extends StatelessWidget {
       children: [
         _Line('${l.troopsFull(o.troops)} · ${l.moraleShort(o.morale)}'),
         _Line(namer.node(o.nodeId)),
+        // What the player can do now comes first: on a phone the sheet is short.
+        ?actions,
         _Stats(
           entries: [
             (l.statLeadership, def.stats.leadership),

@@ -205,7 +205,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String orderWithTarget(String order, String target) {
-    return '$order → $target';
+    return '$order: $target';
   }
 
   @override
@@ -431,12 +431,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String logUnityChanged(String pillar, int from, int to) {
-    return '$pillar: $from → $to.';
+    return '$pillar: $from to $to.';
   }
 
   @override
   String logResourceChanged(String resource, int from, int to) {
-    return '$resource: $from → $to.';
+    return '$resource: $from to $to.';
   }
 
   @override
@@ -563,7 +563,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String intentToward(String intent, String node) {
-    return '$intent → $node';
+    return '$intent toward $node';
   }
 
   @override
@@ -578,4 +578,132 @@ class AppLocalizationsEn extends AppLocalizations {
   String armyOf(String commander) {
     return '$commander\'s army';
   }
+
+  @override
+  String get cardPlay => 'Play card';
+
+  @override
+  String cardPlayOn(String target) {
+    return 'Play on $target';
+  }
+
+  @override
+  String get cardPickTarget => 'Choose a target:';
+
+  @override
+  String get cardNoTargets => 'There is no legal target.';
+
+  @override
+  String get cardOnlyCouncil => 'Cards can only be played during Council.';
+
+  @override
+  String get cardFinal => 'A played card cannot be taken back.';
+
+  @override
+  String get cardClose => 'Close';
+
+  @override
+  String get skillUse => 'Use skill';
+
+  @override
+  String skillUseOn(String target) {
+    return 'Use skill on $target';
+  }
+
+  @override
+  String get ordersTitle => 'Give an order';
+
+  @override
+  String get orderClear => 'Clear order';
+
+  @override
+  String get ordersOnlyInOrders => 'Orders are given during the Orders phase.';
+
+  @override
+  String get ordersNone => 'No order is possible.';
+
+  @override
+  String get orderNoOrders => 'Takes no orders this turn.';
+
+  @override
+  String orderCostSupport(String order, String support, int n) {
+    return '$order ($support $n)';
+  }
+
+  @override
+  String get previewTitle => 'Battle preview';
+
+  @override
+  String previewField(String node) {
+    return 'Battle at $node';
+  }
+
+  @override
+  String previewAmbush(String edge) {
+    return 'Ambush on $edge';
+  }
+
+  @override
+  String previewOfficers(String names) {
+    return 'Our officers: $names';
+  }
+
+  @override
+  String previewArmies(String names) {
+    return 'Enemy: $names';
+  }
+
+  @override
+  String previewPowers(String dv, String yuan) {
+    return 'Power: Đại Việt $dv, the Yuan $yuan';
+  }
+
+  @override
+  String previewWinner(String side) {
+    return 'Expected: $side wins';
+  }
+
+  @override
+  String previewUncertain(String low, String high) {
+    return 'The result depends on the roll: $low wins on a low roll, $high on a high roll.';
+  }
+
+  @override
+  String previewLosses(String dv, String yuan) {
+    return 'Expected losses: Đại Việt ${dv}k, the Yuan ${yuan}k';
+  }
+
+  @override
+  String get previewConfirm => 'Give this order anyway';
+
+  @override
+  String get choiceTitle => 'A decision is needed';
+
+  @override
+  String get outcomeWon => 'Victory';
+
+  @override
+  String get outcomeLost => 'Defeat';
+
+  @override
+  String outcomeStars(int n, int total) {
+    return 'Stars earned: $n/$total';
+  }
+
+  @override
+  String get lossKingCaptured => 'The king was captured.';
+
+  @override
+  String get lossSeasonEnded => 'The season ended.';
+
+  @override
+  String lossUnity(String pillar) {
+    return '$pillar ran out.';
+  }
+
+  @override
+  String get lossObjective => 'The mission objective was not met.';
+
+  @override
+  String get outcomeBack => 'Back';
 }

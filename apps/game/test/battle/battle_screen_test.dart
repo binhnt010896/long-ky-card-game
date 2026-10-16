@@ -206,6 +206,7 @@ void main() {
         await settle(tester);
         await tester.tap(find.byKey(const Key('phase-button')));
         await settle(tester);
+        await playOut(tester);
         // With no orders the king falls back to Thăng Long and ch1_m2 is won on turn 1.
         expect(cubit.state.state.isOver, isTrue);
         expect(find.text(strings('vi').phaseButtonEnded), findsOneWidget);
@@ -244,10 +245,13 @@ void main() {
       expect(fan.left, greaterThanOrEqualTo(0));
       expect(fan.right, lessThanOrEqualTo(compact.width));
       expect(fan.bottom, lessThanOrEqualTo(tester.getRect(find.byKey(const Key('officer-strip'))).top + 5));
-      // Tapping a card lifts it; tapping the handle closes the fan.
+      // Tapping a card opens it; closing the dialog and tapping the handle closes the fan.
       final first = find.byWidgetPredicate((w) => w is CardTile);
       expect(first, findsNWidgets(rules.mission.handSize));
-      await tester.tap(first.first);
+      await tester.tapAt(tester.getTopLeft(first.first) + const Offset(20, 40));
+      await settle(tester);
+      expect(find.byKey(const Key('card-dialog')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('card-dialog-close')));
       await settle(tester);
       expect(tester.takeException(), isNull);
       await tester.tap(find.byKey(const Key('hand-handle')));

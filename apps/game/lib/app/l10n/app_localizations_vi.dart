@@ -205,7 +205,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String orderWithTarget(String order, String target) {
-    return '$order → $target';
+    return '$order: $target';
   }
 
   @override
@@ -431,12 +431,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String logUnityChanged(String pillar, int from, int to) {
-    return '$pillar: $from → $to.';
+    return '$pillar: $from sang $to.';
   }
 
   @override
   String logResourceChanged(String resource, int from, int to) {
-    return '$resource: $from → $to.';
+    return '$resource: $from sang $to.';
   }
 
   @override
@@ -563,7 +563,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String intentToward(String intent, String node) {
-    return '$intent → $node';
+    return '$intent đến $node';
   }
 
   @override
@@ -578,4 +578,132 @@ class AppLocalizationsVi extends AppLocalizations {
   String armyOf(String commander) {
     return 'Quân của $commander';
   }
+
+  @override
+  String get cardPlay => 'Dùng bài';
+
+  @override
+  String cardPlayOn(String target) {
+    return 'Dùng tại $target';
+  }
+
+  @override
+  String get cardPickTarget => 'Chọn mục tiêu:';
+
+  @override
+  String get cardNoTargets => 'Không có mục tiêu hợp lệ.';
+
+  @override
+  String get cardOnlyCouncil => 'Chỉ dùng được bài trong giai đoạn Triều nghị.';
+
+  @override
+  String get cardFinal => 'Bài đã dùng thì không rút lại được.';
+
+  @override
+  String get cardClose => 'Đóng';
+
+  @override
+  String get skillUse => 'Dùng kỹ năng';
+
+  @override
+  String skillUseOn(String target) {
+    return 'Dùng kỹ năng tại $target';
+  }
+
+  @override
+  String get ordersTitle => 'Giao lệnh';
+
+  @override
+  String get orderClear => 'Bỏ lệnh';
+
+  @override
+  String get ordersOnlyInOrders => 'Giao lệnh ở giai đoạn Hạ lệnh.';
+
+  @override
+  String get ordersNone => 'Không có lệnh nào hợp lệ.';
+
+  @override
+  String get orderNoOrders => 'Không nhận lệnh lượt này.';
+
+  @override
+  String orderCostSupport(String order, String support, int n) {
+    return '$order ($support $n)';
+  }
+
+  @override
+  String get previewTitle => 'Dự báo giao tranh';
+
+  @override
+  String previewField(String node) {
+    return 'Giao tranh tại $node';
+  }
+
+  @override
+  String previewAmbush(String edge) {
+    return 'Phục kích tại $edge';
+  }
+
+  @override
+  String previewOfficers(String names) {
+    return 'Tướng ta: $names';
+  }
+
+  @override
+  String previewArmies(String names) {
+    return 'Quân địch: $names';
+  }
+
+  @override
+  String previewPowers(String dv, String yuan) {
+    return 'Sức mạnh: Đại Việt $dv, quân Nguyên $yuan';
+  }
+
+  @override
+  String previewWinner(String side) {
+    return 'Dự kiến: $side thắng';
+  }
+
+  @override
+  String previewUncertain(String low, String high) {
+    return 'Kết quả còn tùy vận may: $low thắng nếu xui, $high thắng nếu may.';
+  }
+
+  @override
+  String previewLosses(String dv, String yuan) {
+    return 'Thiệt hại dự kiến: Đại Việt ${dv}k, quân Nguyên ${yuan}k';
+  }
+
+  @override
+  String get previewConfirm => 'Vẫn giao lệnh này';
+
+  @override
+  String get choiceTitle => 'Cần đưa ra quyết định';
+
+  @override
+  String get outcomeWon => 'Chiến thắng';
+
+  @override
+  String get outcomeLost => 'Thất bại';
+
+  @override
+  String outcomeStars(int n, int total) {
+    return 'Sao đạt được: $n/$total';
+  }
+
+  @override
+  String get lossKingCaptured => 'Quân vương đã bị bắt.';
+
+  @override
+  String get lossSeasonEnded => 'Hết mùa chiến dịch.';
+
+  @override
+  String lossUnity(String pillar) {
+    return '$pillar đã cạn kiệt.';
+  }
+
+  @override
+  String get lossObjective => 'Không đạt được mục tiêu nhiệm vụ.';
+
+  @override
+  String get outcomeBack => 'Về màn hình trước';
 }

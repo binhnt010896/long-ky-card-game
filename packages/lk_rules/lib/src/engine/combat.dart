@@ -241,28 +241,28 @@ BattleReport _applyBattle(
   bool daiVietStarted = false,
 }) {
   final dvWon = winner == Side.daiViet;
-  final winnerPower = dvWon ? daiVietPower : yuanPower;
-  final loserPower = dvWon ? yuanPower : daiVietPower;
-  final r = winnerPower <= 0 ? 1.0 : loserPower / winnerPower;
-  final loserFraction = Balance.loserLossBase - Balance.loserLossRatio * r;
-  final winnerFraction = Balance.winnerLossRatio * r;
-
-  final officerLosses = <String, int>{};
+  final losses = battleLosses(
+    tx,
+    officerIds: officerIds,
+    armyIds: armyIds,
+    daiVietPower: daiVietPower,
+    yuanPower: yuanPower,
+    winner: winner,
+  );
+  final officerLosses = losses.officers;
   for (final id in officerIds) {
     final o = tx.officer(id);
-    final loss = _loss(o.troops, dvWon ? winnerFraction : loserFraction);
-    officerLosses[id] = loss;
+    final loss = officerLosses[id]!;
     tx.updateOfficer(
       id,
       (o) => o.copyWith(troops: o.troops - loss, nextBattleMultiplier: 1.0, multiplierEnemySupplyBelow: null),
     );
     tx.setOfficerMorale(id, o.morale + (dvWon ? Balance.winnerMoraleGain : -Balance.loserMoraleLoss));
   }
-  final armyLosses = <String, int>{};
+  final armyLosses = losses.armies;
   for (final id in armyIds) {
     final a = tx.army(id);
-    final loss = _loss(a.troops, dvWon ? loserFraction : winnerFraction);
-    armyLosses[id] = loss;
+    final loss = armyLosses[id]!;
     tx.updateArmy(id, (a) => a.copyWith(troops: a.troops - loss));
     tx.setArmyMorale(id, a.morale + (dvWon ? -Balance.loserMoraleLoss : Balance.winnerMoraleGain));
   }
@@ -291,6 +291,30 @@ BattleReport _applyBattle(
   tx.emit(BattleResolved(report));
   if (dvWon) tx.modUnity(Pillar.people, Balance.battleWonPeopleGain);
   return report;
+}
+
+/// Troops each side loses in a decided battle (build-spec section 4): with
+/// `r = loser Power / winner Power`, the loser loses `ceil(troops × (0.5 −
+/// 0.3r))` and the winner `ceil(troops × 0.25r)`. Used by the engine and by
+/// the battle preview, so the two cannot differ.
+({Map<String, int> officers, Map<String, int> armies}) battleLosses(
+  Tx tx, {
+  required List<String> officerIds,
+  required List<String> armyIds,
+  required double daiVietPower,
+  required double yuanPower,
+  required Side winner,
+}) {
+  final dvWon = winner == Side.daiViet;
+  final winnerPower = dvWon ? daiVietPower : yuanPower;
+  final loserPower = dvWon ? yuanPower : daiVietPower;
+  final r = winnerPower <= 0 ? 1.0 : loserPower / winnerPower;
+  final loserFraction = Balance.loserLossBase - Balance.loserLossRatio * r;
+  final winnerFraction = Balance.winnerLossRatio * r;
+  return (
+    officers: {for (final id in officerIds) id: _loss(tx.officer(id).troops, dvWon ? winnerFraction : loserFraction)},
+    armies: {for (final id in armyIds) id: _loss(tx.army(id).troops, dvWon ? loserFraction : winnerFraction)},
+  );
 }
 
 int _loss(int troops, double fraction) {

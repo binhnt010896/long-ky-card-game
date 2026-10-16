@@ -72,18 +72,7 @@ void resolveChoice(Tx tx, ResolveChoice action) {
   processScriptedQueue(tx);
 }
 
-ChoiceEffect _choiceAt(Tx tx, PendingChoice pc) {
-  var effects = switch (pc.source) {
-    ChoiceSource.card => tx.def.cards[pc.sourceId]!.effects,
-    ChoiceSource.skill => tx.officerDef(pc.sourceId).skill!.effects,
-  };
-  for (var i = 0; i < pc.path.length; i += 2) {
-    final effect = effects[pc.path[i]] as ChoiceEffect;
-    if (i + 1 == pc.path.length) return effect;
-    effects = effect.options[pc.path[i + 1]].effects;
-  }
-  throw StateError('bad choice path ${pc.path}');
-}
+ChoiceEffect _choiceAt(Tx tx, PendingChoice pc) => choiceEffectOf(tx.def, pc);
 
 /// Plays this turn's queued scripted Event cards until one asks a choice.
 /// Scripted cards cost nothing and are not discarded into the deck.
@@ -137,3 +126,18 @@ List<String?> candidateTargets(Tx tx, TargetKind kind) => switch (kind) {
       TargetKind.ownOfficer => tx.activeOfficerIds(),
       TargetKind.yuanArmy => tx.activeArmyIds(),
     };
+
+/// The `choice` effect that [pc] is waiting on, so the UI can show its
+/// options. [PendingChoice.path] locates it inside the source's effects.
+ChoiceEffect choiceEffectOf(Ruleset ruleset, PendingChoice pc) {
+  var effects = switch (pc.source) {
+    ChoiceSource.card => ruleset.cards[pc.sourceId]!.effects,
+    ChoiceSource.skill => ruleset.officers[pc.sourceId]!.skill!.effects,
+  };
+  for (var i = 0; i < pc.path.length; i += 2) {
+    final effect = effects[pc.path[i]] as ChoiceEffect;
+    if (i + 1 == pc.path.length) return effect;
+    effects = effect.options[pc.path[i + 1]].effects;
+  }
+  throw StateError('bad choice path ${pc.path}');
+}
