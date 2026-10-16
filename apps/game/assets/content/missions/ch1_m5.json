@@ -156,7 +156,6 @@
     "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
     "en title, briefing, debrief and tutorial drafted from vi, need review.",
     "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
-    "tutorial highlight ids are placeholders until the battle UI defines them (T-22).",
-    "playerOfficers: section 5 says 'all six officers at thien-mac and dong-bo-dau' without the split; this split is a placeholder for T-25."
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
   ]
 }

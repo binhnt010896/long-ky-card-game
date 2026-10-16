@@ -51,7 +51,7 @@
   },
   {
     "id": "le-phu-tran",
-    "longKyPersonId": null,
+    "longKyPersonId": "le-phu-tran",
     "name": { "vi": "Lê Phụ Trần", "en": "Lê Phụ Trần" },
     "title": null,
     "stats": { "leadership": 6, "war": 7, "intelligence": 6, "politics": 6, "loyalty": 9 },
@@ -70,7 +70,6 @@
     "art": { "portrait": "officers/le-phu-tran/portrait.png", "card": "officers/le-phu-tran/card.png" },
     "sourceRefs": ["mytour-le-phu-tran"],
     "todo": [
-      "longKyPersonId: not in Long Ký people.json yet; set it once the person is added there.",
       "title: not given in build-spec section 5.",
       "skill name from docs/plan.md, not section 5; en text drafted from vi, needs review."
     ]
@@ -132,7 +131,7 @@
   },
   {
     "id": "tran-nhat-hieu",
-    "longKyPersonId": null,
+    "longKyPersonId": "tran-nhat-hieu",
     "name": { "vi": "Trần Nhật Hiệu", "en": "Trần Nhật Hiệu" },
     "title": null,
     "stats": { "leadership": 4, "war": 3, "intelligence": 6, "politics": 6, "loyalty": 5 },
@@ -157,7 +156,6 @@
     "art": { "portrait": "officers/tran-nhat-hieu/portrait.png", "card": "officers/tran-nhat-hieu/card.png" },
     "sourceRefs": ["znews-10-cau-noi"],
     "todo": [
-      "longKyPersonId: not in Long Ký people.json yet; set it once the person is added there.",
       "title: not given in build-spec section 5.",
       "en text drafted from vi, needs review."
     ]
