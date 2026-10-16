@@ -2,6 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lk_rules/lk_rules.dart';
+import 'package:long_ky_game/app/l10n/app_localizations.dart';
 import 'package:long_ky_game/features/battle/board/battle_board.dart';
 import 'package:long_ky_game/features/battle/board/board_game.dart';
 import 'package:long_ky_game/features/battle/board/board_scene.dart';
@@ -136,13 +137,23 @@ void main() {
     tester.view.physicalSize = regular;
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
-    await tester.pumpWidget(const MaterialApp(home: BoardPreviewScreen(missionId: 'ch1_m3')));
+    // The preview is the battle screen now, so it needs the app's localization.
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('vi'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: const BoardPreviewScreen(missionId: 'ch1_m3'),
+      ),
+    );
     await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 500)));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 50));
     final game = tester.widget<GameWidget<BoardGame>>(find.byType(GameWidget<BoardGame>)).game!;
     expect(game.ruleset.mission.id, 'ch1_m3');
     expect(game.scene!.tokens.where((t) => t.nodeId == 'thang-long'), hasLength(4));
-    expect(find.textContaining('ch1_m3'), findsOneWidget);
+    // The overlays are there too: the season clock of ch1_m3 (6 turns) and the phase button.
+    expect(find.text('Lượt 1/6'), findsOneWidget);
+    expect(find.byKey(const Key('phase-button')), findsOneWidget);
   });
 }

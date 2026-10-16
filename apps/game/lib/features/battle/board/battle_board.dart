@@ -37,6 +37,10 @@ class BattleBoardState extends State<BattleBoard> {
     game.selection.addListener(_selectionChanged);
   }
 
+  /// Selects [selection] from outside the board (the officer strip, the
+  /// inspector's close button); null clears it.
+  void select(Selection? selection) => game.selection.value = selection;
+
   void _selectionChanged() => widget.onSelectionChanged?.call(game.selection.value);
 
   @override
