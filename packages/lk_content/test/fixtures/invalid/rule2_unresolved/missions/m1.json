@@ -1,0 +1,128 @@
+{
+  "id": "m1",
+  "chapter": 1,
+  "order": 1,
+  "title": {
+    "vi": "Nhiệm vụ",
+    "en": "Mission"
+  },
+  "briefing": {
+    "vi": "Lời dẫn",
+    "en": "Briefing"
+  },
+  "debrief": {
+    "vi": "Kết",
+    "en": "Debrief"
+  },
+  "map": "m",
+  "seasonTurns": 3,
+  "heatStartTurn": null,
+  "start": {
+    "rice": 4,
+    "support": 4,
+    "unity": {
+      "court": 6,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "king",
+      "nodeId": "c",
+      "troops": 12
+    },
+    {
+      "officerId": "general",
+      "nodeId": "b",
+      "troops": 8
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "y1",
+      "commanderId": "khan",
+      "nodeId": "a",
+      "troops": 30,
+      "supply": 20,
+      "maxSupply": 20,
+      "morale": 8,
+      "retreatNodeId": "a"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "ghost",
+      "count": 3
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [
+    {
+      "turn": 1,
+      "cardId": "envoy"
+    }
+  ],
+  "inducements": [
+    {
+      "turn": 3,
+      "threshold": 6
+    }
+  ],
+  "yuanScript": [
+    {
+      "turn": 1,
+      "armyId": "y1",
+      "intent": "hold"
+    }
+  ],
+  "win": [
+    {
+      "type": "surviveTurns",
+      "turns": 3
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "noDefections"
+    },
+    {
+      "anyOf": [
+        {
+          "type": "noCaptures"
+        },
+        {
+          "type": "kingAt",
+          "nodeId": "c",
+          "turn": 3
+        }
+      ]
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "t1",
+      "text": {
+        "vi": "Bấm",
+        "en": "Tap"
+      },
+      "highlight": "phaseButton"
+    }
+  ],
+  "longKyEventId": "event-war",
+  "sourceRefs": [
+    "src-a"
+  ]
+}

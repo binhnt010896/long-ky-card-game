@@ -1,0 +1,96 @@
+[
+  {
+    "id": "evac",
+    "type": "stratagem",
+    "name": {
+      "vi": "Sơ tán",
+      "en": "Evacuate"
+    },
+    "text": {
+      "vi": "Sơ tán một nút.",
+      "en": "Evacuate a node."
+    },
+    "cost": {
+      "rice": 0,
+      "support": 2
+    },
+    "target": "ownNode",
+    "conditions": [],
+    "effects": [
+      {
+        "op": "evacuateNode",
+        "target": "$node"
+      }
+    ],
+    "longKyEventId": "event-war",
+    "art": "cards/evac.png",
+    "sourceRefs": [
+      "src-a"
+    ]
+  },
+  {
+    "id": "evac",
+    "type": "event",
+    "name": {
+      "vi": "Sứ giả",
+      "en": "Envoy"
+    },
+    "text": {
+      "vi": "Chọn một.",
+      "en": "Pick one."
+    },
+    "cost": {
+      "rice": 0,
+      "support": 0
+    },
+    "target": "none",
+    "conditions": [
+      {
+        "op": "unityAtLeast",
+        "pillar": "court",
+        "value": 1
+      }
+    ],
+    "effects": [
+      {
+        "op": "choice",
+        "options": [
+          {
+            "label": {
+              "vi": "Từ chối",
+              "en": "Refuse"
+            },
+            "effects": [
+              {
+                "op": "modUnity",
+                "pillar": "people",
+                "delta": 1
+              }
+            ]
+          },
+          {
+            "label": {
+              "vi": "Nhận",
+              "en": "Accept"
+            },
+            "effects": [
+              {
+                "op": "skipTurn"
+              },
+              {
+                "op": "modUnity",
+                "pillar": "court",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "longKyEventId": null,
+    "art": "cards/envoy.png",
+    "sourceRefs": [
+      "src-b"
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+[
+  { "id": "src-a", "work": "Fixture source A", "publisher": "Test", "url": "https://example.org/a", "note": "" },
+  { "id": "src-b", "work": "Fixture source B", "section": "1", "author": "Someone" }
+]

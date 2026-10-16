@@ -1,0 +1,53 @@
+{
+  "id": "m",
+  "nodes": [
+    {
+      "id": "a",
+      "name": {
+        "vi": "A",
+        "en": "A"
+      },
+      "terrain": "hill",
+      "x": 0.1,
+      "y": 0.1,
+      "riceYield": 0,
+      "isBorder": true
+    },
+    {
+      "id": "b",
+      "name": {
+        "vi": "B",
+        "en": "B"
+      },
+      "terrain": "plain",
+      "x": 0.5,
+      "y": 0.5,
+      "riceYield": 2,
+      "isCapital": true
+    },
+    {
+      "id": "c",
+      "name": {
+        "vi": "C",
+        "en": "C"
+      },
+      "terrain": "city",
+      "x": 0.9,
+      "y": 0.9,
+      "riceYield": 3,
+      "isCapital": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "a",
+      "to": "b",
+      "kind": "land"
+    },
+    {
+      "from": "b",
+      "to": "c",
+      "kind": "river"
+    }
+  ]
+}

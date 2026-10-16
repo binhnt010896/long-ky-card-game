@@ -1,0 +1,42 @@
+[
+  {
+    "id": "king",
+    "longKyPersonId": "person-king",
+    "name": { "vi": "Vua", "en": "King" },
+    "title": null,
+    "stats": { "leadership": 7, "war": 6, "intelligence": 6, "politics": 8, "loyalty": 10 },
+    "loyaltyLocked": true,
+    "isKing": true,
+    "skill": {
+      "id": "kingPresence",
+      "kind": "passive",
+      "name": { "vi": "Thân chinh", "en": "In person" },
+      "text": { "vi": "+1 sĩ khí", "en": "+1 morale" }
+    },
+    "flaw": { "id": "isKing", "name": { "vi": "Vua", "en": "King" }, "text": { "vi": "Bị bắt là thua", "en": "Captured: mission lost" } },
+    "art": { "portrait": "officers/king/portrait.png", "card": "officers/king/card.png" },
+    "sourceRefs": ["src-a"]
+  },
+  {
+    "id": "general",
+    "longKyPersonId": null,
+    "name": { "vi": "Tướng", "en": "General" },
+    "title": { "vi": "Tướng quân", "en": "General" },
+    "stats": { "leadership": 6, "war": 7, "intelligence": 5, "politics": 4, "loyalty": 6 },
+    "loyaltyLocked": false,
+    "isKing": false,
+    "skill": {
+      "id": "rally-court",
+      "kind": "activated",
+      "usesPerMission": 1,
+      "target": "ownNode",
+      "name": { "vi": "Bỏ thành", "en": "Abandon" },
+      "text": { "vi": "Bỏ một nút", "en": "Abandon a node" },
+      "effects": [ { "op": "evacuateNode", "target": "$node" }, { "op": "modUnity", "pillar": "court", "delta": -1 } ]
+    },
+    "flaw": { "id": "troopCap", "value": 8, "name": { "vi": "Hạn quân", "en": "Troop cap" }, "text": { "vi": "Tối đa 8", "en": "At most 8" } },
+    "art": { "portrait": "officers/general/portrait.png", "card": "officers/general/card.png" },
+    "sourceRefs": ["src-b"],
+    "todo": ["fixture"]
+  }
+]
