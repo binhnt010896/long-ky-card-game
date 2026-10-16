@@ -73,13 +73,14 @@ void main() {
         await tester.sendKeyEvent(LogicalKeyboardKey.space);
         await settle(tester);
         expect(cubit.game.phase, Phase.orders);
-        cubit.setOrder('tran-thai-tong', Order.move('thang-long'));
-        cubit.setOrder('le-phu-tran', Order.move('thang-long'));
-        cubit.setOrder('tran-thu-do', Order.move('thang-long'));
+        cubit.setOrder('tran-thai-tong', Order.move('song-lo'));
+        cubit.setOrder('le-phu-tran', Order.move('song-lo'));
+        cubit.setOrder('tran-thu-do', Order.move('song-lo'));
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
         await settle(tester);
         await playOut(tester);
-        expect(cubit.game.outcome, Outcome.won);
+        expect(cubit.game.turn, 2);
+        expect(cubit.game.phase, Phase.council);
       });
 
       testWidgets('works even after a button was tapped (a focused button does not take the key)', (tester) async {
@@ -95,7 +96,7 @@ void main() {
         final cubit = await pumpBattle(tester, size);
         cubit.endPhase();
         for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-          cubit.setOrder(id, Order.move('thang-long'));
+          cubit.setOrder(id, Order.move('song-lo'));
         }
         await tester.sendKeyEvent(LogicalKeyboardKey.space);
         await tester.pump();
@@ -105,11 +106,19 @@ void main() {
         await tester.pump();
         expect(cubit.state.step, step, reason: 'busy');
         await playOut(tester);
+        // The rest of the mission: hold at Sông Lô for turns 2 to 4.
+        for (var turn = 2; turn <= 4; turn++) {
+          cubit.endPhase();
+          cubit.endPhase();
+        }
+        await settle(tester);
+        await playOut(tester);
         expect(cubit.game.isOver, isTrue);
+        final endStep = cubit.state.step;
         await tester.sendKeyEvent(LogicalKeyboardKey.space);
         await tester.sendKeyEvent(LogicalKeyboardKey.escape);
         await settle(tester);
-        expect(cubit.state.step, step, reason: 'nothing after the end');
+        expect(cubit.state.step, endStep, reason: 'nothing after the end');
         expect(find.byKey(const Key('battle-menu')), findsNothing);
       });
 

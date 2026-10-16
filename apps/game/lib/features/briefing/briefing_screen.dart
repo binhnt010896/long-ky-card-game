@@ -115,6 +115,7 @@ class _BriefingScreenState extends State<BriefingScreen> {
     );
     final facts = _Facts(
       objectives: [for (final o in mission.win) namer.objective(state, o)],
+      loseIf: namer.extraLossRules(mission),
       officers: [
         for (final p in mission.playerOfficers)
           (name: namer.officer(p.officerId), line: l.briefingOfficerLine(l.troopsFull(p.troops), namer.node(p.nodeId))),
@@ -229,9 +230,12 @@ class _Narration extends StatelessWidget {
 }
 
 class _Facts extends StatelessWidget {
-  const _Facts({required this.objectives, required this.officers});
+  const _Facts({required this.objectives, required this.loseIf, required this.officers});
 
   final List<String> objectives;
+
+  /// Extra ways to lose, beyond the standard ones.
+  final List<String> loseIf;
   final List<({String name, String line})> officers;
 
   @override
@@ -252,6 +256,19 @@ class _Facts extends StatelessWidget {
                 style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.3),
               ),
             ),
+          if (loseIf.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            _heading(l.briefingLoss),
+            for (var i = 0; i < loseIf.length; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  loseIf[i],
+                  key: Key('briefing-loss-$i'),
+                  style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.3),
+                ),
+              ),
+          ],
           const SizedBox(height: 14),
           _heading(l.briefingOfficers),
           for (var i = 0; i < officers.length; i++)

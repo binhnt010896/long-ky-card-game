@@ -49,6 +49,12 @@ class ResultScreen extends StatelessWidget {
         if (p.name == name) return l.lossUnity(l.pillarName(p));
       }
     }
+    if (r.startsWith(LossReasons.objectivePrefix)) {
+      // A loss rule of the mission itself: say which one.
+      final type = r.substring(LossReasons.objectivePrefix.length);
+      final named = ruleset.mission.loss.where((o) => o.type == type).map(Namer(l, ruleset).lossRule).nonNulls;
+      if (named.isNotEmpty) return named.first;
+    }
     return l.lossObjective;
   }
 

@@ -82,6 +82,10 @@
   ],
   "win": [
     {
+      "type": "surviveTurns",
+      "turns": 4
+    },
+    {
       "anyOf": [
         {
           "type": "kingAt",
@@ -94,6 +98,10 @@
           "turn": 4
         }
       ]
+    },
+    {
+      "type": "troopsLostAtMost",
+      "value": 16
     }
   ],
   "loss": [
@@ -169,6 +177,7 @@
     "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
     "en title, briefing, debrief and tutorial drafted from vi, need review.",
     "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
-    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22).",
+    "T-25 balance (docs/balance/t25-report.md): the win needs surviveTurns 4 as well as kingAt (a king who loses the battle at Bình Lệ Nguyên and withdraws to Thăng Long won on turn 1 for any play), and troopsLostAtMost 16 (loses at most 16,000 troops)."
   ]
 }

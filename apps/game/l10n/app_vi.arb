@@ -501,5 +501,9 @@
   "longKyOpenFailed": "Không mở được Long Ký.",
   "@longKyOpenFailed": {"description": "Neither the link nor the store page could be opened."},
   "actionClose": "Đóng",
-  "@actionClose": {"description": "Button: close a dialog."}
+  "@actionClose": {"description": "Button: close a dialog."},
+  "briefingLoss": "Thua nếu",
+  "@briefingLoss": {"description": "Briefing: heading of the extra ways to lose a mission."},
+  "lossTroopsOver": "Quân ta hao tổn quá {n} nghìn người",
+  "@lossTroopsOver": {"description": "A mission that is lost when the troops lost pass a limit: used in the briefing and on the Result screen.", "placeholders": {"n": {"type": "int"}}}
 }

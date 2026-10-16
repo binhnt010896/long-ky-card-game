@@ -1,0 +1,627 @@
+{
+  "games": 1000,
+  "seed": 1,
+  "contentHash": "63ff31bdbb7c2155",
+  "invariantViolations": 0,
+  "reports": [
+    {
+      "mission": "ch1_m1",
+      "strategy": "expert",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 3.0,
+      "avgTurnsWhenWon": 3.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 3.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 3000
+      },
+      "skillUses": {},
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m1",
+      "strategy": "naive",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 3.0,
+      "avgTurnsWhenWon": 3.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 3000
+      },
+      "skillUses": {},
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m1",
+      "strategy": "passive",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 3.0,
+      "avgTurnsWhenWon": 3.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 3000
+      },
+      "skillUses": {},
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m1",
+      "strategy": "random",
+      "games": 1000,
+      "wins": 738,
+      "winRate": 0.738,
+      "avgTurns": 2.91,
+      "avgTurnsWhenWon": 3.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.836
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.738,
+        0.738,
+        0.239
+      ],
+      "cardPlays": {
+        "lui-binh-bao-toan": 824,
+        "phuc-kich-ben-song": 807,
+        "su-gia-phuong-bac": 2910,
+        "vuon-khong-nha-trong": 969
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 324,
+        "nhap-tong": 1414
+      },
+      "lossReasons": {
+        "unity:court": 262
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m2",
+      "strategy": "expert",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 4.0,
+      "avgTurnsWhenWon": 4.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 8.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "vuon-khong-nha-trong": 965
+      },
+      "skillUses": {},
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m2",
+      "strategy": "naive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 4.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {},
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m2",
+      "strategy": "passive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 4.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {},
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m2",
+      "strategy": "random",
+      "games": 1000,
+      "wins": 96,
+      "winRate": 0.096,
+      "avgTurns": 4.0,
+      "avgTurnsWhenWon": 4.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 9.504
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.096,
+        0.096,
+        0.014
+      ],
+      "cardPlays": {
+        "lui-binh-bao-toan": 1481,
+        "phuc-kich-ben-song": 1217,
+        "vuon-khong-nha-trong": 948
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 635
+      },
+      "lossReasons": {
+        "seasonEnded": 904
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m3",
+      "strategy": "expert",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 6.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 0.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "vuon-khong-nha-trong": 1807
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 1000,
+        "nhap-tong": 2000
+      },
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m3",
+      "strategy": "naive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 14.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {},
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m3",
+      "strategy": "passive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 13.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {},
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m3",
+      "strategy": "random",
+      "games": 1000,
+      "wins": 26,
+      "winRate": 0.026,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 6.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.308
+      },
+      "armyRoutedRate": {
+        "mong-co-1258": 0.001
+      },
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.026,
+        0.008,
+        0.026
+      ],
+      "cardPlays": {
+        "lui-binh-bao-toan": 2093,
+        "phuc-kich-ben-song": 1714,
+        "vuon-khong-nha-trong": 1756
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 740,
+        "nhap-tong": 1860
+      },
+      "lossReasons": {
+        "seasonEnded": 974
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m4",
+      "strategy": "expert",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 5.0,
+      "avgTurnsWhenWon": 5.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 11.895
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 1.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 1000,
+        "vuon-khong-nha-trong": 965
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 1000
+      },
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m4",
+      "strategy": "naive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 2.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 19.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 1000
+      },
+      "skillUses": {},
+      "lossReasons": {
+        "objective:troopsLostAtMost": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m4",
+      "strategy": "passive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 4.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 14.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 1.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {
+        "su-gia-phuong-bac": 1000
+      },
+      "skillUses": {},
+      "lossReasons": {
+        "objective:troopsLostAtMost": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m4",
+      "strategy": "random",
+      "games": 1000,
+      "wins": 61,
+      "winRate": 0.061,
+      "avgTurns": 3.39,
+      "avgTurnsWhenWon": 5.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 10.911
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.709,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.061,
+        0.061,
+        0.045
+      ],
+      "cardPlays": {
+        "lui-binh-bao-toan": 1041,
+        "phuc-kich-ben-song": 922,
+        "su-gia-phuong-bac": 1000,
+        "vuon-khong-nha-trong": 725
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 472,
+        "nhap-tong": 1070
+      },
+      "lossReasons": {
+        "objective:troopsLostAtMost": 654,
+        "unity:court": 285
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m5",
+      "strategy": "expert",
+      "games": 1000,
+      "wins": 1000,
+      "winRate": 1.0,
+      "avgTurns": 2.0,
+      "avgTurnsWhenWon": 2.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 13.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "cardPlays": {
+        "nang-nong": 1000,
+        "phan-cong": 833
+      },
+      "skillUses": {},
+      "lossReasons": {},
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m5",
+      "strategy": "naive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 10.521
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {
+        "nang-nong": 1000,
+        "phan-cong": 1537
+      },
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m5",
+      "strategy": "passive",
+      "games": 1000,
+      "wins": 0,
+      "winRate": 0.0,
+      "avgTurns": 6.0,
+      "avgTurnsWhenWon": 0.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 9.0
+      },
+      "armyRoutedRate": {},
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cardPlays": {
+        "nang-nong": 1000
+      },
+      "skillUses": {},
+      "lossReasons": {
+        "seasonEnded": 1000
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    },
+    {
+      "mission": "ch1_m5",
+      "strategy": "random",
+      "games": 1000,
+      "wins": 13,
+      "winRate": 0.013,
+      "avgTurns": 5.987,
+      "avgTurnsWhenWon": 5.0,
+      "avgSupplyLeft": {
+        "mong-co-1258": 10.989
+      },
+      "armyRoutedRate": {
+        "mong-co-1258": 0.011
+      },
+      "avgDefections": 0.0,
+      "avgCaptures": 0.0,
+      "starRates": [
+        0.013,
+        0.004,
+        0.013
+      ],
+      "cardPlays": {
+        "lui-binh-bao-toan": 1630,
+        "nang-nong": 1000,
+        "phan-cong": 1670,
+        "phuc-kich-ben-song": 1484,
+        "vuon-khong-nha-trong": 1257
+      },
+      "skillUses": {
+        "dau-than-chua-roi": 672,
+        "nhap-tong": 1831
+      },
+      "lossReasons": {
+        "seasonEnded": 987
+      },
+      "skippedActions": 0,
+      "invariantViolations": 0,
+      "violationSamples": []
+    }
+  ]
+}

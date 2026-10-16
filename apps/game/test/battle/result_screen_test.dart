@@ -163,6 +163,25 @@ void main() {
         expect(tester.getSize(find.byKey(const Key('read-more'))).height, greaterThanOrEqualTo(48));
       });
 
+      testWidgets('a mission\'s own loss rule is named: ch1_m4 is lost when too many troops are lost', (tester) async {
+        final m4 = ruleset('ch1_m4');
+        final limit = m4.mission.loss.whereType<TroopsLostAtMostObjective>().single.value;
+        await pumpOverlay(
+          tester,
+          size,
+          screen(lost('${LossReasons.objectivePrefix}troopsLostAtMost'), r: m4, onBack: () {}),
+        );
+        expect(find.text(l.lossTroopsOver(limit)), findsOneWidget);
+        expect(find.text(l.lossObjective), findsNothing);
+        await pumpOverlay(
+          tester,
+          size,
+          screen(lost('${LossReasons.objectivePrefix}troopsLostAtMost'), r: m4, onBack: () {}),
+          lang: 'en',
+        );
+        expect(find.text(strings('en').lossTroopsOver(limit)), findsOneWidget);
+      });
+
       testWidgets('buttons only appear when they have somewhere to go', (tester) async {
         await pumpOverlay(tester, size, screen(won([true, false, false])));
         expect(find.byKey(const Key('result-back')), findsNothing);

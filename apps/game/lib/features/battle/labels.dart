@@ -156,3 +156,18 @@ extension ObjectiveText on Namer {
     AnyOfObjective() => o.anyOf.map((x) => objective(state, x)).reduce((a, b) => l.objAnyOf(a, b)),
   };
 }
+
+/// The ways a mission can be lost beyond the standard ones (king captured, a
+/// Unity pillar at 0), as sentences for the briefing and the Result screen.
+extension LossText on Namer {
+  /// The sentence for one loss objective, or null for the standard ones.
+  String? lossRule(ObjectiveDef o) => switch (o) {
+    TroopsLostAtMostObjective() => l.lossTroopsOver(o.value),
+    _ => null,
+  };
+
+  List<String> extraLossRules(MissionDef mission) => [
+    for (final o in mission.loss) ?lossRule(o),
+  ];
+}
+

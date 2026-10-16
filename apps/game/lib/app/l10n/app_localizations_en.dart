@@ -72,7 +72,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetConfirmTitle => 'Reset all progress?';
 
   @override
-  String get resetConfirmBody => 'Stars and unlocks will be erased. Settings are kept.';
+  String get resetConfirmBody =>
+      'Stars and unlocks will be erased. Settings are kept.';
 
   @override
   String get actionCancel => 'Cancel';
@@ -87,7 +88,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCredits => 'Credits and sources';
 
   @override
-  String get creditsFont => 'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
+  String get creditsFont =>
+      'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Software licences';
@@ -792,7 +794,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resumeUnusableTitle => 'The saved battle cannot be continued';
 
   @override
-  String get resumeUnusableBody => 'The game content has changed or the save is damaged. Start this mission again?';
+  String get resumeUnusableBody =>
+      'The game content has changed or the save is damaged. Start this mission again?';
 
   @override
   String get resumeRestart => 'Start again';
@@ -878,7 +881,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignLocked => 'Locked';
 
   @override
-  String get campaignLockedHint => 'Win the previous mission to unlock this one.';
+  String get campaignLockedHint =>
+      'Win the previous mission to unlock this one.';
 
   @override
   String campaignStarsSemantics(int n, int total) {
@@ -889,7 +893,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get campaignReplaceTitle => 'Replace the saved battle?';
 
   @override
-  String get campaignReplaceBody => 'The saved battle is lost if you start this mission.';
+  String get campaignReplaceBody =>
+      'The saved battle is lost if you start this mission.';
 
   @override
   String get campaignStartAnyway => 'Start anyway';
@@ -921,7 +926,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get codexCodeTitle => 'Enter an unlock code';
 
   @override
-  String get codexCodeHelp => 'The code appears after you finish a lesson in Long Ký.';
+  String get codexCodeHelp =>
+      'The code appears after you finish a lesson in Long Ký.';
 
   @override
   String get codexCodeField => 'Unlock code';
@@ -940,7 +946,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get codexCodeInvalid => 'That code is not valid. Check it and try again.';
+  String get codexCodeInvalid =>
+      'That code is not valid. Check it and try again.';
 
   @override
   String get codexCodeUnavailable => 'Codes cannot be checked in this build.';
@@ -959,4 +966,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionClose => 'Close';
+
+  @override
+  String get briefingLoss => 'You lose if';
+
+  @override
+  String lossTroopsOver(int n) {
+    return 'Our losses pass $n,000 troops';
+  }
 }

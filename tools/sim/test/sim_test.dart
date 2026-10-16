@@ -92,15 +92,21 @@ void main() {
     test('ch1_m2 can be played start to finish in the terminal', () {
       final engine = GameEngine(content.ruleset('ch1_m2'));
       final out = StringBuffer();
-      // Help, board, a bad command, then end every phase (the king holds,
-      // loses the battle and withdraws to Thăng Long).
-      final end = playInTerminal(engine, 1, readLine: scripted(['h', 'b', 'nope', '999', 'e', 'e']), out: out);
+      // Help, board, a bad command, then end every phase for the four turns
+      // (the king holds, loses the battle at Bình Lệ Nguyên and withdraws;
+      // doing nothing does not win the mission, since T-25).
+      final end = playInTerminal(
+        engine,
+        1,
+        readLine: scripted(['h', 'b', 'nope', '999', ...List.filled(8, 'e')]),
+        out: out,
+      );
       final text = out.toString();
       expect(end.isOver, isTrue);
-      expect(end.outcome, Outcome.won);
+      expect(end.outcome, Outcome.lost);
       expect(text, contains('Unknown command "nope"'));
       expect(text, contains('Battle at Bình Lệ Nguyên'));
-      expect(text, contains('Mission WON'));
+      expect(text, contains('Mission LOST'));
     });
 
     test('choices are offered and resolved by number in ch1_m1', () {

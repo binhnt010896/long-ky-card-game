@@ -278,11 +278,7 @@ void main() {
   group('winning', () {
     /// ch1_m2 in one turn: everyone to Thăng Long.
     Future<void> win(WidgetTester tester, BattleCubit cubit) async {
-      cubit.endPhase();
-      for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-        cubit.setOrder(id, Order.move('thang-long'));
-      }
-      cubit.endPhase();
+      winM2(cubit);
       await settle(tester);
       await playOut(tester);
     }
@@ -421,11 +417,7 @@ void main() {
       await tester.pump();
       await loaded(tester);
       final cubit = tester.element(find.byType(BattleScreen)).read<BattleCubit>();
-      cubit.endPhase();
-      for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-        cubit.setOrder(id, Order.move('thang-long'));
-      }
-      cubit.endPhase();
+      winM2(cubit);
       await settle(tester);
       await playOut(tester);
       await tester.tap(find.byKey(const Key('result-back')));

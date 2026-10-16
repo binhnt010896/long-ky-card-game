@@ -191,14 +191,14 @@ void main() {
         final cubit = await pumpBattle(tester, size, reduceMotion: reduceMotion);
         cubit.endPhase();
         await settle(tester);
-        cubit.setOrder('tran-thai-tong', Order.move('thang-long'));
-        cubit.setOrder('le-phu-tran', Order.move('thang-long'));
-        cubit.setOrder('tran-thu-do', Order.move('thang-long'));
+        cubit.setOrder('tran-thai-tong', Order.move('song-lo'));
+        cubit.setOrder('le-phu-tran', Order.move('song-lo'));
+        cubit.setOrder('tran-thu-do', Order.move('song-lo'));
         await settle(tester);
         return cubit;
       }
 
-      testWidgets('ending the turn plays the moves and battle in order, then the outcome appears', (tester) async {
+      testWidgets('ending the turn plays the moves in order, then the next turn begins', (tester) async {
         final cubit = await readyToResolve(tester);
         await tester.tap(find.byKey(const Key('phase-button')));
         await tester.pump();
@@ -218,9 +218,11 @@ void main() {
         expect(boardGame(tester).animator.moveOf('mong-co-1258'), isNotNull);
 
         await playOut(tester);
-        expect(find.byKey(const Key('result-screen')), findsOneWidget);
-        expect(cubit.game.outcome, Outcome.won);
-        expect(find.text(l.phaseButtonEnded), findsOneWidget);
+        // Turn 1 is over; the mission is not (it takes four turns).
+        expect(find.byKey(const Key('result-screen')), findsNothing);
+        expect(cubit.game.turn, 2);
+        expect(cubit.game.phase, Phase.council);
+        expect(find.text(l.phaseButtonCouncil), findsOneWidget);
         expect(tester.takeException(), isNull);
       });
 
@@ -231,8 +233,9 @@ void main() {
         await tester.pump(const Duration(milliseconds: 20));
         expect(boardGame(tester).busy.value, isFalse);
         expect(boardGame(tester).animator.isBusy, isFalse);
-        expect(find.byKey(const Key('result-screen')), findsOneWidget, reason: 'at once');
-        expect(cubit.game.isOver, isTrue);
+        expect(cubit.game.turn, 2, reason: 'at once');
+        expect(cubit.game.phase, Phase.council);
+        expect(find.text(l.phaseButtonCouncil), findsOneWidget);
       });
 
       testWidgets('the board shows the new state once the animations are over', (tester) async {
@@ -249,7 +252,7 @@ void main() {
   }
 
   group('a whole mission, start to finish', () {
-    /// ch1_m2: evacuate Bình Lệ Nguyên by card, then take the court to Thăng Long.
+    /// ch1_m2: evacuate Bình Lệ Nguyên by card, fall back to Sông Lô and hold it for four turns.
     Future<void> playMission(WidgetTester tester, Size size, BattleLayoutMode mode, Tap tap) async {
       var backed = 0;
       final cubit = await pumpBattle(tester, size, onExit: () => backed++);
@@ -272,16 +275,25 @@ void main() {
       await tap(find.byKey(const Key('preview-cancel')));
       expect(cubit.game.officers['le-phu-tran']!.order, isNull);
 
-      // Everyone goes to Thăng Long.
+      // Everyone falls back to Sông Lô.
       for (final id in ['le-phu-tran', 'tran-thai-tong', 'tran-thu-do']) {
         await tap(find.byKey(Key('officer-$id')));
-        await tap(find.byKey(const Key('order-move-thang-long')));
-        expect(cubit.game.officers[id]!.order, Order.move('thang-long'), reason: id);
+        await tap(find.byKey(const Key('order-move-song-lo')));
+        expect(cubit.game.officers[id]!.order, Order.move('song-lo'), reason: id);
       }
 
       // End Orders: the turn resolves in front of the player.
       await tap(find.byKey(const Key('phase-button')));
       await playOut(tester);
+      expect(cubit.game.isOver, isFalse);
+      expect(cubit.game.turn, 2);
+
+      // Three more turns of holding at Sông Lô: Council, then Orders.
+      for (var turn = 2; turn <= 4; turn++) {
+        await tap(find.byKey(const Key('phase-button')));
+        await tap(find.byKey(const Key('phase-button')));
+        await playOut(tester);
+      }
       expect(cubit.game.outcome, Outcome.won);
       expect(find.byKey(const Key('result-screen')), findsOneWidget);
       expect(find.byKey(const Key('result-title')), findsOneWidget);

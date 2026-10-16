@@ -30,32 +30,32 @@
     {
       "officerId": "tran-thai-tong",
       "nodeId": "thien-mac",
-      "troops": 12
+      "troops": 10
     },
     {
       "officerId": "tran-thu-do",
       "nodeId": "thien-mac",
-      "troops": 6
+      "troops": 5
     },
     {
       "officerId": "le-phu-tran",
       "nodeId": "thien-mac",
-      "troops": 6
+      "troops": 5
     },
     {
       "officerId": "tran-quoc-tuan",
       "nodeId": "dong-bo-dau",
-      "troops": 6
+      "troops": 5
     },
     {
       "officerId": "tran-nhat-hieu",
       "nodeId": "dong-bo-dau",
-      "troops": 4
+      "troops": 3
     },
     {
       "officerId": "tran-khanh-du",
       "nodeId": "phu-lo",
-      "troops": 8
+      "troops": 6
     }
   ],
   "yuanArmies": [
@@ -66,7 +66,7 @@
       "troops": 30,
       "supply": 10,
       "maxSupply": 20,
-      "morale": 8,
+      "morale": 10,
       "retreatNodeId": "bien-gioi"
     }
   ],
@@ -115,6 +115,10 @@
     {
       "type": "unityAllAbove",
       "value": 0
+    },
+    {
+      "type": "troopsLostAtMost",
+      "value": 14
     }
   ],
   "stars": [
@@ -122,7 +126,7 @@
       "type": "won"
     },
     {
-      "type": "noDefections"
+      "type": "noCaptures"
     },
     {
       "type": "unityAtLeastAtEnd",
@@ -148,6 +152,7 @@
     "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
     "en title, briefing, debrief and tutorial drafted from vi, need review.",
     "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
-    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22).",
+    "T-25 balance (docs/balance/t25-report.md): Đại Việt troops are 80% of build-spec section 5 and the Yuan army morale is 10 (not 8); the mission is also lost when more than 14,000 troops are lost (a survive-only mission cannot otherwise be lost: the king is never out of free nodes against one army). Star 2 is noCaptures instead of noDefections: Trần Nhật Hiệu's defection at turn 2 cannot be prevented by any action, so that star could not be earned."
   ]
 }

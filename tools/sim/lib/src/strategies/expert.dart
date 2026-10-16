@@ -65,6 +65,11 @@ final class ExpertStrategy extends PlannedStrategy {
   String? _counterNode(GameView v) =>
       _flatten(v.mission.win).whereType<CounterattackAtObjective>().firstOrNull?.nodeId;
 
+  /// Whether the win objectives call for beating an army in battle.
+  bool _wantsAttack(GameView v) => _flatten(v.mission.win).any(
+        (o) => o is CounterattackAtObjective || o is AllArmiesBrokenObjective || o is ArmyBrokenObjective,
+      );
+
   // -- Council -----------------------------------------------------------------
 
   @override
@@ -339,6 +344,9 @@ final class ExpertStrategy extends PlannedStrategy {
   /// `counterattackAt` objective only that node is attacked.
   ({String node, List<String> attackers})? _attackPlan(GameView v) {
     final counter = _counterNode(v);
+    // Only a mission that asks for it is a reason to fight an army that
+    // could be left to starve: every troop lost is paid for later.
+    if (!_wantsAttack(v)) return null;
     for (final a in v.armyIds) {
       final army = v.army(a);
       final node = army.nodeId;

@@ -16,7 +16,7 @@
   },
   "map": "ch1",
   "seasonTurns": 6,
-  "heatStartTurn": 1,
+  "heatStartTurn": 6,
   "start": {
     "rice": 5,
     "support": 5,
@@ -63,10 +63,10 @@
       "id": "mong-co-1258",
       "commanderId": "ngot-luong-hop-thai",
       "nodeId": "thang-long",
-      "troops": 24,
+      "troops": 30,
       "supply": 6,
       "maxSupply": 20,
-      "morale": 5,
+      "morale": 9,
       "retreatNodeId": "bien-gioi"
     }
   ],
@@ -156,6 +156,7 @@
     "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
     "en title, briefing, debrief and tutorial drafted from vi, need review.",
     "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
-    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22).",
+    "T-25 balance (docs/balance/t25-report.md): the Yuan army starts at 30 troops (not 24), morale 9 (not 5), and heat starts on turn 6 (not 1): with the section 5 numbers every strategy won."
   ]
 }

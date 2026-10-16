@@ -72,7 +72,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resetConfirmTitle => 'Xoá toàn bộ tiến trình?';
 
   @override
-  String get resetConfirmBody => 'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
+  String get resetConfirmBody =>
+      'Sao và các mục đã mở khoá sẽ bị xoá. Cài đặt được giữ nguyên.';
 
   @override
   String get actionCancel => 'Huỷ';
@@ -87,7 +88,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsCredits => 'Ghi công và nguồn tư liệu';
 
   @override
-  String get creditsFont => 'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
+  String get creditsFont =>
+      'Phông chữ Be Vietnam Pro, theo giấy phép SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Giấy phép phần mềm';
@@ -792,7 +794,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resumeUnusableTitle => 'Không thể tiếp tục ván đã lưu';
 
   @override
-  String get resumeUnusableBody => 'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
+  String get resumeUnusableBody =>
+      'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
 
   @override
   String get resumeRestart => 'Bắt đầu lại';
@@ -889,7 +892,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get campaignReplaceTitle => 'Thay ván đang chơi?';
 
   @override
-  String get campaignReplaceBody => 'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.';
+  String get campaignReplaceBody =>
+      'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.';
 
   @override
   String get campaignStartAnyway => 'Vẫn bắt đầu';
@@ -921,7 +925,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get codexCodeTitle => 'Nhập mã mở khoá';
 
   @override
-  String get codexCodeHelp => 'Mã hiện ra sau khi hoàn thành một bài học trong Long Ký.';
+  String get codexCodeHelp =>
+      'Mã hiện ra sau khi hoàn thành một bài học trong Long Ký.';
 
   @override
   String get codexCodeField => 'Mã mở khoá';
@@ -959,4 +964,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get actionClose => 'Đóng';
+
+  @override
+  String get briefingLoss => 'Thua nếu';
+
+  @override
+  String lossTroopsOver(int n) {
+    return 'Quân ta hao tổn quá $n nghìn người';
+  }
 }

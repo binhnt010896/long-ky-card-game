@@ -260,5 +260,7 @@
   "longKyScan": "Scan with your phone to open Long Ký",
   "longKyQrSemantics": "QR code that opens Long Ký",
   "longKyOpenFailed": "Could not open Long Ký.",
-  "actionClose": "Close"
+  "actionClose": "Close",
+  "briefingLoss": "You lose if",
+  "lossTroopsOver": "Our losses pass {n},000 troops"
 }

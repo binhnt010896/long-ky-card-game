@@ -22,6 +22,21 @@ export 'board_support.dart';
 
 const mission = 'ch1_m2';
 
+/// A line that wins ch1_m2 from the start of Council (T-25: doing nothing, or
+/// standing and fighting at Bình Lệ Nguyên, no longer wins). Everyone falls
+/// back to Sông Lô, and holds there for the four turns.
+void winM2(BattleCubit cubit) {
+  cubit.endPhase();
+  for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
+    cubit.setOrder(id, Order.move('song-lo'));
+  }
+  cubit.endPhase();
+  for (var turn = 2; turn <= 4; turn++) {
+    cubit.endPhase();
+    cubit.endPhase();
+  }
+}
+
 /// Both layouts, as the build spec names them.
 const layouts = <(String, Size, BattleLayoutMode)>[
   ('compact', compact, BattleLayoutMode.compact),

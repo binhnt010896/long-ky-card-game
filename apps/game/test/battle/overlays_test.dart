@@ -559,7 +559,8 @@ void main() {
         );
         expect(find.text(l.logTitle), findsOneWidget);
         // Newest at the bottom, in view.
-        expect(find.text(lines.last), findsOneWidget);
+        // (The same phase line comes back every turn, so it may appear more than once.)
+        expect(find.text(lines.last), findsWidgets);
         await tester.tap(find.byKey(Key(mode.isCompact ? 'log-close' : 'log-toggle')));
         expect(closed, 1);
       });

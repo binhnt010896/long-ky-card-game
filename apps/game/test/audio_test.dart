@@ -17,6 +17,8 @@ import 'package:long_ky_game/features/battle/battle_audio.dart';
 import 'package:long_ky_game/features/battle/battle_cubit.dart';
 import 'package:long_ky_game/features/settings/progress_cubit.dart';
 
+import 'battle/overlay_support.dart' show winM2;
+
 import 'battle/board_support.dart' show ruleset;
 
 /// Records what the service asks of the backend.
@@ -258,11 +260,7 @@ void main() {
       await Future<void>.delayed(Duration.zero);
       expect(b.log.last, 'play effects effects/card.mp3');
 
-      cubit.endPhase();
-      for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-        cubit.setOrder(id, Order.move('thang-long'));
-      }
-      cubit.endPhase();
+      winM2(cubit);
       await Future<void>.delayed(Duration.zero);
       expect(b.log, contains('play effects effects/victory.mp3'));
       expect(b.log, contains('play voice voice/ch1_m2_debrief.mp3'));

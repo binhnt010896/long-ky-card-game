@@ -200,15 +200,18 @@ void main() {
         expect(tester.takeException(), isNull);
       });
 
-      testWidgets('ending Orders resolves the turn: the mission ends and the button says so', (tester) async {
+      testWidgets('ending Orders resolves the turn; at the end of the mission the button says so', (tester) async {
         final cubit = await pumpBattle(tester, size);
-        await tester.tap(find.byKey(const Key('phase-button')));
-        await settle(tester);
-        await tester.tap(find.byKey(const Key('phase-button')));
-        await settle(tester);
-        await playOut(tester);
-        // With no orders the king falls back to Thăng Long and ch1_m2 is won on turn 1.
-        expect(cubit.state.state.isOver, isTrue);
+        // With no orders the king falls back and the season runs out: four turns of Council and Orders.
+        for (var turn = 1; turn <= 4; turn++) {
+          await tester.tap(find.byKey(const Key('phase-button')));
+          await settle(tester);
+          await tester.tap(find.byKey(const Key('phase-button')));
+          await settle(tester);
+          await playOut(tester);
+          expect(cubit.state.state.isOver, turn == 4, reason: 'turn $turn');
+        }
+        expect(cubit.state.state.outcome, Outcome.lost);
         expect(find.text(strings('vi').phaseButtonEnded), findsOneWidget);
         expect(tester.widget<FilledButton>(find.byKey(const Key('phase-button'))).onPressed, isNull);
         expect(tester.takeException(), isNull);

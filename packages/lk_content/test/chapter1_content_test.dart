@@ -34,13 +34,16 @@ void main() {
     }
   });
 
-  test('numbers match build-spec section 5', () {
+  test('numbers match build-spec section 5 as tuned in T-25', () {
     final b = loadContent(readContentDir(dir!));
     final m2 = b.missions['ch1_m2']!;
     expect((m2.seasonTurns, m2.heatStartTurn, m2.start.rice, m2.start.support), (4, null, 4, 3));
     final m5 = b.missions['ch1_m5']!;
     final army = m5.yuanArmies.single;
-    expect((army.troops, army.supply, army.maxSupply, army.morale, army.retreatNodeId), (24, 6, 20, 5, 'bien-gioi'));
+    // Build-spec section 5 has 24 troops, morale 5 and heat from turn 1; T-25
+    // tuned the last two and the troops (docs/balance/t25-report.md).
+    expect((army.troops, army.supply, army.maxSupply, army.morale, army.retreatNodeId), (30, 6, 20, 9, 'bien-gioi'));
+    expect(m5.heatStartTurn, 6);
     expect(m5.deck.map((d) => (d.cardId, d.count)), [
       ('vuon-khong-nha-trong', 3),
       ('lui-binh-bao-toan', 2),

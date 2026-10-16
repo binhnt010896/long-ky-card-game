@@ -104,11 +104,7 @@ void main() {
       setViewSize(tester, phone);
       notch(tester);
       final cubit = await pumpBattle(tester, phone, onExit: () {});
-      cubit.endPhase();
-      for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-        cubit.setOrder(id, Order.move('thang-long'));
-      }
-      cubit.endPhase();
+      winM2(cubit);
       await settle(tester);
       await playOut(tester);
       expect(cubit.game.outcome, Outcome.won);

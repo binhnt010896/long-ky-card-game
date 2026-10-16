@@ -40,6 +40,32 @@ void main() {
 
   for (final (name, size, _) in layouts) {
     group('briefing ($name)', () {
+      testWidgets('names the extra ways to lose, only where the mission has them', (tester) async {
+        final l = strings('vi');
+        setViewSize(tester, size);
+        for (final (id, limit) in [('ch1_m4', 14), ('ch1_m2', null)]) {
+          await tester.pumpWidget(
+            appAround(
+              BriefingScreen(
+                key: UniqueKey(),
+                missionId: id,
+                bundle: DiskAssetBundle(),
+                audio: serviceWith(RecordingBackend(), {}),
+              ),
+            ),
+          );
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 50));
+          if (limit == null) {
+            expect(find.text(l.briefingLoss), findsNothing, reason: id);
+            expect(find.byKey(const Key('briefing-loss-0')), findsNothing, reason: id);
+          } else {
+            expect(find.text(l.briefingLoss), findsOneWidget, reason: id);
+            expect(find.text(l.lossTroopsOver(limit)), findsOneWidget, reason: id);
+          }
+        }
+      });
+
       testWidgets('shows the title, the narration as subtitles, the objectives and the officers', (tester) async {
         final b = RecordingBackend();
         await pumpBriefing(tester, size, serviceWith(b, voiceFiles));
@@ -179,11 +205,7 @@ void main() {
     cubit.playCard('vuon-khong-nha-trong', target: 'binh-le-nguyen');
     await tester.pump();
     expect(b.log, contains('play effects effects/card.mp3'));
-    cubit.endPhase();
-    for (final id in ['tran-thai-tong', 'le-phu-tran', 'tran-thu-do']) {
-      cubit.setOrder(id, Order.move('thang-long'));
-    }
-    cubit.endPhase();
+    winM2(cubit);
     await settle(tester);
     expect(b.log, contains('play voice voice/ch1_m2_debrief.mp3'));
     await tester.pumpWidget(const SizedBox());

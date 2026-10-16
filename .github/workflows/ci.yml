@@ -49,11 +49,23 @@ jobs:
           fi
 
       - name: Simulator smoke run
-        # Invariant checks only. The win-rate gate (T-25 target minus 10 points)
-        # is switched on in T-25.
+        # Invariant checks, then the win-rate gate of build-spec section 8:
+        # the expert may not fall more than 10 points below its T-25 target.
+        # (tools/sim/test/balance_test.dart checks every target exactly.)
         run: |
           if [ -d apps/game/assets/content/missions ]; then
             dart run tools/sim/bin/sim.dart --mission all --strategy expert --games 200 --seed 1 --json build/sim-smoke.json
+            python3 - <<'PY'
+          import json, sys
+          targets = {'ch1_m1': 0.95, 'ch1_m2': 0.90, 'ch1_m3': 0.90, 'ch1_m4': 0.85, 'ch1_m5': 0.85}
+          bad = []
+          for r in json.load(open('build/sim-smoke.json'))['reports']:
+              floor = targets.get(r['mission'], 0.0) - 0.10
+              print(f"{r['mission']} expert win rate {r['winRate']:.3f} (floor {floor:.2f})")
+              if r['winRate'] < floor:
+                  bad.append(r['mission'])
+          sys.exit(f"expert win rate below target minus 10 points: {bad}" if bad else 0)
+          PY
           else
             echo "No mission content yet (T-12)."
           fi
