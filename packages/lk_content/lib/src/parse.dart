@@ -343,6 +343,7 @@ final class ContentParser {
       return edge;
     });
     _image(o, 'image', required: false);
+    _todo(o);
     return MapDef(id: id, nodes: nodes, edges: edges);
   }
 

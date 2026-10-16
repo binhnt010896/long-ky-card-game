@@ -1,0 +1,97 @@
+[
+  {
+    "id": "vietjack-sbt7-p48",
+    "work": "SBT Lịch sử 7, trang 48",
+    "publisher": "VietJack",
+    "url": "https://vietjack.com/sbt-lich-su-7-kn/giai-sbt-lich-su-7-trang-48-ket-noi.jsp",
+    "note": ""
+  },
+  {
+    "id": "vietjack-ls11-p50",
+    "work": "Lịch sử 11, trang 50",
+    "publisher": "VietJack",
+    "url": "https://vietjack.com/lich-su-11-ct/lich-su-11-trang-50.jsp",
+    "note": "Cited in docs/plan.md for the envoys before 1258 and the 30,000 troops of Ngột Lương Hợp Thai.",
+    "todo": ["History reviewer: confirm, and add the matching Đại Việt sử ký toàn thư entry."]
+  },
+  {
+    "id": "loigiaihay-sbt7-b3-p47",
+    "work": "Giải bài 3 trang 47 SBT Sử 7",
+    "publisher": "Loigiaihay",
+    "url": "https://loigiaihay.com/giai-bai-3-trang-47-sbt-su-7-a68523.html",
+    "note": "Cited in docs/plan.md for the 1258 route (Thao River, Bạch Hạc, Bình Lệ Nguyên).",
+    "todo": ["History reviewer: confirm."]
+  },
+  {
+    "id": "loigiaihay-ls7-cd-b17",
+    "work": "Bài 17: Ba lần kháng chiến chống quân xâm lược Mông – Nguyên (SGK Lịch sử và Địa lí 7, Cánh diều)",
+    "publisher": "Loigiaihay",
+    "url": "https://loigiaihay.com/bai-17-ba-lan-khang-chien-chong-quan-xam-luoc-mong-nguyen-sgk-lich-su-va-dia-li-7-canh-dieu-a107988.html",
+    "note": "Cited in docs/plan.md for Trần Thái Tông at the Bình Lệ Nguyên line.",
+    "todo": ["History reviewer: confirm."]
+  },
+  {
+    "id": "loigiaihay-tbd7-p19",
+    "work": "Giải bài 1 trang 19 Tập bản đồ Lịch sử 7",
+    "publisher": "Loigiaihay",
+    "url": "https://loigiaihay.com/giai-bai-1-trang-19-tap-ban-do-lich-su-7-a74430.html",
+    "note": "Cited in docs/plan.md for leaving Thăng Long and the Đông Bộ Đầu counterattack.",
+    "todo": ["History reviewer: confirm; resolve the 29-1-1258 vs 29-2-1258 date question noted in docs/plan.md."]
+  },
+  {
+    "id": "luatminhkhue-ba-lan-khang-chien",
+    "work": "Nguyên nhân và ý nghĩa của ba lần kháng chiến chống quân Mông – Nguyên",
+    "publisher": "Luật Minh Khuê",
+    "url": "https://luatminhkhue.vn/nguyen-nhan-va-y-nghia-cua-ba-lan-khang-chien-chong-quan-mong.aspx",
+    "note": "Cited in docs/plan.md for withdrawing when the enemy was strong.",
+    "todo": ["History reviewer: confirm."]
+  },
+  {
+    "id": "wikipedia-tran-thai-tong",
+    "work": "Trần Thái Tông",
+    "publisher": "Wikipedia (English)",
+    "url": "https://en.wikipedia.org/wiki/Tr%E1%BA%A7n_Th%C3%A1i_T%C3%B4ng",
+    "note": "Cited in docs/plan.md for the letters before 1258.",
+    "todo": ["History reviewer: confirm, or replace with a Vietnamese primary source."]
+  },
+  {
+    "id": "wikipedia-binh-le-nguyen",
+    "work": "Battle of Bình Lệ Nguyên",
+    "publisher": "Wikipedia (English)",
+    "url": "https://en.wikipedia.org/wiki/Battle_of_B%C3%ACnh_L%E1%BB%87_Nguy%C3%AAn",
+    "note": "Cited in docs/plan.md for mission 2.",
+    "todo": ["History reviewer: confirm, or replace with a Vietnamese primary source."]
+  },
+  {
+    "id": "weaponsandwarfare-mongol-vietnam",
+    "work": "Mongol invasions of Vietnam",
+    "publisher": "Weapons and Warfare",
+    "url": "https://weaponsandwarfare.com/?p=14762",
+    "note": "Cited in docs/plan.md for supply shortages and the climate in 1258.",
+    "todo": ["History reviewer: confirm."]
+  },
+  {
+    "id": "mytour-le-phu-tran",
+    "work": "Lê Phụ Trần",
+    "publisher": "Mytour",
+    "url": "https://mytour.vn/vi/blog/bai-viet/le-phu-tran.html",
+    "note": "Cited in docs/plan.md for Lê Phụ Trần shielding the king.",
+    "todo": ["History reviewer: confirm, or replace with a stronger source."]
+  },
+  {
+    "id": "mytour-top7-vi-tuong",
+    "work": "Top 7 vị tướng nổi bật trong cuộc chiến chống quân Mông Nguyên",
+    "publisher": "Mytour",
+    "url": "https://mytour.vn/vi/blog/bai-viet/top-7-vi-tuong-noi-bat-trong-cuoc-chien-chong-quan-mong-nguyen.html",
+    "note": "Cited in docs/plan.md for Trần Quốc Tuấn and Trần Khánh Dư in 1258.",
+    "todo": ["History reviewer: confirm, or replace with a stronger source."]
+  },
+  {
+    "id": "znews-10-cau-noi",
+    "work": "10 câu nói lưu danh muôn đời của anh hùng nước Việt",
+    "publisher": "Znews",
+    "url": "https://znews.vn/10-cau-noi-luu-danh-muon-doi-cua-anh-hung-nuoc-viet-post818481.html",
+    "note": "Cited in docs/plan.md for Trần Nhật Hiệu and Trần Thủ Độ.",
+    "todo": ["History reviewer: confirm."]
+  }
+]

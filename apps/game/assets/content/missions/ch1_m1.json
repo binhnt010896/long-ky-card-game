@@ -1,0 +1,195 @@
+{
+  "id": "ch1_m1",
+  "chapter": 1,
+  "order": 1,
+  "title": {
+    "vi": "Sứ giả phương Bắc",
+    "en": "Envoys from the North"
+  },
+  "briefing": {
+    "vi": "Mục tiêu: trụ vững đủ 3 lượt. Mỗi lượt có sứ giả đến; hãy chọn cách đáp lời và giữ lòng trung của các tướng.",
+    "en": "Goal: hold out for 3 turns. An envoy arrives every turn; choose your answer and keep your officers loyal."
+  },
+  "debrief": {
+    "vi": "Kết thúc nhiệm vụ Sứ giả phương Bắc.",
+    "en": "End of the mission Envoys from the North."
+  },
+  "map": "ch1",
+  "seasonTurns": 3,
+  "heatStartTurn": null,
+  "start": {
+    "rice": 4,
+    "support": 4,
+    "unity": {
+      "court": 6,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "thang-long",
+      "troops": 12
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "thang-long",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-quoc-tuan",
+      "nodeId": "song-thao",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-nhat-hieu",
+      "nodeId": "thang-long",
+      "troops": 4
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "bien-gioi",
+      "troops": 30,
+      "supply": 20,
+      "maxSupply": 20,
+      "morale": 8,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 3
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 2
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 2
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [
+    {
+      "turn": 1,
+      "cardId": "su-gia-phuong-bac"
+    },
+    {
+      "turn": 2,
+      "cardId": "su-gia-phuong-bac"
+    },
+    {
+      "turn": 3,
+      "cardId": "su-gia-phuong-bac"
+    }
+  ],
+  "inducements": [
+    {
+      "turn": 3,
+      "threshold": 6
+    }
+  ],
+  "yuanScript": [
+    {
+      "turn": 1,
+      "armyId": "mong-co-1258",
+      "intent": "hold"
+    },
+    {
+      "turn": 2,
+      "armyId": "mong-co-1258",
+      "intent": "hold"
+    },
+    {
+      "turn": 3,
+      "armyId": "mong-co-1258",
+      "intent": "hold"
+    }
+  ],
+  "win": [
+    {
+      "type": "surviveTurns",
+      "turns": 3
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "noDefections"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 5
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "m1-intel",
+      "text": {
+        "vi": "Do thám: đầu mỗi lượt, xem ý đồ của quân Nguyên trên bản đồ.",
+        "en": "Intel: at the start of each turn, see the Yuan army's intent on the map."
+      },
+      "highlight": "intentArrows"
+    },
+    {
+      "id": "m1-council",
+      "text": {
+        "vi": "Hội nghị: trả lời Sự kiện và đánh thẻ Mưu kế bằng Lương và Lòng dân.",
+        "en": "Council: answer Events and play Stratagem cards with Rice and Support."
+      },
+      "highlight": "hand"
+    },
+    {
+      "id": "m1-orders",
+      "text": {
+        "vi": "Ra lệnh: giao cho mỗi tướng một lệnh. Tướng không có lệnh sẽ giữ vị trí.",
+        "en": "Orders: give each officer one order. An officer without one holds."
+      },
+      "highlight": "officerStrip"
+    },
+    {
+      "id": "m1-resolution",
+      "text": {
+        "vi": "Giao tranh: các lệnh và hành quân được thực hiện, rồi đến các trận đánh.",
+        "en": "Resolution: orders and moves resolve, then battles."
+      },
+      "highlight": "phaseButton"
+    },
+    {
+      "id": "m1-upkeep",
+      "text": {
+        "vi": "Hậu cần: quân Nguyên tiêu hao Lương thảo, bạn thu lương và rút thẻ. Coi chừng lòng trung của các tướng.",
+        "en": "Upkeep: the Yuan use Supply, you collect rice and draw. Watch your officers' loyalty."
+      },
+      "highlight": "topBar"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "wikipedia-tran-thai-tong",
+    "vietjack-ls11-p50"
+  ],
+  "todo": [
+    "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
+    "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
+    "tutorial highlight ids are placeholders until the battle UI defines them (T-22)."
+  ]
+}
