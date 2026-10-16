@@ -5,6 +5,7 @@ import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/l10n/app_localizations.dart';
 import '../../../app/theme.dart';
+import '../../cards/card_frame.dart';
 import '../labels.dart';
 import 'panel.dart';
 
@@ -27,8 +28,9 @@ List<CardDef> handCards(GameState state, Ruleset ruleset) => [
     if (ruleset.cards[id] != null) ruleset.cards[id]!,
 ];
 
-/// A lacquer tablet with a card's name, type, cost and text. Not a playing
-/// card: no suit, rank or corner index. Painted frames come in T-21.
+/// A card of the hand: the lacquer frame (3:4), tappable, with its cost, the
+/// text in its tooltip and a note when it cannot be paid for. Painted art
+/// comes in by id; until it exists the frame shows a placeholder.
 class CardTile extends StatelessWidget {
   const CardTile({
     super.key,
@@ -37,8 +39,6 @@ class CardTile extends StatelessWidget {
     required this.width,
     required this.selected,
     required this.onTap,
-    this.showText = true,
-    this.maxTextLines = 3,
     this.shortcut,
   });
 
@@ -47,11 +47,12 @@ class CardTile extends StatelessWidget {
   final double width;
   final bool selected;
   final VoidCallback onTap;
-  final bool showText;
-  final int maxTextLines;
 
   /// The key that opens this card (1–9), named in its tooltip.
   final String? shortcut;
+
+  /// Tile height for [width].
+  static double heightFor(double width) => width / CardFrame.aspect;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,8 @@ class CardTile extends StatelessWidget {
             if (cost.support > 0) '${l.resourceSupport} ${cost.support}',
           ].join(' · ');
     final name = l.content(card.name);
+    final surcharge = cost.support > card.cost.support;
+    final tip = '$name — ${l.content(card.text)}';
     return Semantics(
       button: true,
       selected: selected,
@@ -76,62 +79,39 @@ class CardTile extends StatelessWidget {
       ),
       excludeSemantics: true,
       child: Tooltip(
-        message: shortcut == null ? name : l.shortcutHint(name, shortcut!),
-        child: Opacity(
-          opacity: affordable ? 1 : 0.6,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                width: width,
-                constraints: const BoxConstraints(minHeight: minTouch),
-                padding: const EdgeInsets.all(8),
-                decoration: lacquerPanel(selected: selected, radius: 6, fill: LongKyColors.lacquerRaised),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: LongKyColors.goldLeaf,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      l.cardTypeName(card.type),
-                      style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.75), fontSize: 11, height: 1.2),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      affordable ? costText : '$costText · ${l.cardCannotAfford}',
-                      maxLines: 2,
-                      style: const TextStyle(
-                        color: LongKyColors.ivory,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        height: 1.2,
-                      ),
-                    ),
-                    if (showText) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        l.content(card.text),
-                        maxLines: selected ? 8 : maxTextLines,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.9), fontSize: 11, height: 1.25),
-                      ),
-                    ],
-                  ],
+        message: shortcut == null ? tip : l.shortcutHint(tip, shortcut!),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(width * 0.05),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                frameForCard(
+                  l,
+                  card,
+                  width: width,
+                  cost: (rice: cost.rice, support: cost.support, surcharge: surcharge),
+                  selected: selected,
+                  dimmed: !affordable,
                 ),
-              ),
+                if (!affordable)
+                  // Said in words as well as dimmed, so colour is not the only signal.
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: LongKyColors.lacquer.withValues(alpha: 0.92),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: LongKyColors.cinnabar),
+                    ),
+                    child: Text(
+                      l.cardCannotAfford,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: LongKyColors.ivory, fontSize: 11, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+              ],
             ),
           ),
         ),
@@ -211,27 +191,35 @@ class _HandColumnState extends State<HandColumn> {
           Expanded(
             child: cards.isEmpty
                 ? Text(l.handEmpty, style: const TextStyle(color: LongKyColors.ivory))
-                : ListView.separated(
-                    itemCount: cards.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, i) {
-                      final card = cards[i];
-                      // The same card can be in hand twice; select by position.
-                      final key = '$i:${card.id}';
-                      return CardTile(
-                        key: Key('card-$i-${card.id}'),
-                        card: card,
-                        state: widget.state,
-                        shortcut: i < 9 ? '${i + 1}' : null,
-                        width: double.infinity,
-                        selected: _selected == key,
-                        onTap: () {
-                          if (widget.onCardTap != null) {
-                            widget.onCardTap!(card);
-                          } else {
-                            setState(() => _selected = _selected == key ? null : key);
-                          }
-                        },
+                : LayoutBuilder(
+                    builder: (context, box) {
+                      // Two frames to a row.
+                      final w = (box.maxWidth - 8) / 2;
+                      return SingleChildScrollView(
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (var i = 0; i < cards.length; i++)
+                              CardTile(
+                                key: Key('card-$i-${cards[i].id}'),
+                                card: cards[i],
+                                state: widget.state,
+                                shortcut: i < 9 ? '${i + 1}' : null,
+                                width: w,
+                                // The same card can be in hand twice; select by position.
+                                selected: _selected == '$i:${cards[i].id}',
+                                onTap: () {
+                                  if (widget.onCardTap != null) {
+                                    widget.onCardTap!(cards[i]);
+                                  } else {
+                                    final key = '$i:${cards[i].id}';
+                                    setState(() => _selected = _selected == key ? null : key);
+                                  }
+                                },
+                              ),
+                          ],
+                        ),
                       );
                     },
                   ),
@@ -355,7 +343,6 @@ class _HandFanState extends State<HandFan> {
                   shortcut: i < 9 ? '${i + 1}' : null,
                   width: w,
                   selected: i == _selected,
-                  maxTextLines: 2,
                   onTap: () {
                     if (widget.onCardTap != null) {
                       widget.onCardTap!(cards[i]);

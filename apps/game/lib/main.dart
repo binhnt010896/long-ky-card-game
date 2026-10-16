@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'app/long_ky_app.dart';
+import 'art/art_library.dart';
 import 'audio/audio_backend.dart';
 import 'audio/audio_service.dart';
 import 'data/battle_save_repository.dart';
@@ -25,12 +26,14 @@ Future<void> main() async {
   final repository = ProgressRepository(FileProgressStore(directory));
   final progress = await repository.load();
   final audio = await AudioService.fromBundle(FlameAudioBackend(), rootBundle, progress.settings);
+  final art = await ArtLibrary.fromBundle(rootBundle);
   runApp(
     LongKyApp(
       repository: repository,
       initial: progress,
       saves: BattleSaveRepository(FileBattleSaveStore(directory)),
       audio: audio,
+      art: art,
     ),
   );
 }

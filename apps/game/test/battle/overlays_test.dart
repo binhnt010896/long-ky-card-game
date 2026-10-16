@@ -4,6 +4,7 @@ import 'package:lk_rules/lk_rules.dart';
 import 'package:long_ky_game/features/battle/board/board_scene.dart';
 import 'package:long_ky_game/features/battle/labels.dart';
 import 'package:long_ky_game/features/battle/overlays/event_log.dart';
+import 'package:long_ky_game/features/cards/card_frame.dart';
 import 'package:long_ky_game/features/battle/overlays/hand.dart';
 import 'package:long_ky_game/features/battle/overlays/inspector.dart';
 import 'package:long_ky_game/features/battle/overlays/officer_strip.dart';
@@ -271,7 +272,9 @@ void main() {
         },
       );
 
-      testWidgets('a card shows type, cost and text; tapping selects it and shows the full text', (tester) async {
+      testWidgets('a card is a lacquer frame in 3:4: type, name, a cost row and the text in its tooltip', (
+        tester,
+      ) async {
         final card = rules.cards['vuon-khong-nha-trong']!;
         final s = start.copyWith(hand: ['vuon-khong-nha-trong']);
         final l = strings('vi');
@@ -288,7 +291,6 @@ void main() {
                 state: s,
                 width: 140,
                 selected: selected,
-                maxTextLines: 1,
                 onTap: () => set(() => selected = !selected),
               );
             },
@@ -296,11 +298,18 @@ void main() {
         );
         expect(find.text(l.content(card.name)), findsOneWidget);
         expect(find.text(l.cardTypeName(CardType.stratagem)), findsOneWidget);
-        expect(find.text('${l.resourceSupport} 2'), findsOneWidget);
-        final folded = tester.getSize(find.byType(CardTile)).height;
+        expect(find.byIcon(Icons.favorite), findsOneWidget, reason: 'Support 2, as a glyph and a number');
+        expect(find.text('2'), findsOneWidget);
+        final frame = tester.getSize(find.byKey(const Key('card-frame')));
+        expect(frame.width / frame.height, closeTo(3 / 4, 0.001));
+        expect(CardTile.heightFor(140), closeTo(140 * 4 / 3, 1e-9));
+        // Small frames leave the effect text to the tooltip.
+        expect(find.text(l.content(card.text)), findsNothing);
+        expect(tester.widget<Tooltip>(find.byType(Tooltip)).message, contains(l.content(card.text)));
+
         await tester.tap(find.byType(CardTile));
         await tester.pump();
-        expect(tester.getSize(find.byType(CardTile)).height, greaterThanOrEqualTo(folded));
+        expect(tester.widget<CardFrame>(find.byType(CardFrame)).selected, isTrue);
         expect(tester.takeException(), isNull);
       });
 
