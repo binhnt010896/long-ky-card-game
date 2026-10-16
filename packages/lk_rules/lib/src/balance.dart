@@ -39,6 +39,18 @@ abstract final class Balance {
   static const int rallyMorale = 1;
   static const int rallyTroops = 1;
 
+  /// People lost by each evacuation after the first in the same turn.
+  static const int extraEvacuationPeopleLoss = 1;
+
+  /// People gained per battle won.
+  static const int battleWonPeopleGain = 1;
+
+  /// Court lost the first time the capital falls.
+  static const int capitalLostCourtLoss = 1;
+
+  /// Clan lost per defection.
+  static const int defectionClanLoss = 1;
+
   // Combat.
   static const int troopsPerLeadership = 3;
   static const double overCapTroopValue = 0.5;
