@@ -40,4 +40,4 @@ dart run tools/sim/bin/sim.dart --mission ch1_m2 --games 1000
 dart run tools/sim/bin/sim.dart --play --mission ch1_m2
 ```
 
-Status: M0 and M1 (T-01 to T-13) and T-14 (app shell) done; next is T-15, the Flame board.
+Status: M0, M1 and T-14 (app shell) merged; T-15 (Flame board) in review; next is T-16, the battle overlays.

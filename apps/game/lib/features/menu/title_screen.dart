@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/l10n/app_localizations.dart';
@@ -43,6 +44,13 @@ class TitleScreen extends StatelessWidget {
                   onPressed: () => Navigator.pushNamed(context, Routes.settings),
                   child: Text(l.menuSettings),
                 ),
+                if (kDebugMode) ...[
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(context, Routes.boardPreview),
+                    child: const Text('Board preview (debug)'),
+                  ),
+                ],
               ],
             ),
           ),
