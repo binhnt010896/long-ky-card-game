@@ -26,6 +26,8 @@ import 'overlays/panel.dart';
 import 'overlays/phase_button.dart';
 import 'overlays/preview_dialog.dart';
 import 'overlays/top_bar.dart';
+import '../tutorial/tutorial_coach.dart';
+import '../tutorial/tutorial_flow.dart';
 
 /// The battle screen: the Flame board with Flutter overlays around it
 /// (build-spec section 6). Reads its [BattleCubit] from the context.
@@ -34,7 +36,14 @@ import 'overlays/top_bar.dart';
 /// it except what is open on purpose: the inspector, the hand fan on
 /// compact and the log popover on compact.
 class BattleScreen extends StatefulWidget {
-  const BattleScreen({super.key, required this.ruleset, this.onExit, this.onRetry});
+  const BattleScreen({
+    super.key,
+    required this.ruleset,
+    this.onExit,
+    this.onRetry,
+    this.tutorial = const [],
+    this.onTutorialDone,
+  });
 
   final Ruleset ruleset;
 
@@ -43,6 +52,13 @@ class BattleScreen extends StatefulWidget {
 
   /// Shows "Play again" on the Result screen when set.
   final VoidCallback? onRetry;
+
+  /// The mission's coach marks (T-22), when they are to be shown: empty for a
+  /// player who has finished or skipped them.
+  final List<TutorialStep> tutorial;
+
+  /// Called once when the coach marks are over (all read, skipped or passed).
+  final VoidCallback? onTutorialDone;
 
   @override
   State<BattleScreen> createState() => _BattleScreenState();
@@ -61,6 +77,76 @@ class _BattleScreenState extends State<BattleScreen> {
 
   /// The board is playing the last step's animations.
   bool _busy = false;
+
+  // Coach marks (T-22): what has been read, and the elements they point at.
+  final Set<String> _readTips = {};
+  bool _tutorialReported = false;
+  String? _measuredFor;
+  final GlobalKey _stackKey = GlobalKey();
+  final GlobalKey _topBarKey = GlobalKey();
+  final GlobalKey _stripKey = GlobalKey();
+  final GlobalKey _phaseKey = GlobalKey();
+  final GlobalKey _handKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    // A battle picked up late (resumed in turn 3) has nothing left to teach.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _tutorialOn && _flow.finished(_cubit.game, _readTips)) _reportTutorialDone();
+    });
+  }
+
+  late final TutorialFlow _flow = TutorialFlow([for (final t in widget.tutorial) t.id]);
+
+  bool get _tutorialOn => widget.tutorial.isNotEmpty && !_tutorialReported;
+
+  void _reportTutorialDone() {
+    if (_tutorialReported) return;
+    setState(() => _tutorialReported = true);
+    widget.onTutorialDone?.call();
+  }
+
+  void _readTip(String id) {
+    setState(() => _readTips.add(id));
+    if (_flow.finished(_cubit.game, _readTips)) _reportTutorialDone();
+  }
+
+  /// A rect of an element, in the coordinates of the screen's own stack.
+  Rect? _rectOf(GlobalKey key) {
+    final box = key.currentContext?.findRenderObject();
+    final stack = _stackKey.currentContext?.findRenderObject();
+    if (box is! RenderBox || stack is! RenderBox || !box.attached || !stack.attached || !box.hasSize) return null;
+    return box.localToGlobal(Offset.zero, ancestor: stack) & box.size;
+  }
+
+  /// The spotlit element of a coach mark (`highlight` in the content).
+  Rect? _spotlight(String? highlight, BattleLayoutMode mode) {
+    switch (highlight) {
+      case 'topBar':
+        return _rectOf(_topBarKey);
+      case 'officerStrip':
+        return _rectOf(_stripKey);
+      case 'phaseButton':
+      case 'battlePreview':
+        return _rectOf(_phaseKey);
+      case 'hand':
+        return _rectOf(_handKey);
+      case 'map':
+        return _rectOf(_boardKey);
+      case 'intentArrows':
+        final board = _rectOf(_boardKey);
+        final scene = _boardKey.currentState?.game.scene;
+        if (board == null || scene == null || scene.arrows.isEmpty) return board;
+        var r = Rect.fromPoints(scene.arrows.first.start, scene.arrows.first.end);
+        for (final a in scene.arrows) {
+          r = r.expandToInclude(Rect.fromPoints(a.start, a.end));
+        }
+        return r.inflate(scene.layout.nodeRadius).shift(board.topLeft);
+      default:
+        return null;
+    }
+  }
 
   /// Also true in the frame between a step and the board starting to play it.
   bool get _isBusy => _busy || (_boardKey.currentState?.game.busy.value ?? false);
@@ -169,28 +255,36 @@ class _BattleScreenState extends State<BattleScreen> {
         builder: (context, constraints) {
           final mode = BattleLayoutMode.forWidth(constraints.maxWidth);
           return SafeArea(
-            child: BlocBuilder<BattleCubit, BattleViewState>(
-              builder: (context, view) => Stack(
-                children: [
-                  Positioned.fill(child: mode.isCompact ? _compact(context, l, view) : _regular(context, l, view)),
-                  if (view.state.isOver && !_busy)
-                    Positioned.fill(
-                      child: ResultScreen(
-                        state: view.state,
-                        ruleset: widget.ruleset,
-                        onBack: widget.onExit,
-                        onRetry: widget.onRetry,
+            child: BlocListener<BattleCubit, BattleViewState>(
+              // A player who goes on without reading the rest has seen enough.
+              listener: (context, view) {
+                if (_tutorialOn && _flow.finished(view.state, _readTips)) _reportTutorialDone();
+              },
+              child: BlocBuilder<BattleCubit, BattleViewState>(
+                builder: (context, view) => Stack(
+                  key: _stackKey,
+                  children: [
+                    Positioned.fill(child: mode.isCompact ? _compact(context, l, view) : _regular(context, l, view)),
+                    if (view.state.isOver && !_busy)
+                      Positioned.fill(
+                        child: ResultScreen(
+                          state: view.state,
+                          ruleset: widget.ruleset,
+                          onBack: widget.onExit,
+                          onRetry: widget.onRetry,
+                        ),
                       ),
-                    ),
-                  if (view.state.pendingChoice != null && !_busy)
-                    Positioned.fill(
-                      child: ChoiceOverlay(
-                        choice: view.state.pendingChoice!,
-                        ruleset: widget.ruleset,
-                        onChoose: _cubit.resolveChoice,
+                    if (view.state.pendingChoice != null && !_busy)
+                      Positioned.fill(
+                        child: ChoiceOverlay(
+                          choice: view.state.pendingChoice!,
+                          ruleset: widget.ruleset,
+                          onChoose: _cubit.resolveChoice,
+                        ),
                       ),
-                    ),
-                ],
+                    ..._coach(view, mode),
+                  ],
+                ),
               ),
             ),
           );
@@ -230,24 +324,35 @@ class _BattleScreenState extends State<BattleScreen> {
     }
   }
 
-  Widget _topBar(BattleViewState view, BattleLayoutMode mode, {Widget? trailing}) => BattleTopBar(
-    state: view.state,
-    seasonTurns: widget.ruleset.mission.seasonTurns,
-    mode: mode,
-    leading: widget.onExit == null
-        ? null
-        : IconButton(
-            key: const Key('battle-exit'),
-            tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-            constraints: const BoxConstraints(minWidth: minTouch, minHeight: minTouch),
-            onPressed: widget.onExit,
-            icon: const Icon(Icons.arrow_back, color: LongKyColors.goldLeaf),
-          ),
-    trailing: trailing,
+  Widget _topBar(BattleViewState view, BattleLayoutMode mode, {Widget? trailing}) => KeyedSubtree(
+    key: _topBarKey,
+    child: BattleTopBar(
+      state: view.state,
+      seasonTurns: widget.ruleset.mission.seasonTurns,
+      mode: mode,
+      leading: widget.onExit == null
+          ? null
+          : IconButton(
+              key: const Key('battle-exit'),
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              constraints: const BoxConstraints(minWidth: minTouch, minHeight: minTouch),
+              onPressed: widget.onExit,
+              icon: const Icon(Icons.arrow_back, color: LongKyColors.goldLeaf),
+            ),
+      trailing: trailing,
+    ),
   );
 
-  Widget _strip(BattleViewState view, BattleLayoutMode mode) =>
-      OfficerStrip(state: view.state, ruleset: widget.ruleset, mode: mode, selection: _selection, onSelect: _select);
+  Widget _strip(BattleViewState view, BattleLayoutMode mode) => KeyedSubtree(
+    key: _stripKey,
+    child: OfficerStrip(
+      state: view.state,
+      ruleset: widget.ruleset,
+      mode: mode,
+      selection: _selection,
+      onSelect: _select,
+    ),
+  );
 
   Widget _inspector(BattleViewState view, BattleLayoutMode mode) => InspectorPanel(
     selection: _selection!,
@@ -270,6 +375,44 @@ class _BattleScreenState extends State<BattleScreen> {
           )
         : null,
   );
+
+  // ---- coach marks (T-22)
+
+  /// The coach mark for this moment of the game, if there is one. It waits
+  /// while the board animates and while a choice or the Result screen cover
+  /// the game.
+  List<Widget> _coach(BattleViewState view, BattleLayoutMode mode) {
+    if (!_tutorialOn || _busy || view.state.pendingChoice != null || view.state.isOver) return const [];
+    final id = _flow.current(view.state, _readTips);
+    if (id == null) return const [];
+    final step = widget.tutorial.firstWhere((t) => t.id == id);
+    final l = AppLocalizations.of(context);
+    final target = _spotlight(step.highlight, mode);
+    if (target == null && step.highlight != null && _measuredFor != id) {
+      // The element it points at is not laid out yet (the tip came with the
+      // first frame): measure again once it is.
+      _measuredFor = id;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+    }
+    return [
+      Positioned.fill(
+        child: TutorialCoach(
+          key: ValueKey(id),
+          text: l.content(step.text),
+          position: _flow.position(id),
+          total: widget.tutorial.length,
+          target: target,
+          onNext: () => _readTip(id),
+          onSkip: () {
+            setState(() => _readTips.addAll(_flow.steps));
+            _reportTutorialDone();
+          },
+        ),
+      ),
+    ];
+  }
 
   // ---- compact (< 900 wide)
 
@@ -301,14 +444,20 @@ class _BattleScreenState extends State<BattleScreen> {
                 child: Row(
                   children: [
                     Expanded(child: _strip(view, mode)),
-                    HandDrawer(
-                      state: view.state,
-                      ruleset: widget.ruleset,
-                      open: _handOpen,
-                      onToggle: () => setState(() => _handOpen = !_handOpen),
+                    KeyedSubtree(
+                      key: _handKey,
+                      child: HandDrawer(
+                        state: view.state,
+                        ruleset: widget.ruleset,
+                        open: _handOpen,
+                        onToggle: () => setState(() => _handOpen = !_handOpen),
+                      ),
                     ),
                     const SizedBox(width: 4),
-                    PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
+                    KeyedSubtree(
+                      key: _phaseKey,
+                      child: PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
+                    ),
                     const SizedBox(width: 4),
                   ],
                 ),
@@ -395,7 +544,10 @@ class _BattleScreenState extends State<BattleScreen> {
               child: Column(
                 children: [
                   Expanded(
-                    child: HandColumn(state: view.state, ruleset: widget.ruleset, onCardTap: _openCard),
+                    child: KeyedSubtree(
+                      key: _handKey,
+                      child: HandColumn(state: view.state, ruleset: widget.ruleset, onCardTap: _openCard),
+                    ),
                   ),
                   ColoredBox(
                     color: LongKyColors.lacquer,
@@ -403,7 +555,10 @@ class _BattleScreenState extends State<BattleScreen> {
                       padding: const EdgeInsets.all(8),
                       child: SizedBox(
                         width: double.infinity,
-                        child: PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
+                        child: KeyedSubtree(
+                          key: _phaseKey,
+                          child: PhaseButton(state: view.state, mode: mode, busy: _busy, onPressed: _endPhase),
+                        ),
                       ),
                     ),
                   ),

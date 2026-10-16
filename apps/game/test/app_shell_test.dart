@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:long_ky_game/app/long_ky_app.dart';
+import 'package:long_ky_game/data/progress.dart';
 import 'package:long_ky_game/data/progress_store.dart';
 
 import 'support.dart';
@@ -73,7 +74,7 @@ void main() {
     await tester.tap(await reveal(tester, 'reduceMotion'));
     await tester.pumpAndSettle();
     final saved = jsonDecode(store.text!) as Map<String, Object?>;
-    expect(saved['version'], 1);
+    expect(saved['version'], Progress.currentVersion);
     expect((saved['settings']! as Map)['languageCode'], 'en');
 
     // Restart on the same storage.
@@ -96,12 +97,16 @@ void main() {
   });
 
   testWidgets('reset progress asks first, clears stars, keeps settings', (tester) async {
-    final store = MemoryProgressStore(jsonEncode({
-      'version': 1,
-      'stars': {'ch1_m1': [true, true, false]},
-      'unlocks': ['tran-thu-do'],
-      'settings': {'languageCode': 'en'},
-    }));
+    final store = MemoryProgressStore(
+      jsonEncode({
+        'version': 1,
+        'stars': {
+          'ch1_m1': [true, true, false],
+        },
+        'unlocks': ['tran-thu-do'],
+        'settings': {'languageCode': 'en'},
+      }),
+    );
     await startApp(tester, store: store);
     await openSettings(tester, 'Settings');
     await tester.tap(await reveal(tester, 'resetProgress'));

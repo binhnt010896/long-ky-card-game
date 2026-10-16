@@ -10,7 +10,9 @@ void main() {
   group('Progress JSON', () {
     test('round-trips and carries the version', () {
       final p = Progress(
-        stars: const {'ch1_m2': [true, false, true]},
+        stars: const {
+          'ch1_m2': [true, false, true],
+        },
         unlocks: const ['x'],
         settings: const GameSettings().copyWith(languageCode: 'en', textScale: 1.3, reduceMotion: true),
       );
@@ -20,6 +22,41 @@ void main() {
       expect(back.stars, p.stars);
       expect(back.unlocks, p.unlocks);
       expect(back.settings, p.settings);
+    });
+
+    test('a version 1 file (before coach marks) loads, with no tutorial done and everything else kept', () {
+      final p = Progress.fromJson({
+        'version': 1,
+        'stars': {
+          'ch1_m1': [true, false, true],
+        },
+        'unlocks': ['x'],
+        'settings': {'languageCode': 'en', 'reduceMotion': true},
+      });
+      expect(p.tutorialDone, isEmpty);
+      expect(p.stars['ch1_m1'], [true, false, true]);
+      expect(p.unlocks, ['x']);
+      expect(p.settings.languageCode, 'en');
+      expect(p.settings.reduceMotion, isTrue);
+      expect(p.toJson()['version'], Progress.currentVersion, reason: 'written back as the current version');
+    });
+
+    test('finished coach marks are remembered, round-trip, and a reset makes the player new again', () {
+      final p = const Progress().copyWith(tutorialDone: ['ch1_m1', 'ch1_m2']);
+      final back = Progress.fromJson(p.toJson());
+      expect(back.tutorialDone, ['ch1_m1', 'ch1_m2']);
+      expect(p.reset().tutorialDone, isEmpty);
+    });
+
+    test('a damaged tutorialDone list is ignored, not fatal', () {
+      expect(Progress.fromJson({'version': 2, 'tutorialDone': 'nope'}).tutorialDone, isEmpty);
+      expect(
+        Progress.fromJson({
+          'version': 2,
+          'tutorialDone': ['a', 3, null],
+        }).tutorialDone,
+        ['a'],
+      );
     });
 
     test('missing or invalid settings fall back to defaults; values are clamped', () {

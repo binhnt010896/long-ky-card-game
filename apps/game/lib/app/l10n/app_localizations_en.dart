@@ -72,7 +72,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resetConfirmTitle => 'Reset all progress?';
 
   @override
-  String get resetConfirmBody => 'Stars and unlocks will be erased. Settings are kept.';
+  String get resetConfirmBody =>
+      'Stars and unlocks will be erased. Settings are kept.';
 
   @override
   String get actionCancel => 'Cancel';
@@ -87,7 +88,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsCredits => 'Credits and sources';
 
   @override
-  String get creditsFont => 'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
+  String get creditsFont =>
+      'Be Vietnam Pro typeface, under the SIL Open Font License 1.1.';
 
   @override
   String get creditsLicenses => 'Software licences';
@@ -792,7 +794,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get resumeUnusableTitle => 'The saved battle cannot be continued';
 
   @override
-  String get resumeUnusableBody => 'The game content has changed or the save is damaged. Start this mission again?';
+  String get resumeUnusableBody =>
+      'The game content has changed or the save is damaged. Start this mission again?';
 
   @override
   String get resumeRestart => 'Start again';
@@ -839,4 +842,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get briefingLoadError => 'Could not load the briefing.';
+
+  @override
+  String get tutorialNext => 'Next';
+
+  @override
+  String get tutorialGotIt => 'Got it';
+
+  @override
+  String get tutorialSkip => 'Skip the tutorial';
+
+  @override
+  String tutorialCount(int n, int total) {
+    return '$n/$total';
+  }
+
+  @override
+  String tutorialSemantics(String text) {
+    return 'Tutorial: $text';
+  }
 }

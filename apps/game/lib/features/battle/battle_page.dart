@@ -143,6 +143,10 @@ class _BattlePageState extends State<BattlePage> {
     }
   }
 
+  /// Coach marks are for a player who has not been through them: only with
+  /// a progress record to say so, and not once they are done.
+  bool get _showTutorial => _progress != null && !_progress!.state.tutorialDone.contains(widget.missionId);
+
   void _adopt(Ruleset ruleset, BattleCubit cubit) {
     final old = _cubit;
     if (!mounted) {
@@ -197,6 +201,9 @@ class _BattlePageState extends State<BattlePage> {
             ruleset: _ruleset!,
             onExit: () => Navigator.maybePop(context),
             onRetry: () => _start(resume: false),
+            // Coach marks until the player has finished or skipped them once.
+            tutorial: _showTutorial ? _ruleset!.mission.tutorial : const [],
+            onTutorialDone: _progress == null ? null : () => _progress!.markTutorialDone(widget.missionId),
           ),
         );
     }

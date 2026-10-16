@@ -35,6 +35,13 @@ class ProgressCubit extends Cubit<Progress> {
     return _update(state.copyWith(stars: {...state.stars, missionId: best}));
   }
 
+  /// Remembers that [missionId]'s coach marks were finished or skipped, so
+  /// they are not shown again.
+  Future<void> markTutorialDone(String missionId) {
+    if (state.tutorialDone.contains(missionId)) return Future.value();
+    return _update(state.copyWith(tutorialDone: [...state.tutorialDone, missionId]));
+  }
+
   /// Clears stars and unlocks; settings are kept.
   Future<void> resetProgress() => _update(state.reset());
 }

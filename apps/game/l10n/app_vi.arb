@@ -433,5 +433,15 @@
   "briefingStopVoice": "Dừng lời dẫn",
   "@briefingStopVoice": {"description": "Button: stop the spoken narration."},
   "briefingLoadError": "Không tải được phần dẫn nhiệm vụ.",
-  "@briefingLoadError": {"description": "Shown when a briefing cannot be loaded."}
+  "@briefingLoadError": {"description": "Shown when a briefing cannot be loaded."},
+  "tutorialNext": "Tiếp",
+  "@tutorialNext": {"description": "Coach mark: the next tip."},
+  "tutorialGotIt": "Đã hiểu",
+  "@tutorialGotIt": {"description": "Coach mark: the last tip."},
+  "tutorialSkip": "Bỏ qua hướng dẫn",
+  "@tutorialSkip": {"description": "Coach mark: stop all tips."},
+  "tutorialCount": "{n}/{total}",
+  "@tutorialCount": {"description": "Which tip this is.", "placeholders": {"n": {"type": "int"}, "total": {"type": "int"}}},
+  "tutorialSemantics": "Hướng dẫn: {text}",
+  "@tutorialSemantics": {"description": "Screen-reader label of a coach mark.", "placeholders": {"text": {"type": "String"}}}
 }

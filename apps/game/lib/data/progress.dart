@@ -37,33 +37,32 @@ final class GameSettings {
     double? effectsVolume,
     double? textScale,
     bool? reduceMotion,
-  }) =>
-      GameSettings(
-        languageCode: languageCode ?? this.languageCode,
-        musicVolume: _volume(musicVolume ?? this.musicVolume),
-        voiceVolume: _volume(voiceVolume ?? this.voiceVolume),
-        effectsVolume: _volume(effectsVolume ?? this.effectsVolume),
-        textScale: _scale(textScale ?? this.textScale),
-        reduceMotion: reduceMotion ?? this.reduceMotion,
-      );
+  }) => GameSettings(
+    languageCode: languageCode ?? this.languageCode,
+    musicVolume: _volume(musicVolume ?? this.musicVolume),
+    voiceVolume: _volume(voiceVolume ?? this.voiceVolume),
+    effectsVolume: _volume(effectsVolume ?? this.effectsVolume),
+    textScale: _scale(textScale ?? this.textScale),
+    reduceMotion: reduceMotion ?? this.reduceMotion,
+  );
 
   Map<String, Object?> toJson() => {
-        'languageCode': languageCode,
-        'musicVolume': musicVolume,
-        'voiceVolume': voiceVolume,
-        'effectsVolume': effectsVolume,
-        'textScale': textScale,
-        'reduceMotion': reduceMotion,
-      };
+    'languageCode': languageCode,
+    'musicVolume': musicVolume,
+    'voiceVolume': voiceVolume,
+    'effectsVolume': effectsVolume,
+    'textScale': textScale,
+    'reduceMotion': reduceMotion,
+  };
 
   /// Unknown or invalid values fall back to the defaults.
   factory GameSettings.fromJson(Map<String, Object?> json) {
     const d = GameSettings();
     final lang = json['languageCode'];
     double number(String key, double fallback) => switch (json[key]) {
-          final num v => v.toDouble(),
-          _ => fallback,
-        };
+      final num v => v.toDouble(),
+      _ => fallback,
+    };
     return GameSettings(
       languageCode: lang is String && languages.contains(lang) ? lang : d.languageCode,
       musicVolume: _volume(number('musicVolume', d.musicVolume)),
@@ -96,35 +95,46 @@ final class Progress {
   const Progress({
     this.stars = const {},
     this.unlocks = const [],
+    this.tutorialDone = const [],
     this.settings = const GameSettings(),
   });
 
   /// The current file version. Bump it and add a step to [_migrations]
   /// whenever the shape changes.
-  static const int currentVersion = 1;
+  static const int currentVersion = 2;
 
   /// Stars earned per mission id (best result).
   final Map<String, List<bool>> stars;
 
   /// Unlocked lore and bonus card ids (T-24).
   final List<String> unlocks;
+
+  /// Missions whose coach marks were finished or skipped (T-22).
+  final List<String> tutorialDone;
   final GameSettings settings;
 
-  Progress copyWith({Map<String, List<bool>>? stars, List<String>? unlocks, GameSettings? settings}) => Progress(
-        stars: stars ?? this.stars,
-        unlocks: unlocks ?? this.unlocks,
-        settings: settings ?? this.settings,
-      );
+  Progress copyWith({
+    Map<String, List<bool>>? stars,
+    List<String>? unlocks,
+    List<String>? tutorialDone,
+    GameSettings? settings,
+  }) => Progress(
+    stars: stars ?? this.stars,
+    unlocks: unlocks ?? this.unlocks,
+    tutorialDone: tutorialDone ?? this.tutorialDone,
+    settings: settings ?? this.settings,
+  );
 
-  /// Stars and unlocks cleared; settings kept.
+  /// Stars, unlocks and tutorials cleared (a new player); settings kept.
   Progress reset() => Progress(settings: settings);
 
   Map<String, Object?> toJson() => {
-        'version': currentVersion,
-        'stars': {for (final e in stars.entries) e.key: e.value},
-        'unlocks': unlocks,
-        'settings': settings.toJson(),
-      };
+    'version': currentVersion,
+    'stars': {for (final e in stars.entries) e.key: e.value},
+    'unlocks': unlocks,
+    'tutorialDone': tutorialDone,
+    'settings': settings.toJson(),
+  };
 
   /// Reads any version up to [currentVersion]. Throws [FormatException]
   /// for a file from a newer app or with the wrong shape.
@@ -148,14 +158,19 @@ final class Progress {
       }
     }
     final unlocks = data['unlocks'];
+    final tutorialDone = data['tutorialDone'];
     final settings = data['settings'];
     return Progress(
       stars: stars,
       unlocks: unlocks is List<Object?> ? unlocks.whereType<String>().toList() : const [],
+      tutorialDone: tutorialDone is List<Object?> ? tutorialDone.whereType<String>().toList() : const [],
       settings: settings is Map<String, Object?> ? GameSettings.fromJson(settings) : const GameSettings(),
     );
   }
 
   /// `_migrations[n]` turns a version-n file into version n + 1.
-  static final Map<int, Map<String, Object?> Function(Map<String, Object?>)> _migrations = {};
+  static final Map<int, Map<String, Object?> Function(Map<String, Object?>)> _migrations = {
+    // 1 → 2: coach marks (T-22). A player of version 1 has seen none.
+    1: (data) => {...data, 'version': 2, 'tutorialDone': const <String>[]},
+  };
 }

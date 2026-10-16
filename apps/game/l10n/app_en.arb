@@ -226,5 +226,10 @@
   "briefingSubtitles": "Narration subtitles",
   "briefingPlayVoice": "Play the narration",
   "briefingStopVoice": "Stop the narration",
-  "briefingLoadError": "Could not load the briefing."
+  "briefingLoadError": "Could not load the briefing.",
+  "tutorialNext": "Next",
+  "tutorialGotIt": "Got it",
+  "tutorialSkip": "Skip the tutorial",
+  "tutorialCount": "{n}/{total}",
+  "tutorialSemantics": "Tutorial: {text}"
 }
