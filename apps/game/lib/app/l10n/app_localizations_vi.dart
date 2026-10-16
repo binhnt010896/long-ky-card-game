@@ -706,4 +706,100 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get outcomeBack => 'Về màn hình trước';
+
+  @override
+  String get resultObjectives => 'Mục tiêu';
+
+  @override
+  String get resultMet => 'Đã đạt';
+
+  @override
+  String get resultNotMet => 'Chưa đạt';
+
+  @override
+  String get resultDebrief => 'Tổng kết';
+
+  @override
+  String get resultRetry => 'Chơi lại';
+
+  @override
+  String get objWon => 'Thắng nhiệm vụ';
+
+  @override
+  String get objAllArmiesBroken => 'Đánh tan mọi đạo quân địch';
+
+  @override
+  String objArmyBroken(String army) {
+    return 'Đánh tan $army';
+  }
+
+  @override
+  String objCounterattackAt(String node) {
+    return 'Phản công thắng lợi tại $node';
+  }
+
+  @override
+  String objSurviveTurns(int n) {
+    return 'Trụ vững $n lượt';
+  }
+
+  @override
+  String objKingAt(String node, int turn) {
+    return 'Đưa quân vương đến $node trước hết lượt $turn';
+  }
+
+  @override
+  String objArmySupplyAtMost(String army, int percent) {
+    return 'Tiếp tế của $army còn tối đa $percent%';
+  }
+
+  @override
+  String get objKingNotCaptured => 'Quân vương không bị bắt';
+
+  @override
+  String get objCapitalHeld => 'Giữ được kinh đô';
+
+  @override
+  String objUnityAllAbove(int n) {
+    return 'Cả ba trụ cột đều trên $n';
+  }
+
+  @override
+  String objUnityAtLeast(String pillar, int n) {
+    return '$pillar đạt ít nhất $n khi kết thúc';
+  }
+
+  @override
+  String get objNoDefections => 'Không tướng nào đào ngũ';
+
+  @override
+  String get objNoCaptures => 'Không tướng nào bị bắt';
+
+  @override
+  String objTroopsLostAtMost(int n) {
+    return 'Mất tối đa $n nghìn quân';
+  }
+
+  @override
+  String objWinByTurn(int turn) {
+    return 'Thắng trước hết lượt $turn';
+  }
+
+  @override
+  String objAnyOf(String a, String b) {
+    return '$a hoặc $b';
+  }
+
+  @override
+  String get resumeUnusableTitle => 'Không thể tiếp tục ván đã lưu';
+
+  @override
+  String get resumeUnusableBody =>
+      'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?';
+
+  @override
+  String get resumeRestart => 'Bắt đầu lại';
+
+  @override
+  String get battleLoadError => 'Không tải được nhiệm vụ.';
 }

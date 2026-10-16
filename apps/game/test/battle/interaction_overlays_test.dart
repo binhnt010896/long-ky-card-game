@@ -6,13 +6,12 @@ import 'package:long_ky_game/features/battle/labels.dart';
 import 'package:long_ky_game/features/battle/overlays/card_dialog.dart';
 import 'package:long_ky_game/features/battle/overlays/choice_overlay.dart';
 import 'package:long_ky_game/features/battle/overlays/officer_actions.dart';
-import 'package:long_ky_game/features/battle/overlays/outcome_banner.dart';
 import 'package:long_ky_game/features/battle/overlays/preview_dialog.dart';
 
 import 'overlay_support.dart';
 
-/// Orders, skills, the card dialog, the battle preview, the choice dialog and
-/// the outcome banner, each at both layouts.
+/// Orders, skills, the card dialog, the battle preview and the choice dialog,
+/// each at both layouts.
 void main() {
   final rules = ruleset(mission);
   final engine = GameEngine(rules);
@@ -432,34 +431,6 @@ void main() {
           lang: 'en',
         );
         expect(find.text('A decision is needed'), findsOneWidget);
-      });
-    });
-
-    group('outcome banner ($name)', () {
-      testWidgets('a win shows the stars and Back', (tester) async {
-        var back = 0;
-        final won = council.copyWith(phase: Phase.ended, outcome: Outcome.won, stars: [true, false]);
-        await pumpOverlay(tester, size, OutcomeBanner(state: won, onBack: () => back++));
-        expect(find.text(l.outcomeWon), findsOneWidget);
-        expect(find.text(l.outcomeStars(1, 2)), findsOneWidget);
-        await tester.tap(find.byKey(const Key('outcome-back')));
-        expect(back, 1);
-      });
-
-      testWidgets('a loss says why, for each kind of loss', (tester) async {
-        final reasons = {
-          LossReasons.kingCaptured: l.lossKingCaptured,
-          LossReasons.seasonEnded: l.lossSeasonEnded,
-          '${LossReasons.unityPrefix}clan': l.lossUnity(l.unityClan),
-          '${LossReasons.objectivePrefix}x': l.lossObjective,
-        };
-        for (final e in reasons.entries) {
-          final lost = council.copyWith(phase: Phase.ended, outcome: Outcome.lost, lossReason: e.key);
-          await pumpOverlay(tester, size, OutcomeBanner(state: lost, onBack: null));
-          expect(find.text(l.outcomeLost), findsOneWidget);
-          expect(find.text(e.value), findsOneWidget, reason: e.key);
-          expect(find.byKey(const Key('outcome-back')), findsNothing);
-        }
       });
     });
   }

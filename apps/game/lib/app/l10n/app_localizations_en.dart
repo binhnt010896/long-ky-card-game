@@ -706,4 +706,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get outcomeBack => 'Back';
+
+  @override
+  String get resultObjectives => 'Objectives';
+
+  @override
+  String get resultMet => 'Met';
+
+  @override
+  String get resultNotMet => 'Not met';
+
+  @override
+  String get resultDebrief => 'Debrief';
+
+  @override
+  String get resultRetry => 'Play again';
+
+  @override
+  String get objWon => 'Win the mission';
+
+  @override
+  String get objAllArmiesBroken => 'Break every enemy army';
+
+  @override
+  String objArmyBroken(String army) {
+    return 'Break $army';
+  }
+
+  @override
+  String objCounterattackAt(String node) {
+    return 'Win a counterattack at $node';
+  }
+
+  @override
+  String objSurviveTurns(int n) {
+    return 'Survive $n turns';
+  }
+
+  @override
+  String objKingAt(String node, int turn) {
+    return 'Bring the king to $node by the end of turn $turn';
+  }
+
+  @override
+  String objArmySupplyAtMost(String army, int percent) {
+    return '$army\'s Supply at most $percent%';
+  }
+
+  @override
+  String get objKingNotCaptured => 'The king is not captured';
+
+  @override
+  String get objCapitalHeld => 'Hold the capital';
+
+  @override
+  String objUnityAllAbove(int n) {
+    return 'Every Unity pillar above $n';
+  }
+
+  @override
+  String objUnityAtLeast(String pillar, int n) {
+    return '$pillar at least $n at the end';
+  }
+
+  @override
+  String get objNoDefections => 'No officer defects';
+
+  @override
+  String get objNoCaptures => 'No officer is captured';
+
+  @override
+  String objTroopsLostAtMost(int n) {
+    return 'Lose at most $n,000 troops';
+  }
+
+  @override
+  String objWinByTurn(int turn) {
+    return 'Win by the end of turn $turn';
+  }
+
+  @override
+  String objAnyOf(String a, String b) {
+    return '$a or $b';
+  }
+
+  @override
+  String get resumeUnusableTitle => 'The saved battle cannot be continued';
+
+  @override
+  String get resumeUnusableBody =>
+      'The game content has changed or the save is damaged. Start this mission again?';
+
+  @override
+  String get resumeRestart => 'Start again';
+
+  @override
+  String get battleLoadError => 'Could not load the mission.';
 }

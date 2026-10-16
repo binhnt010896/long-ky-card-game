@@ -1,6 +1,10 @@
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart' show PointerDeviceKind;
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -140,4 +144,24 @@ Future<void> mouseTap(WidgetTester tester, Finder f) async {
   await mouse.up();
   await mouse.removePointer();
   await tester.pump(const Duration(milliseconds: 50));
+}
+
+/// The game content as an asset bundle that reads `assets/content` from disk
+/// at once. The real bundle loads through platform channels, whose timing the
+/// test clock does not control.
+class DiskAssetBundle extends CachingAssetBundle {
+  static const String root = 'assets/content';
+
+  @override
+  Future<ByteData> load(String key) {
+    if (key == 'AssetManifest.bin') {
+      final assets = <Object?, Object?>{
+        for (final f in Directory(root).listSync(recursive: true))
+          if (f is File && f.path.endsWith('.json')) f.path.replaceAll('\\', '/'): <Object?>[],
+      };
+      return Future.value(const StandardMessageCodec().encodeMessage(assets)!);
+    }
+    final bytes = File(key).readAsBytesSync();
+    return Future.value(ByteData.sublistView(bytes));
+  }
 }

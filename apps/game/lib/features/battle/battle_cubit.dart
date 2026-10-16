@@ -17,16 +17,53 @@ final class BattleViewState {
   final int step;
 }
 
+/// A saved battle that cannot be replayed (the engine refuses an action).
+final class SaveReplayException implements Exception {
+  const SaveReplayException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => 'SaveReplayException: $message';
+}
+
 /// Holds the [GameState] of the battle and sends actions to the engine
-/// (build-spec section 6). Autosave comes with T-18.
+/// (build-spec section 6). [onChanged] runs after every step: that is where
+/// the battle is autosaved.
 class BattleCubit extends Cubit<BattleViewState> {
-  BattleCubit(this.engine, {required int seed}) : super(_start(engine, seed));
+  BattleCubit(this.engine, {required int seed, this.onChanged}) : super(_start(engine, seed));
+
+  /// Picks up a saved battle: replays [actions] from the mission start with
+  /// [seed], giving the same state, and the same log, as when it was saved.
+  /// Nothing is animated. Throws [SaveReplayException] if an action is no
+  /// longer legal.
+  BattleCubit.resume(this.engine, {required int seed, required List<GameAction> actions, this.onChanged})
+    : super(_replay(engine, seed, actions));
 
   final GameEngine engine;
+
+  /// Called after each step with the new state.
+  final void Function(BattleViewState view)? onChanged;
 
   static BattleViewState _start(GameEngine engine, int seed) {
     final r = engine.newGame(seed);
     return BattleViewState(state: r.state, events: r.events);
+  }
+
+  static BattleViewState _replay(GameEngine engine, int seed, List<GameAction> actions) {
+    final first = engine.newGame(seed);
+    var state = first.state;
+    final events = [...first.events];
+    for (final a in actions) {
+      try {
+        final r = engine.apply(state, a);
+        state = r.state;
+        events.addAll(r.events);
+      } on IllegalAction catch (e) {
+        throw SaveReplayException('$a: $e');
+      }
+    }
+    return BattleViewState(state: state, events: events);
   }
 
   GameState get game => state.state;
@@ -66,14 +103,14 @@ class BattleCubit extends Cubit<BattleViewState> {
     } on IllegalAction {
       return false;
     }
-    emit(
-      BattleViewState(
-        state: r.state,
-        events: [...state.events, ...r.events],
-        lastEvents: r.events,
-        step: state.step + 1,
-      ),
+    final next = BattleViewState(
+      state: r.state,
+      events: [...state.events, ...r.events],
+      lastEvents: r.events,
+      step: state.step + 1,
     );
+    emit(next);
+    onChanged?.call(next);
     return true;
   }
 }

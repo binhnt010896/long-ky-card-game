@@ -17,7 +17,7 @@ import 'overlays/hand.dart';
 import 'overlays/inspector.dart';
 import 'overlays/officer_actions.dart';
 import 'overlays/officer_strip.dart';
-import 'overlays/outcome_banner.dart';
+import 'overlays/result_screen.dart';
 import 'overlays/panel.dart';
 import 'overlays/phase_button.dart';
 import 'overlays/preview_dialog.dart';
@@ -30,12 +30,15 @@ import 'overlays/top_bar.dart';
 /// it except what is open on purpose: the inspector, the hand fan on
 /// compact and the log popover on compact.
 class BattleScreen extends StatefulWidget {
-  const BattleScreen({super.key, required this.ruleset, this.onExit});
+  const BattleScreen({super.key, required this.ruleset, this.onExit, this.onRetry});
 
   final Ruleset ruleset;
 
   /// Shows a back button in the top bar when set.
   final VoidCallback? onExit;
+
+  /// Shows "Play again" on the Result screen when set.
+  final VoidCallback? onRetry;
 
   @override
   State<BattleScreen> createState() => _BattleScreenState();
@@ -108,9 +111,11 @@ class _BattleScreenState extends State<BattleScreen> {
                   Positioned.fill(child: mode.isCompact ? _compact(context, l, view) : _regular(context, l, view)),
                   if (view.state.isOver && !_busy)
                     Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: OutcomeBanner(state: view.state, onBack: widget.onExit),
+                      child: ResultScreen(
+                        state: view.state,
+                        ruleset: widget.ruleset,
+                        onBack: widget.onExit,
+                        onRetry: widget.onRetry,
                       ),
                     ),
                   if (view.state.pendingChoice != null && !_busy)

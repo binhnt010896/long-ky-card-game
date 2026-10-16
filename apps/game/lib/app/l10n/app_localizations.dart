@@ -1237,6 +1237,156 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Về màn hình trước'**
   String get outcomeBack;
+
+  /// Result screen: heading of the star objectives.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mục tiêu'**
+  String get resultObjectives;
+
+  /// An objective was met.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã đạt'**
+  String get resultMet;
+
+  /// An objective was not met.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa đạt'**
+  String get resultNotMet;
+
+  /// Result screen: heading of the mission debrief.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tổng kết'**
+  String get resultDebrief;
+
+  /// Result screen: start the mission again.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi lại'**
+  String get resultRetry;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thắng nhiệm vụ'**
+  String get objWon;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đánh tan mọi đạo quân địch'**
+  String get objAllArmiesBroken;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đánh tan {army}'**
+  String objArmyBroken(String army);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phản công thắng lợi tại {node}'**
+  String objCounterattackAt(String node);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Trụ vững {n} lượt'**
+  String objSurviveTurns(int n);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đưa quân vương đến {node} trước hết lượt {turn}'**
+  String objKingAt(String node, int turn);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tiếp tế của {army} còn tối đa {percent}%'**
+  String objArmySupplyAtMost(String army, int percent);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Quân vương không bị bắt'**
+  String get objKingNotCaptured;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Giữ được kinh đô'**
+  String get objCapitalHeld;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Cả ba trụ cột đều trên {n}'**
+  String objUnityAllAbove(int n);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'{pillar} đạt ít nhất {n} khi kết thúc'**
+  String objUnityAtLeast(String pillar, int n);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tướng nào đào ngũ'**
+  String get objNoDefections;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tướng nào bị bắt'**
+  String get objNoCaptures;
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mất tối đa {n} nghìn quân'**
+  String objTroopsLostAtMost(int n);
+
+  /// Objective.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thắng trước hết lượt {turn}'**
+  String objWinByTurn(int turn);
+
+  /// Two objectives, either of which is enough.
+  ///
+  /// In vi, this message translates to:
+  /// **'{a} hoặc {b}'**
+  String objAnyOf(String a, String b);
+
+  /// Dialog title when the save cannot be replayed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể tiếp tục ván đã lưu'**
+  String get resumeUnusableTitle;
+
+  /// Dialog body when the save cannot be replayed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nội dung trò chơi đã thay đổi hoặc bản lưu bị hỏng. Bắt đầu lại nhiệm vụ này?'**
+  String get resumeUnusableBody;
+
+  /// Button: discard the save and start the mission again.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bắt đầu lại'**
+  String get resumeRestart;
+
+  /// Shown when a mission cannot be loaded.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không tải được nhiệm vụ.'**
+  String get battleLoadError;
 }
 
 class _AppLocalizationsDelegate

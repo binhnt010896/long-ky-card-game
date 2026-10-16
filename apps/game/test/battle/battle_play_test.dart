@@ -209,7 +209,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 50));
         expect(find.text(l.phaseButtonWait), findsOneWidget);
         expect(tester.widget<FilledButton>(find.byKey(const Key('phase-button'))).onPressed, isNull);
-        expect(find.byKey(const Key('outcome-banner')), findsNothing, reason: 'not before the animations end');
+        expect(find.byKey(const Key('result-screen')), findsNothing, reason: 'not before the animations end');
         // A tap on the button meanwhile changes nothing.
         final step = cubit.state.step;
         await tester.tap(find.byKey(const Key('phase-button')), warnIfMissed: false);
@@ -218,7 +218,7 @@ void main() {
         expect(boardGame(tester).animator.moveOf('mong-co-1258'), isNotNull);
 
         await playOut(tester);
-        expect(find.byKey(const Key('outcome-banner')), findsOneWidget);
+        expect(find.byKey(const Key('result-screen')), findsOneWidget);
         expect(cubit.game.outcome, Outcome.won);
         expect(find.text(l.phaseButtonEnded), findsOneWidget);
         expect(tester.takeException(), isNull);
@@ -231,7 +231,7 @@ void main() {
         await tester.pump(const Duration(milliseconds: 20));
         expect(boardGame(tester).busy.value, isFalse);
         expect(boardGame(tester).animator.isBusy, isFalse);
-        expect(find.byKey(const Key('outcome-banner')), findsOneWidget, reason: 'at once');
+        expect(find.byKey(const Key('result-screen')), findsOneWidget, reason: 'at once');
         expect(cubit.game.isOver, isTrue);
       });
 
@@ -283,11 +283,12 @@ void main() {
       await tap(find.byKey(const Key('phase-button')));
       await playOut(tester);
       expect(cubit.game.outcome, Outcome.won);
-      expect(find.byKey(const Key('outcome-banner')), findsOneWidget);
+      expect(find.byKey(const Key('result-screen')), findsOneWidget);
+      expect(find.byKey(const Key('result-title')), findsOneWidget);
       expect(find.text(l.outcomeWon), findsOneWidget);
       expect(tester.widget<FilledButton>(find.byKey(const Key('phase-button'))).onPressed, isNull);
 
-      await tap(find.byKey(const Key('outcome-back')));
+      await tap(find.byKey(const Key('result-back')));
       expect(backed, 1);
       expect(tester.takeException(), isNull);
     }

@@ -23,6 +23,18 @@ class ProgressCubit extends Cubit<Progress> {
 
   Future<void> setReduceMotion(bool on) => updateSettings((s) => s.copyWith(reduceMotion: on));
 
+  /// Keeps the best stars per mission: a star once earned is never lost by
+  /// a later, worse run.
+  Future<void> recordStars(String missionId, List<bool> stars) {
+    final old = state.stars[missionId] ?? const <bool>[];
+    final length = old.length > stars.length ? old.length : stars.length;
+    final best = [for (var i = 0; i < length; i++) (i < old.length && old[i]) || (i < stars.length && stars[i])];
+    if (best.length == old.length && [for (var i = 0; i < best.length; i++) best[i] == old[i]].every((x) => x)) {
+      return Future.value();
+    }
+    return _update(state.copyWith(stars: {...state.stars, missionId: best}));
+  }
+
   /// Clears stars and unlocks; settings are kept.
   Future<void> resetProgress() => _update(state.reset());
 }

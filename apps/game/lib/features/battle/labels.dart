@@ -132,3 +132,27 @@ final class Namer {
     return to == null ? name : l.intentToward(name, node(to));
   }
 }
+
+/// Text for the star objectives on the Result screen. The mission data holds
+/// only each objective's type and numbers (build-spec section 3), so the
+/// sentence is built here, in both languages, from the closed list.
+extension ObjectiveText on Namer {
+  String objective(GameState state, ObjectiveDef o) => switch (o) {
+    WonObjective() => l.objWon,
+    AllArmiesBrokenObjective() => l.objAllArmiesBroken,
+    ArmyBrokenObjective() => l.objArmyBroken(army(state, o.armyId)),
+    CounterattackAtObjective() => l.objCounterattackAt(node(o.nodeId)),
+    SurviveTurnsObjective() => l.objSurviveTurns(o.turns),
+    KingAtObjective() => l.objKingAt(node(o.nodeId), o.turn),
+    ArmySupplyAtMostObjective() => l.objArmySupplyAtMost(army(state, o.armyId), (o.fraction * 100).round()),
+    KingNotCapturedObjective() => l.objKingNotCaptured,
+    CapitalHeldObjective() => l.objCapitalHeld,
+    UnityAllAboveObjective() => l.objUnityAllAbove(o.value),
+    UnityAtLeastAtEndObjective() => l.objUnityAtLeast(l.pillarName(o.pillar), o.value),
+    NoDefectionsObjective() => l.objNoDefections,
+    NoCapturesObjective() => l.objNoCaptures,
+    TroopsLostAtMostObjective() => l.objTroopsLostAtMost(o.value),
+    WinByTurnObjective() => l.objWinByTurn(o.turn),
+    AnyOfObjective() => o.anyOf.map((x) => objective(state, x)).reduce((a, b) => l.objAnyOf(a, b)),
+  };
+}

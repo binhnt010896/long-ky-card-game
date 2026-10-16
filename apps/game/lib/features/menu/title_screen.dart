@@ -1,13 +1,59 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/l10n/app_localizations.dart';
 import '../../app/routes.dart';
 import '../../app/theme.dart';
+import '../../data/battle_save_repository.dart';
+import '../battle/battle_page.dart';
 
 /// Title screen: Continue, Campaign, Codex, Settings.
-class TitleScreen extends StatelessWidget {
+class TitleScreen extends StatefulWidget {
   const TitleScreen({super.key});
+
+  @override
+  State<TitleScreen> createState() => _TitleScreenState();
+}
+
+class _TitleScreenState extends State<TitleScreen> {
+  /// The saved battle, once looked up.
+  SavedBattle? _saved;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  BattleSaveRepository? get _saves {
+    try {
+      return context.read<BattleSaveRepository>();
+    } on Object {
+      return null;
+    }
+  }
+
+  Future<void> _refresh() async {
+    final saved = await _saves?.load() ?? const NoSavedBattle();
+    if (mounted) setState(() => _saved = saved);
+  }
+
+  /// The mission to continue, if there is a save to continue (or at least one
+  /// that can be offered a restart).
+  String? get _continueMission => switch (_saved) {
+    FoundSavedBattle(:final save) => save.missionId,
+    UnusableSavedBattle(:final missionId) => missionId,
+    _ => null,
+  };
+
+  Future<void> _continue() async {
+    final mission = _continueMission;
+    if (mission == null) return;
+    await Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => BattlePage(missionId: mission, resume: true)));
+    await _refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +73,19 @@ class TitleScreen extends StatelessWidget {
                   style: textTheme.displaySmall?.copyWith(color: LongKyColors.goldLeaf, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 40),
-                // Continue resumes a saved battle (T-18); there is none yet.
-                FilledButton(onPressed: null, child: Text(l.menuContinue)),
+                // Continue resumes the saved battle, if there is one.
+                FilledButton(
+                  key: const Key('menu-continue'),
+                  onPressed: _continueMission == null ? null : _continue,
+                  child: Text(l.menuContinue),
+                ),
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () => Navigator.pushNamed(context, Routes.campaign),
                   child: Text(l.menuCampaign),
                 ),
                 const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, Routes.codex),
-                  child: Text(l.menuCodex),
-                ),
+                OutlinedButton(onPressed: () => Navigator.pushNamed(context, Routes.codex), child: Text(l.menuCodex)),
                 const SizedBox(height: 12),
                 OutlinedButton(
                   onPressed: () => Navigator.pushNamed(context, Routes.settings),
@@ -47,7 +94,7 @@ class TitleScreen extends StatelessWidget {
                 if (kDebugMode) ...[
                   const SizedBox(height: 12),
                   TextButton(
-                    onPressed: () => Navigator.pushNamed(context, Routes.boardPreview),
+                    onPressed: () => Navigator.pushNamed(context, Routes.boardPreview).then((_) => _refresh()),
                     child: const Text('Board preview (debug)'),
                   ),
                 ],
