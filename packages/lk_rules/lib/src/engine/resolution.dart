@@ -32,6 +32,7 @@ void runResolution(Tx tx) {
   resolveYuanMoves(tx, ctx);
   resolveBattles(tx, ctx);
   resolveRaids(tx, ctx);
+  resolveForage(tx);
   updateNodeControl(tx);
 }
 
@@ -131,6 +132,23 @@ void resolveRaids(Tx tx, ResolutionContext ctx) {
     tx.updateOfficer(id, (o) => o.copyWith(troops: o.troops - troopsLost));
     tx.updateStats((m) => m.copyWith(raids: m.raids + 1, troopsLost: m.troopsLost + troopsLost));
     tx.emit(Raided(id, armyId, supplyLost, troopsLost));
+  }
+}
+
+/// Step 5: an army whose intent was `forage`, on a non-evacuated node with
+/// rice, gains min(2 × riceStock, maxSupply − supply); the stock becomes 0.
+void resolveForage(Tx tx) {
+  for (final id in tx.activeArmyIds()) {
+    final a = tx.army(id);
+    if (a.intent?.kind != IntentKind.forage) continue;
+    final n = tx.node(a.nodeId);
+    if (n.evacuated || n.riceStock <= 0) continue;
+    final room = a.maxSupply - a.supply;
+    final wanted = Balance.forageSupplyPerRice * n.riceStock;
+    final gained = wanted < room ? wanted : room;
+    tx.updateArmy(id, (a) => a.copyWith(supply: a.supply + gained));
+    tx.updateNode(a.nodeId, (n) => n.copyWith(riceStock: 0));
+    tx.emit(Foraged(id, a.nodeId, gained));
   }
 }
 
