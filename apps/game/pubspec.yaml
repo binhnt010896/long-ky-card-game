@@ -11,8 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: 9.1.1
+  flutter_localizations:
+    sdk: flutter
+  intl: 0.20.3
   lk_content: any
   lk_rules: any
+  path_provider: 2.1.6
 
 dev_dependencies:
   flutter_lints: 6.0.0
@@ -21,7 +26,21 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/content/
     - assets/content/maps/
     - assets/content/missions/
+    - assets/fonts/BeVietnamPro/OFL.txt
+  fonts:
+    - family: BeVietnamPro
+      fonts:
+        - asset: assets/fonts/BeVietnamPro/BeVietnamPro-Regular.ttf
+        - asset: assets/fonts/BeVietnamPro/BeVietnamPro-Italic.ttf
+          style: italic
+        - asset: assets/fonts/BeVietnamPro/BeVietnamPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/BeVietnamPro/BeVietnamPro-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BeVietnamPro/BeVietnamPro-Bold.ttf
+          weight: 700

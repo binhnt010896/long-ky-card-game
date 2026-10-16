@@ -1,0 +1,7 @@
+# gen-l10n (build-spec section 6): Vietnamese is the template and default.
+arb-dir: l10n
+template-arb-file: app_vi.arb
+output-dir: lib/app/l10n
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false
