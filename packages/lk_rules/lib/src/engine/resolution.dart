@@ -7,6 +7,7 @@ import 'evacuation.dart';
 import 'events.dart';
 import 'orders.dart';
 import 'tx.dart';
+import 'unity.dart';
 
 /// What happened earlier in this Resolution, for later steps.
 final class ResolutionContext {
@@ -166,5 +167,6 @@ void updateNodeControl(Tx tx) {
     if (to == null || to == from) continue;
     tx.updateNode(id, (n) => n.copyWith(controller: to));
     tx.emit(NodeControlChanged(id, from, to));
+    onNodeControlChanged(tx, id, to);
   }
 }
