@@ -10,9 +10,11 @@ import 'panel.dart';
 /// objectives, the debrief, and what to do next. It covers the battle once
 /// the mission is over.
 ///
+/// After a win, [nextTitle] names the next mission: it is announced as
+/// unlocked when [newlyUnlocked], and [onNext] opens its briefing.
+///
 /// TODO(T-24): "Read more in Long Ký" (needs the deep-link format, an open
-/// input) and unlocks from codes. TODO(T-23): "next mission" once the
-/// campaign unlocks them.
+/// input) and unlocks from codes.
 class ResultScreen extends StatelessWidget {
   const ResultScreen({
     super.key,
@@ -20,12 +22,20 @@ class ResultScreen extends StatelessWidget {
     required this.ruleset,
     required this.onBack,
     required this.onRetry,
+    this.nextTitle,
+    this.newlyUnlocked = false,
+    this.onNext,
   });
 
   final GameState state;
   final Ruleset ruleset;
   final VoidCallback? onBack;
   final VoidCallback? onRetry;
+
+  /// The next mission of the campaign, if there is one.
+  final LocalizedText? nextTitle;
+  final bool newlyUnlocked;
+  final VoidCallback? onNext;
 
   String _lossReason(AppLocalizations l) {
     final r = state.lossReason;
@@ -117,6 +127,26 @@ class ResultScreen extends StatelessWidget {
                             key: const Key('result-debrief'),
                             style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.4),
                           ),
+                          if (newlyUnlocked && nextTitle != null) ...[
+                            const SizedBox(height: 12),
+                            Row(
+                              key: const Key('result-unlocked'),
+                              children: [
+                                const Icon(Icons.lock_open, size: 20, color: LongKyColors.goldLeaf),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    l.resultUnlocked(l.content(nextTitle!)),
+                                    style: const TextStyle(
+                                      color: LongKyColors.goldLeaf,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ],
                     ),
@@ -135,11 +165,18 @@ class ResultScreen extends StatelessWidget {
                           style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
                           child: Text(l.resultRetry),
                         ),
-                      if (onBack != null)
+                      if (won && onNext != null)
                         FilledButton(
+                          key: const Key('result-next'),
+                          onPressed: onNext,
+                          style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                          child: Text(l.resultNext),
+                        ),
+                      if (onBack != null)
+                        OutlinedButton(
                           key: const Key('result-back'),
                           onPressed: onBack,
-                          style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                          style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
                           child: Text(l.outcomeBack),
                         ),
                     ],

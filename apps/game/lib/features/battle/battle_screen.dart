@@ -41,6 +41,9 @@ class BattleScreen extends StatefulWidget {
     required this.ruleset,
     this.onExit,
     this.onRetry,
+    this.nextTitle,
+    this.newlyUnlocked = false,
+    this.onNext,
     this.tutorial = const [],
     this.onTutorialDone,
   });
@@ -52,6 +55,12 @@ class BattleScreen extends StatefulWidget {
 
   /// Shows "Play again" on the Result screen when set.
   final VoidCallback? onRetry;
+
+  /// The next mission after a win (T-23): its title, whether this win opened
+  /// it, and how to go there.
+  final LocalizedText? nextTitle;
+  final bool newlyUnlocked;
+  final VoidCallback? onNext;
 
   /// The mission's coach marks (T-22), when they are to be shown: empty for a
   /// player who has finished or skipped them.
@@ -272,6 +281,9 @@ class _BattleScreenState extends State<BattleScreen> {
                           ruleset: widget.ruleset,
                           onBack: widget.onExit,
                           onRetry: widget.onRetry,
+                          nextTitle: widget.nextTitle,
+                          newlyUnlocked: widget.newlyUnlocked,
+                          onNext: widget.onNext,
                         ),
                       ),
                     if (view.state.pendingChoice != null && !_busy)

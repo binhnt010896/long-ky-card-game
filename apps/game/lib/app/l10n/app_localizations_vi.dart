@@ -861,4 +861,48 @@ class AppLocalizationsVi extends AppLocalizations {
   String tutorialSemantics(String text) {
     return 'Hướng dẫn: $text';
   }
+
+  @override
+  String campaignChapter(int n) {
+    return 'Chương $n';
+  }
+
+  @override
+  String campaignChapterSummary(int won, int total, int stars, int starsTotal) {
+    return '$won/$total nhiệm vụ · $stars/$starsTotal sao';
+  }
+
+  @override
+  String campaignMissionNumber(int n) {
+    return 'Nhiệm vụ $n';
+  }
+
+  @override
+  String get campaignLocked => 'Chưa mở khoá';
+
+  @override
+  String get campaignLockedHint => 'Thắng nhiệm vụ trước để mở khoá.';
+
+  @override
+  String campaignStarsSemantics(int n, int total) {
+    return '$n trên $total sao';
+  }
+
+  @override
+  String get campaignReplaceTitle => 'Thay ván đang chơi?';
+
+  @override
+  String get campaignReplaceBody =>
+      'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.';
+
+  @override
+  String get campaignStartAnyway => 'Vẫn bắt đầu';
+
+  @override
+  String resultUnlocked(String title) {
+    return 'Mở khoá: $title';
+  }
+
+  @override
+  String get resultNext => 'Nhiệm vụ tiếp theo';
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lk_rules/lk_rules.dart';
 import 'package:long_ky_game/data/battle_save_repository.dart';
+import 'package:long_ky_game/data/campaign.dart';
 import 'package:long_ky_game/data/progress.dart';
 import 'package:long_ky_game/data/battle_save_store.dart';
 import 'package:long_ky_game/data/progress_repository.dart';
@@ -12,6 +13,7 @@ import 'package:long_ky_game/data/progress_store.dart';
 import 'package:long_ky_game/features/battle/battle_cubit.dart';
 import 'package:long_ky_game/features/battle/battle_page.dart';
 import 'package:long_ky_game/features/battle/battle_screen.dart';
+import 'package:long_ky_game/features/briefing/briefing_screen.dart';
 import 'package:long_ky_game/features/settings/progress_cubit.dart';
 
 import 'battle/overlay_support.dart';
@@ -298,6 +300,29 @@ void main() {
       expect(find.byKey(const Key('result-screen')), findsOneWidget);
       expect(find.byKey(const Key('objective-0')), findsOneWidget);
       expect(find.text(l.outcomeStars(cubit.game.stars.where((s) => s).length, 3)), findsOneWidget);
+    });
+
+    pageTest('a first win opens the next mission; Next mission goes to its briefing', (tester) async {
+      final cubit = await pumpPage(tester, seed: 21);
+      expect(Campaign.isWon(progress.state, 'ch1_m3'), isFalse);
+      await win(tester, cubit);
+      expect(find.byKey(const Key('result-unlocked')), findsOneWidget);
+      expect(find.byKey(const Key('result-next')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('result-next')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.byType(BriefingScreen), findsOneWidget);
+      expect(tester.widget<BriefingScreen>(find.byType(BriefingScreen)).missionId, 'ch1_m3');
+    });
+
+    pageTest('winning a mission already won does not announce an unlock again', (tester) async {
+      await progress.recordStars(mission, const [true, false, false]);
+      final cubit = await pumpPage(tester, seed: 21);
+      await win(tester, cubit);
+      expect(find.byKey(const Key('result-screen')), findsOneWidget);
+      expect(find.byKey(const Key('result-unlocked')), findsNothing);
+      expect(find.byKey(const Key('result-next')), findsOneWidget);
     });
 
     pageTest('Play again starts the mission afresh, with a new save', (tester) async {

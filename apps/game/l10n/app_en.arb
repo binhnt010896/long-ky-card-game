@@ -231,5 +231,16 @@
   "tutorialGotIt": "Got it",
   "tutorialSkip": "Skip the tutorial",
   "tutorialCount": "{n}/{total}",
-  "tutorialSemantics": "Tutorial: {text}"
+  "tutorialSemantics": "Tutorial: {text}",
+  "campaignChapter": "Chapter {n}",
+  "campaignChapterSummary": "{won}/{total} missions · {stars}/{starsTotal} stars",
+  "campaignMissionNumber": "Mission {n}",
+  "campaignLocked": "Locked",
+  "campaignLockedHint": "Win the previous mission to unlock this one.",
+  "campaignStarsSemantics": "{n} of {total} stars",
+  "campaignReplaceTitle": "Replace the saved battle?",
+  "campaignReplaceBody": "The saved battle is lost if you start this mission.",
+  "campaignStartAnyway": "Start anyway",
+  "resultUnlocked": "Unlocked: {title}",
+  "resultNext": "Next mission"
 }

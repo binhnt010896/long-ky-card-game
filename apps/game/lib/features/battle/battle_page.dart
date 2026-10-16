@@ -10,10 +10,12 @@ import '../../app/l10n/app_localizations.dart';
 import '../../app/theme.dart';
 import '../../audio/audio_service.dart';
 import '../../data/battle_save_repository.dart';
+import '../../data/campaign.dart';
 import '../../data/content_repository.dart';
 import '../settings/progress_cubit.dart';
 import 'battle_audio.dart';
 import 'battle_cubit.dart';
+import '../briefing/briefing_screen.dart';
 import 'battle_screen.dart';
 import 'overlays/panel.dart';
 
@@ -69,6 +71,10 @@ class _BattlePageState extends State<BattlePage> {
   ProgressCubit? _progress;
   late final AssetBundle _bundle;
 
+  /// Whether the mission was already won when this battle began, so that a
+  /// win now opens the next mission only the first time.
+  bool _wonBefore = false;
+
   @override
   void initState() {
     super.initState();
@@ -103,6 +109,8 @@ class _BattlePageState extends State<BattlePage> {
       _content = content;
       final ruleset = content.ruleset(widget.missionId);
       final engine = GameEngine(ruleset);
+      final before = _progress?.state;
+      _wonBefore = before != null && Campaign.isWon(before, widget.missionId);
 
       if (resume && _saves != null) {
         final found = await _saves!.load();
@@ -195,12 +203,20 @@ class _BattlePageState extends State<BattlePage> {
       case _Stage.cannotResume:
         return _CannotResume(onRestart: () => _start(resume: false), onBack: () => Navigator.maybePop(context));
       case _Stage.ready:
+        final next = Campaign(_content!.missions.values).next(widget.missionId);
         return BlocProvider.value(
           value: _cubit!,
           child: BattleScreen(
             ruleset: _ruleset!,
             onExit: () => Navigator.maybePop(context),
             onRetry: () => _start(resume: false),
+            nextTitle: next?.title,
+            newlyUnlocked: !_wonBefore,
+            onNext: next == null || _progress == null
+                ? null
+                : () =>
+                      Navigator.of(context)
+                          .pushReplacement(MaterialPageRoute<void>(builder: (_) => BriefingScreen(missionId: next.id))),
             // Coach marks until the player has finished or skipped them once.
             tutorial: _showTutorial ? _ruleset!.mission.tutorial : const [],
             onTutorialDone: _progress == null ? null : () => _progress!.markTutorialDone(widget.missionId),

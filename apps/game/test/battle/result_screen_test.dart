@@ -18,11 +18,28 @@ void main() {
   GameState lost(String? reason) =>
       start.copyWith(phase: Phase.ended, outcome: Outcome.lost, lossReason: reason, stars: const [false, false, false]);
 
-  Widget screen(GameState s, {VoidCallback? onBack, VoidCallback? onRetry, Ruleset? r}) => SizedBox(
+  Widget screen(
+    GameState s, {
+    VoidCallback? onBack,
+    VoidCallback? onRetry,
+    Ruleset? r,
+    LocalizedText? next,
+    bool unlocked = false,
+    VoidCallback? onNext,
+  }) => SizedBox(
     width: double.infinity,
     height: double.infinity,
-    child: ResultScreen(state: s, ruleset: r ?? rules, onBack: onBack, onRetry: onRetry),
+    child: ResultScreen(
+      state: s,
+      ruleset: r ?? rules,
+      onBack: onBack,
+      onRetry: onRetry,
+      nextTitle: next,
+      newlyUnlocked: unlocked,
+      onNext: onNext,
+    ),
   );
+  const nextTitle = LocalizedText(vi: 'Trận kế', en: 'Next battle');
 
   for (final (name, size, _) in layouts) {
     group('result screen ($name)', () {
@@ -76,6 +93,50 @@ void main() {
           expect(find.byKey(const Key('result-debrief')), findsNothing);
           expect(find.byKey(const Key('result-retry')), findsOneWidget);
         }
+      });
+
+      testWidgets('a first win announces the unlocked mission and offers it; a replay only offers it', (tester) async {
+        var next = 0;
+        await pumpOverlay(
+          tester,
+          size,
+          screen(won([true, false, false]), next: nextTitle, unlocked: true, onNext: () => next++, onBack: () {}),
+        );
+        expect(find.byKey(const Key('result-unlocked')), findsOneWidget);
+        expect(find.text(l.resultUnlocked('Trận kế')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('result-next')));
+        expect(next, 1);
+        expect(find.text(l.resultNext), findsOneWidget);
+        expect(tester.getSize(find.byKey(const Key('result-next'))).height, greaterThanOrEqualTo(48));
+
+        await pumpOverlay(tester, size, screen(won([true, false, false]), next: nextTitle, onNext: () {}));
+        expect(find.byKey(const Key('result-unlocked')), findsNothing);
+        expect(find.byKey(const Key('result-next')), findsOneWidget);
+      });
+
+      testWidgets('no next mission, no unlock line; a loss never offers the next mission', (tester) async {
+        await pumpOverlay(tester, size, screen(won([true, true, true]), unlocked: true));
+        expect(find.byKey(const Key('result-unlocked')), findsNothing);
+        expect(find.byKey(const Key('result-next')), findsNothing);
+
+        await pumpOverlay(
+          tester,
+          size,
+          screen(lost(null), next: nextTitle, unlocked: true, onNext: () {}, onRetry: () {}),
+        );
+        expect(find.byKey(const Key('result-unlocked')), findsNothing);
+        expect(find.byKey(const Key('result-next')), findsNothing);
+      });
+
+      testWidgets('the unlock line is in English too', (tester) async {
+        await pumpOverlay(
+          tester,
+          size,
+          screen(won([true, false, false]), next: nextTitle, unlocked: true, onNext: () {}),
+          lang: 'en',
+        );
+        expect(find.text('Unlocked: Next battle'), findsOneWidget);
+        expect(find.text('Next mission'), findsOneWidget);
       });
 
       testWidgets('buttons only appear when they have somewhere to go', (tester) async {

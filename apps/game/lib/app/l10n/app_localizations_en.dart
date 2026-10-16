@@ -861,4 +861,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String tutorialSemantics(String text) {
     return 'Tutorial: $text';
   }
+
+  @override
+  String campaignChapter(int n) {
+    return 'Chapter $n';
+  }
+
+  @override
+  String campaignChapterSummary(int won, int total, int stars, int starsTotal) {
+    return '$won/$total missions · $stars/$starsTotal stars';
+  }
+
+  @override
+  String campaignMissionNumber(int n) {
+    return 'Mission $n';
+  }
+
+  @override
+  String get campaignLocked => 'Locked';
+
+  @override
+  String get campaignLockedHint =>
+      'Win the previous mission to unlock this one.';
+
+  @override
+  String campaignStarsSemantics(int n, int total) {
+    return '$n of $total stars';
+  }
+
+  @override
+  String get campaignReplaceTitle => 'Replace the saved battle?';
+
+  @override
+  String get campaignReplaceBody =>
+      'The saved battle is lost if you start this mission.';
+
+  @override
+  String get campaignStartAnyway => 'Start anyway';
+
+  @override
+  String resultUnlocked(String title) {
+    return 'Unlocked: $title';
+  }
+
+  @override
+  String get resultNext => 'Next mission';
 }

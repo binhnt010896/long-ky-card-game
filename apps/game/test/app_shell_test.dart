@@ -42,7 +42,7 @@ void main() {
     await startApp(tester);
     await tester.tap(find.text('Chiến dịch'));
     await tester.pumpAndSettle();
-    expect(find.text('Sắp ra mắt.'), findsOneWidget);
+    expect(find.widgetWithText(AppBar, 'Chiến dịch'), findsOneWidget);
     await goBack(tester);
     await tester.tap(find.text('Sử liệu'));
     await tester.pumpAndSettle();

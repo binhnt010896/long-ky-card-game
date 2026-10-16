@@ -1489,6 +1489,72 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Hướng dẫn: {text}'**
   String tutorialSemantics(String text);
+
+  /// Chapter heading.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chương {n}'**
+  String campaignChapter(int n);
+
+  /// Progress on a chapter.
+  ///
+  /// In vi, this message translates to:
+  /// **'{won}/{total} nhiệm vụ · {stars}/{starsTotal} sao'**
+  String campaignChapterSummary(int won, int total, int stars, int starsTotal);
+
+  /// Mission number in its chapter.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiệm vụ {n}'**
+  String campaignMissionNumber(int n);
+
+  /// A mission or chapter that is not open yet.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa mở khoá'**
+  String get campaignLocked;
+
+  /// Why a mission is locked.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thắng nhiệm vụ trước để mở khoá.'**
+  String get campaignLockedHint;
+
+  /// Screen-reader label of the stars of a mission.
+  ///
+  /// In vi, this message translates to:
+  /// **'{n} trên {total} sao'**
+  String campaignStarsSemantics(int n, int total);
+
+  /// Dialog title when starting a mission while a battle is saved.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thay ván đang chơi?'**
+  String get campaignReplaceTitle;
+
+  /// Dialog body when starting a mission while a battle is saved.
+  ///
+  /// In vi, this message translates to:
+  /// **'Ván đã lưu sẽ mất nếu bạn bắt đầu nhiệm vụ này.'**
+  String get campaignReplaceBody;
+
+  /// Button: start the mission and drop the saved battle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Vẫn bắt đầu'**
+  String get campaignStartAnyway;
+
+  /// Result screen: the next mission has just opened.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mở khoá: {title}'**
+  String resultUnlocked(String title);
+
+  /// Result screen: go to the next mission.
+  ///
+  /// In vi, this message translates to:
+  /// **'Nhiệm vụ tiếp theo'**
+  String get resultNext;
 }
 
 class _AppLocalizationsDelegate
