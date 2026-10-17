@@ -295,6 +295,8 @@ void main() {
         await playOut(tester);
       }
       expect(cubit.game.outcome, Outcome.won);
+      expect(find.byKey(const Key('review-banner')), findsOneWidget, reason: 'the board stays for a look first');
+      await tap(find.byKey(const Key('review-result')));
       expect(find.byKey(const Key('result-screen')), findsOneWidget);
       expect(find.byKey(const Key('result-title')), findsOneWidget);
       expect(find.text(l.outcomeWon), findsOneWidget);

@@ -1717,6 +1717,60 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Bài huấn luyện dạy cách chơi từng bước.'**
   String get campaignTrainingHint;
+
+  /// Dialog title: what to do in this mission.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mục tiêu nhiệm vụ'**
+  String get objectivesTitle;
+
+  /// Button and menu entry that opens the objectives.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem mục tiêu'**
+  String get objectivesShow;
+
+  /// Heading of the win conditions.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thắng khi'**
+  String get objectivesWin;
+
+  /// Standard loss rule.
+  ///
+  /// In vi, this message translates to:
+  /// **'Một cột Đoàn kết (Triều đình, Tông thất, Dân chúng) về 0.'**
+  String get objectivesLossUnity;
+
+  /// Standard loss rule.
+  ///
+  /// In vi, this message translates to:
+  /// **'Hết {n} lượt mà chưa thắng.'**
+  String objectivesLossSeason(int n);
+
+  /// Heading of the star objectives.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sao thưởng'**
+  String get objectivesStars;
+
+  /// Button on the Result screen: go back to the board.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem lại chiến trường'**
+  String get reviewBoard;
+
+  /// Button on the review banner.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem kết quả'**
+  String get reviewResult;
+
+  /// Hint while looking at the board after the battle.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chạm vào tướng hoặc địa điểm để xem. Phóng to, kéo để di chuyển.'**
+  String get reviewHint;
 }
 
 class _AppLocalizationsDelegate

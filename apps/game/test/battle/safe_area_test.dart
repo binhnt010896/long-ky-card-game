@@ -108,6 +108,9 @@ void main() {
       await settle(tester);
       await playOut(tester);
       expect(cubit.game.outcome, Outcome.won);
+      expectSafe(tester, find.byKey(const Key('review-banner')), 'review banner');
+      await tester.tap(find.byKey(const Key('review-result')));
+      await settle(tester);
       expectSafe(tester, find.byKey(const Key('result-back')), 'Back');
       expectSafe(tester, find.byKey(const Key('result-title')), 'title');
     });

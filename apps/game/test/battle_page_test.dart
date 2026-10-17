@@ -281,7 +281,31 @@ void main() {
       winM2(cubit);
       await settle(tester);
       await playOut(tester);
+      // The board stays for a look; the Result screen opens on request.
+      expect(find.byKey(const Key('result-screen')), findsNothing);
+      await tester.tap(find.byKey(const Key('review-result')));
+      await settle(tester);
     }
+
+    pageTest('after the last step the board stays; the Result screen opens on request and can go back', (tester) async {
+      final cubit = await pumpPage(tester);
+      winM2(cubit);
+      await settle(tester);
+      await playOut(tester);
+      expect(find.byKey(const Key('review-banner')), findsOneWidget);
+      expect(find.text(l.outcomeWon), findsOneWidget);
+      expect(find.byKey(const Key('result-screen')), findsNothing);
+
+      await tester.tap(find.byKey(const Key('review-result')));
+      await settle(tester);
+      expect(find.byKey(const Key('result-screen')), findsOneWidget);
+      expect(find.byKey(const Key('review-banner')), findsNothing);
+
+      await tester.tap(find.byKey(const Key('result-review')));
+      await settle(tester);
+      expect(find.byKey(const Key('result-screen')), findsNothing);
+      expect(find.byKey(const Key('review-banner')), findsOneWidget);
+    });
 
     pageTest('the save is cleared, the stars are recorded and the Result screen shows them', (tester) async {
       final cubit = await pumpPage(tester);
@@ -420,6 +444,8 @@ void main() {
       winM2(cubit);
       await settle(tester);
       await playOut(tester);
+      await tester.tap(find.byKey(const Key('review-result')));
+      await settle(tester);
       await tester.tap(find.byKey(const Key('result-back')));
       await tester.pump();
       await tester.pumpAndSettle();

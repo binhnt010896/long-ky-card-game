@@ -5,7 +5,7 @@ import '../../../app/theme.dart';
 import 'panel.dart';
 
 /// What the player chose in the battle menu.
-enum BattleMenuChoice { resume, leave }
+enum BattleMenuChoice { resume, objectives, leave }
 
 /// The menu Esc opens when no panel is open (build-spec section 6). The
 /// battle is autosaved after every step, so leaving loses nothing.
@@ -44,6 +44,13 @@ class BattleMenu extends StatelessWidget {
                 onPressed: () => Navigator.of(context).pop(BattleMenuChoice.resume),
                 style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
                 child: Text(l.battleMenuResume),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                key: const Key('menu-objectives'),
+                onPressed: () => Navigator.of(context).pop(BattleMenuChoice.objectives),
+                style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                child: Text(l.objectivesShow),
               ),
               const SizedBox(height: 8),
               OutlinedButton(

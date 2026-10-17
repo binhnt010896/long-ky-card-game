@@ -14,6 +14,8 @@ import 'board/board_layout.dart';
 import 'board/board_scene.dart';
 import 'labels.dart';
 import 'overlays/battle_menu.dart';
+import 'overlays/objectives_dialog.dart';
+import 'overlays/strategy_cutscene.dart';
 import 'overlays/card_dialog.dart';
 import 'overlays/choice_overlay.dart';
 import 'overlays/event_log.dart';
@@ -89,6 +91,12 @@ class _BattleScreenState extends State<BattleScreen> {
   bool _handOpen = false;
 
   /// The board is playing the last step's animations.
+  /// The strategy whose cutscene is playing, and the step that started it.
+  CardDef? _cutscene;
+  int _cutsceneStep = -1;
+
+  /// The Result screen is shown on request, after the board has been looked at.
+  bool _showResult = false;
   bool _busy = false;
 
   // Coach marks (T-22): what has been read, and the elements they point at.
@@ -307,9 +315,32 @@ class _BattleScreenState extends State<BattleScreen> {
 
   void _select(Selection? s) => _boardKey.currentState?.select(s);
 
+  /// A strategy the player just played gets its cutscene (not for reduced
+  /// motion, and not for the cards the mission plays by itself).
+  void _maybeCutscene(BattleViewState view) {
+    if (view.step == _cutsceneStep || MediaQuery.disableAnimationsOf(context)) return;
+    for (final e in view.lastEvents) {
+      if (e is CardPlayed && !e.scripted) {
+        final card = widget.ruleset.cards[e.cardId];
+        if (card == null) return;
+        _cutsceneStep = view.step;
+        setState(() => _cutscene = card);
+        return;
+      }
+    }
+  }
+
+  Future<void> _openObjectives() =>
+      showObjectives(context, ruleset: widget.ruleset, state: _cubit.game);
+
   Future<void> _openMenu() async {
     final choice = await showBattleMenu(context);
-    if (choice == BattleMenuChoice.leave && mounted) widget.onExit?.call();
+    if (!mounted) return;
+    if (choice == BattleMenuChoice.leave) {
+      widget.onExit?.call();
+    } else if (choice == BattleMenuChoice.objectives) {
+      await _openObjectives();
+    }
   }
 
   /// A battle key (build-spec section 6). Returns whether it was used.
@@ -386,6 +417,7 @@ class _BattleScreenState extends State<BattleScreen> {
             child: BlocListener<BattleCubit, BattleViewState>(
               // A player who goes on without reading the rest has seen enough.
               listener: (context, view) {
+                _maybeCutscene(view);
                 if (_tutorialOn && _flowFinished(view.state)) _reportTutorialDone();
               },
               child: BlocBuilder<BattleCubit, BattleViewState>(
@@ -393,9 +425,17 @@ class _BattleScreenState extends State<BattleScreen> {
                   key: _stackKey,
                   children: [
                     Positioned.fill(child: mode.isCompact ? _compact(context, l, view) : _regular(context, l, view)),
-                    if (view.state.isOver && !_busy)
+                    if (view.state.isOver && !_busy && !_showResult)
+                      Positioned(
+                        left: 12,
+                        right: 12,
+                        top: BattleTopBar.heightFor(mode) + 8,
+                        child: _reviewBanner(view.state, l),
+                      ),
+                    if (view.state.isOver && !_busy && _showResult)
                       Positioned.fill(
                         child: ResultScreen(
+                          onReview: () => setState(() => _showResult = false),
                           state: view.state,
                           ruleset: widget.ruleset,
                           onBack: widget.onExit,
@@ -413,6 +453,14 @@ class _BattleScreenState extends State<BattleScreen> {
                           onChoose: _cubit.resolveChoice,
                         ),
                       ),
+                    if (_cutscene != null)
+                      Positioned.fill(
+                        child: StrategyCutscene(
+                          key: ValueKey(_cutsceneStep),
+                          card: _cutscene!,
+                          onDone: () => setState(() => _cutscene = null),
+                        ),
+                      ),
                     ..._coach(view, mode),
                   ],
                 ),
@@ -421,6 +469,52 @@ class _BattleScreenState extends State<BattleScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  /// After the last step the board stays, so the player can look at who is
+  /// where; the Result screen opens when they ask for it.
+  Widget _reviewBanner(GameState state, AppLocalizations l) {
+    final won = state.outcome == Outcome.won;
+    final accent = won ? LongKyColors.goldLeaf : const Color(0xFFE88A80);
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 640),
+        child: Container(
+          key: const Key('review-banner'),
+          padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+          decoration: BoxDecoration(
+            color: LongKyColors.lacquer.withValues(alpha: 0.92),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: accent, width: 1.5),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      won ? l.outcomeWon : l.outcomeLost,
+                      key: const Key('review-title'),
+                      style: TextStyle(color: accent, fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    Text(l.reviewHint, style: const TextStyle(color: LongKyColors.ivory, fontSize: 13)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              FilledButton(
+                key: const Key('review-result'),
+                onPressed: () => setState(() => _showResult = true),
+                style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                child: Text(l.reviewResult),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -615,7 +709,17 @@ class _BattleScreenState extends State<BattleScreen> {
               left: 0,
               right: 0,
               top: 0,
-              child: _topBar(view, mode, trailing: LogButton(onPressed: () => setState(() => _logOpen = !_logOpen))),
+              child: _topBar(
+                view,
+                mode,
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ObjectivesButton(onPressed: _openObjectives),
+                    LogButton(onPressed: () => setState(() => _logOpen = !_logOpen)),
+                  ],
+                ),
+              ),
             ),
             // Bottom row: officers, hand handle, phase button.
             Positioned(
@@ -702,7 +806,7 @@ class _BattleScreenState extends State<BattleScreen> {
         return Stack(
           children: [
             Positioned.fromRect(rect: boardRect, child: _board(view, l)),
-            Positioned(left: 0, right: 0, top: 0, child: _topBar(view, mode)),
+            Positioned(left: 0, right: 0, top: 0, child: _topBar(view, mode, trailing: ObjectivesButton(onPressed: _openObjectives))),
             Positioned(
               left: 0,
               top: top,

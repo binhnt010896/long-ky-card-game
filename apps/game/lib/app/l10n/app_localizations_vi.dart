@@ -993,4 +993,35 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get campaignTrainingHint => 'Bài huấn luyện dạy cách chơi từng bước.';
+
+  @override
+  String get objectivesTitle => 'Mục tiêu nhiệm vụ';
+
+  @override
+  String get objectivesShow => 'Xem mục tiêu';
+
+  @override
+  String get objectivesWin => 'Thắng khi';
+
+  @override
+  String get objectivesLossUnity =>
+      'Một cột Đoàn kết (Triều đình, Tông thất, Dân chúng) về 0.';
+
+  @override
+  String objectivesLossSeason(int n) {
+    return 'Hết $n lượt mà chưa thắng.';
+  }
+
+  @override
+  String get objectivesStars => 'Sao thưởng';
+
+  @override
+  String get reviewBoard => 'Xem lại chiến trường';
+
+  @override
+  String get reviewResult => 'Xem kết quả';
+
+  @override
+  String get reviewHint =>
+      'Chạm vào tướng hoặc địa điểm để xem. Phóng to, kéo để di chuyển.';
 }

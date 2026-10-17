@@ -142,22 +142,52 @@ final class BoardPainter {
 
   void _paintMapPanel(Canvas canvas, BoardScene scene) {
     final map = _art?.image(scene.mapImagePath);
+    // The same painting widened to 21:9, when it is shipped: its middle is the
+    // map the nodes sit on, and its wings carry on the scenery to the edges.
+    final wide = _art?.image(_widePath(scene.mapImagePath));
+    final mapRect = scene.layout.mapRect.inflate(6);
     if (map != null) {
-      // The map is 16:9 and the board often is not: fill the space around it
-      // with a darkened, enlarged copy of the same painting.
+      // Fill the space the painting does not reach with a darkened, enlarged
+      // copy of it.
       final all = Offset.zero & scene.layout.size;
       canvas.save();
       canvas.clipRect(all);
       _drawCover(canvas, map, all, Paint()..filterQuality = FilterQuality.low);
-      canvas.drawRect(all, Paint()..color = LongKyColors.lacquer.withValues(alpha: 0.72));
+      canvas.drawRect(all, Paint()..color = LongKyColors.lacquer.withValues(alpha: wide != null ? 0.55 : 0.72));
+      if (wide != null) {
+        final h = mapRect.height;
+        final w = h * wide.width / wide.height;
+        final dst = Rect.fromCenter(center: mapRect.center, width: w, height: h);
+        // The wings fade into the darkened copy instead of ending on a line.
+        canvas.saveLayer(dst, Paint());
+        canvas.drawImageRect(
+          wide,
+          Offset.zero & Size(wide.width.toDouble(), wide.height.toDouble()),
+          dst,
+          Paint()..filterQuality = FilterQuality.medium,
+        );
+        canvas.drawRect(
+          dst,
+          Paint()
+            ..blendMode = BlendMode.dstIn
+            ..shader = ui.Gradient.linear(
+              dst.centerLeft,
+              dst.centerRight,
+              const [Color(0x00000000), Color(0xFF000000), Color(0xFF000000), Color(0x00000000)],
+              const [0.0, 0.12, 0.88, 1.0],
+            ),
+        );
+        canvas.restore();
+      }
       canvas.restore();
     }
-    final r = RRect.fromRectAndRadius(scene.layout.mapRect.inflate(6), const Radius.circular(10));
+    if (wide != null) return;
+    final r = RRect.fromRectAndRadius(mapRect, const Radius.circular(10));
     canvas.drawRRect(r, Paint()..color = LongKyColors.lacquerRaised);
     if (map != null) {
       canvas.save();
       canvas.clipRRect(r);
-      _drawCover(canvas, map, scene.layout.mapRect.inflate(6), Paint()..filterQuality = FilterQuality.medium);
+      _drawCover(canvas, map, mapRect, Paint()..filterQuality = FilterQuality.medium);
       canvas.restore();
     }
     canvas.drawRRect(
@@ -168,6 +198,9 @@ final class BoardPainter {
         ..color = LongKyColors.goldLeaf.withValues(alpha: 0.35),
     );
   }
+
+  /// `maps/ch1.jpg` -> `maps/ch1-wide.jpg`.
+  static String? _widePath(String? path) => path?.replaceFirst(RegExp(r'\.\w+$'), '-wide.jpg');
 
   void _paintEdge(Canvas canvas, EdgeView e) {
     // Every link gets a dark halo first, so it reads on any part of the

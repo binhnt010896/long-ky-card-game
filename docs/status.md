@@ -49,6 +49,15 @@ The game had no graphics at all; it now has painted art everywhere.
 - Chapter 0 is always open, not part of the unlock chain, and is offered once to new players (`tutorialDone` marker).
 - Verified in tests only (analyze clean; full workspace tests pass). Not yet checked on the phone, which was locked.
 
+## Update 2026-10-17 (latest 2): battle polish
+
+- **Objectives:** a flag button in the battle top bar and a "View objectives" entry in the pause menu open how to win, how to lose (king captured, a Unity pillar at 0, season ends, mission rules) and the bonus stars.
+- **Review before the result:** when the mission ends the board stays; a banner (won/lost) has "See the result", and the Result screen has "Review the battlefield" to go back.
+- **Wider map:** `maps/ch1-wide.jpg` is the Chapter 1 painting outpainted to 21:9 (Higgsfield `outpaint`); the painter draws it centred on the node map and fades its wings into the darkened copy, so the map reaches the screen edges. Nodes did not move. A map without a `-wide` file falls back to the framed rectangle.
+- **Buttons:** filled buttons are gold leaf, outlined are lacquer, both with painted textures (`ui/btn-gold.jpg`, `ui/btn-lacquer.jpg`, Higgsfield) under a bevel and inlay line (`longKyButtonFace` in `app/theme.dart`).
+- **Strategy cutscene:** playing a strategy shows its painting, name and effect under a brush streak and embers for 2.4 s (`strategy_cutscene.dart`); it takes no taps and is skipped with Reduce motion. No sound effects were made: the ElevenLabs connector here cannot save audio files into the repo.
+- Checked on the phone: wide map, buttons, hand button, cutscene. Not on the phone: objectives dialog and the review banner (covered by widget tests).
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

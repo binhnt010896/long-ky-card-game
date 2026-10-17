@@ -254,7 +254,7 @@ class HandDrawer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         backgroundColor: LongKyColors.lacquerRaised,
         foregroundColor: LongKyColors.goldLeaf,
-        side: const BorderSide(color: LongKyColors.goldLeaf),
+        backgroundBuilder: (_, states, child) => longKyButtonFace(states, child!, primary: false),
       ),
       child: Tooltip(
         message: open ? l.handHide : l.handShow,

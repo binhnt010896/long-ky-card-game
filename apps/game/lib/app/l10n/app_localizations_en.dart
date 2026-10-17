@@ -995,4 +995,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get campaignTrainingHint => 'A step-by-step lesson on how to play.';
+
+  @override
+  String get objectivesTitle => 'Mission objectives';
+
+  @override
+  String get objectivesShow => 'View objectives';
+
+  @override
+  String get objectivesWin => 'You win when';
+
+  @override
+  String get objectivesLossUnity =>
+      'A Unity pillar (Court, Royal clan or People) falls to 0.';
+
+  @override
+  String objectivesLossSeason(int n) {
+    return '$n turns pass without a win.';
+  }
+
+  @override
+  String get objectivesStars => 'Bonus stars';
+
+  @override
+  String get reviewBoard => 'Review the battlefield';
+
+  @override
+  String get reviewResult => 'See the result';
+
+  @override
+  String get reviewHint =>
+      'Tap officers or places to look. Zoom and drag to explore.';
 }

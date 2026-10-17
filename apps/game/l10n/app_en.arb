@@ -269,5 +269,14 @@
   "tutorialDoIt": "Do what the prompt says to continue.",
   "tutorialSkipStep": "Skip step",
   "campaignTraining": "Training",
-  "campaignTrainingHint": "A step-by-step lesson on how to play."
+  "campaignTrainingHint": "A step-by-step lesson on how to play.",
+  "objectivesTitle": "Mission objectives",
+  "objectivesShow": "View objectives",
+  "objectivesWin": "You win when",
+  "objectivesLossUnity": "A Unity pillar (Court, Royal clan or People) falls to 0.",
+  "objectivesLossSeason": "{n} turns pass without a win.",
+  "objectivesStars": "Bonus stars",
+  "reviewBoard": "Review the battlefield",
+  "reviewResult": "See the result",
+  "reviewHint": "Tap officers or places to look. Zoom and drag to explore."
 }

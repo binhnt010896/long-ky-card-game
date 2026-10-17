@@ -59,3 +59,8 @@ characters, no frame, no border, no modern objects.*
   gate open, last carts leaving toward the river.
 - **missions/ch1_m5.jpg**: boats landing at the Đông Bộ Đầu river bank at dawn
   and charging a weakened Mongol camp; banners plain.
+
+## Added 2026-10-17 (battle polish)
+
+- **maps/ch1-wide.jpg**: `maps/ch1.jpg` widened to 21:9 with Higgsfield `outpaint_image` (no prompt). Its middle 16:9 is the original map the nodes are placed on.
+- **ui/btn-gold.jpg**, **ui/btn-lacquer.jpg** (21:9, `nano_banana_pro`): texture swatches for buttons. Prompts: "a seamless horizontal texture swatch for a game button: polished gold-leaf over black-red sơn mài lacquer, subtle craquelure, hammered gold flecks, warm highlights at the top fading to bronze at the bottom" and the same in oxblood-red lacquer with a glossy sheen. No text or objects.

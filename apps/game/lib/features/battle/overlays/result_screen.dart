@@ -27,6 +27,7 @@ class ResultScreen extends StatelessWidget {
     this.nextTitle,
     this.newlyUnlocked = false,
     this.onNext,
+    this.onReview,
   });
 
   final GameState state;
@@ -38,6 +39,9 @@ class ResultScreen extends StatelessWidget {
   final LocalizedText? nextTitle;
   final bool newlyUnlocked;
   final VoidCallback? onNext;
+
+  /// Goes back to the board to look at where everyone stands.
+  final VoidCallback? onReview;
 
   String _lossReason(AppLocalizations l) {
     final r = state.lossReason;
@@ -174,6 +178,13 @@ class ResultScreen extends StatelessWidget {
                     spacing: 12,
                     runSpacing: 8,
                     children: [
+                      if (onReview != null)
+                        OutlinedButton(
+                          key: const Key('result-review'),
+                          onPressed: onReview,
+                          style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                          child: Text(l.reviewBoard),
+                        ),
                       if (onRetry != null)
                         OutlinedButton(
                           key: const Key('result-retry'),

@@ -20,6 +20,76 @@ abstract final class LongKyColors {
 /// Bundled typeface; never downloaded at runtime.
 const String longKyFontFamily = 'BeVietnamPro';
 
+/// Lacquer and gold-leaf button faces (painted textures under a bevel), shared
+/// by every filled and outlined button. A texture that is not shipped leaves
+/// the colour gradient on its own.
+Widget longKyButtonFace(Set<WidgetState> states, Widget child, {required bool primary}) {
+  final disabled = states.contains(WidgetState.disabled);
+  final pressed = states.contains(WidgetState.pressed);
+  final hovered = states.contains(WidgetState.hovered) || states.contains(WidgetState.focused);
+  final radius = BorderRadius.circular(10);
+  final List<Color> colors;
+  if (disabled) {
+    colors = const [Color(0xFF2A2623), Color(0xFF1B1816)];
+  } else if (primary) {
+    colors = pressed
+        ? const [Color(0xFFB88F3A), Color(0xFF8A6A27)]
+        : hovered
+        ? const [Color(0xFFFBE7A6), Color(0xFFC79B42)]
+        : const [Color(0xFFF1D58A), Color(0xFFB98E39)];
+  } else {
+    colors = pressed
+        ? const [Color(0xFF2A100D), Color(0xFF160807)]
+        : hovered
+        ? const [Color(0xFF5A2620), Color(0xFF331511)]
+        : const [Color(0xFF4A1E19), Color(0xFF260F0C)];
+  }
+  final texture = primary ? 'assets/images/ui/btn-gold.jpg' : 'assets/images/ui/btn-lacquer.jpg';
+  return DecoratedBox(
+    decoration: BoxDecoration(
+      borderRadius: radius,
+      gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: colors),
+      image: disabled
+          ? null
+          : DecorationImage(
+              image: AssetImage(texture),
+              fit: BoxFit.cover,
+              opacity: primary ? 0.32 : 0.5,
+              onError: (_, _) {},
+            ),
+      border: Border.all(
+        color: disabled ? const Color(0x33C9A24A) : (primary ? const Color(0xFFFFEFB8) : const Color(0xFFC9A24A)),
+        width: primary ? 1.2 : 1.4,
+      ),
+      boxShadow: disabled
+          ? null
+          : const [BoxShadow(color: Color(0x99000000), blurRadius: 4, offset: Offset(0, 2))],
+    ),
+    child: Stack(
+      alignment: Alignment.center,
+      children: [
+        // A fine inner line, like the inlay on a lacquer tray.
+        if (!disabled)
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  border: Border.all(
+                    color: (primary ? const Color(0xFF5A3F0E) : const Color(0xFFC9A24A)).withValues(alpha: 0.45),
+                    width: 0.8,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        child,
+      ],
+    ),
+  );
+}
+
 ThemeData buildLongKyTheme() {
   const scheme = ColorScheme.dark(
     primary: LongKyColors.goldLeaf,
@@ -55,8 +125,9 @@ ThemeData buildLongKyTheme() {
           borderRadius: BorderRadius.circular(10),
           side: const BorderSide(color: Color(0xFFF1D58A), width: 1),
         ),
-        elevation: 3,
-        shadowColor: Colors.black,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        backgroundBuilder: (_, states, child) => longKyButtonFace(states, child!, primary: true),
         textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w600),
       ),
     ),
@@ -68,6 +139,7 @@ ThemeData buildLongKyTheme() {
         side: BorderSide(color: LongKyColors.goldLeaf.withValues(alpha: 0.8), width: 1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 0,
+        backgroundBuilder: (_, states, child) => longKyButtonFace(states, child!, primary: false),
         textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w500),
       ),
     ),
