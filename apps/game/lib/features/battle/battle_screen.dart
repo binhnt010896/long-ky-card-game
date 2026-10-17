@@ -313,6 +313,26 @@ class _BattleScreenState extends State<BattleScreen> {
     );
   }
 
+  /// The hand, the log and the inspector are popups on a phone, and only one
+  /// shows at a time: opening one closes the others.
+  void _toggleHand() {
+    final open = !_handOpen;
+    setState(() {
+      _handOpen = open;
+      if (open) _logOpen = false;
+    });
+    if (open) _select(null);
+  }
+
+  void _toggleLog() {
+    final open = !_logOpen;
+    setState(() {
+      _logOpen = open;
+      if (open) _handOpen = false;
+    });
+    if (open) _select(null);
+  }
+
   void _select(Selection? s) => _boardKey.currentState?.select(s);
 
   /// A strategy the player just played gets its cutscene (not for reduced
@@ -527,7 +547,14 @@ class _BattleScreenState extends State<BattleScreen> {
       ruleset: widget.ruleset,
       state: view.state,
       languageCode: l.localeName,
-      onSelectionChanged: (s) => setState(() => _selection = s),
+      onSelectionChanged: (s) => setState(() {
+        _selection = s;
+        // One popup at a time: picking something to inspect closes the hand and the log.
+        if (s != null) {
+          _handOpen = false;
+          _logOpen = false;
+        }
+      }),
       events: view.lastEvents,
       step: view.step,
       onBusyChanged: (busy) => setState(() => _busy = busy),
@@ -716,7 +743,7 @@ class _BattleScreenState extends State<BattleScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ObjectivesButton(onPressed: _openObjectives),
-                    LogButton(onPressed: () => setState(() => _logOpen = !_logOpen)),
+                    LogButton(onPressed: _toggleLog),
                   ],
                 ),
               ),
@@ -738,7 +765,7 @@ class _BattleScreenState extends State<BattleScreen> {
                         state: view.state,
                         ruleset: widget.ruleset,
                         open: _handOpen,
-                        onToggle: () => setState(() => _handOpen = !_handOpen),
+                        onToggle: _toggleHand,
                       ),
                     ),
                     const SizedBox(width: 4),
