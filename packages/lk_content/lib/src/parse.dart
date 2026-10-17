@@ -172,7 +172,19 @@ final class ContentParser {
     }
     final uses = o.integer('usesPerMission', min: 1);
     final effects = effectList(o, 'effects', target);
-    return SkillDef(id: id, kind: kind, usesPerMission: uses, target: target, name: name, text: text, effects: effects);
+    final voiceLine = o.has('voiceLine') ? o.text('voiceLine') : null;
+    final voiceSeconds = o.has('voiceSeconds') ? o.integer('voiceSeconds', min: 1, max: 30) : 0;
+    return SkillDef(
+      id: id,
+      kind: kind,
+      usesPerMission: uses,
+      target: target,
+      name: name,
+      text: text,
+      effects: effects,
+      voiceLine: voiceLine,
+      voiceSeconds: voiceSeconds,
+    );
   }
 
   FlawDef _flaw(Obj o) {

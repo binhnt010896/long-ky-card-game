@@ -55,4 +55,51 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byKey(const Key('officer-callout')), findsNothing);
   });
+
+  for (final (id, seconds, phrase) in [
+    ('tran-thu-do', 5, 'Đầu thần chưa rơi xuống đất'),
+    ('tran-quoc-tuan', 8, 'Dẫu cho trăm thân ta phơi ngoài nội cỏ'),
+  ]) {
+    testWidgets('$id: the skill callout lasts as long as the voice line ($seconds s) and shows its subtitle', (tester) async {
+      final m5 = ruleset('ch1_m5');
+      final officer = m5.officers[id]!;
+      expect(OfficerCallout.lengthFor(officer, CalloutKind.skill), Duration(seconds: seconds));
+      expect(OfficerCallout.lengthFor(officer, CalloutKind.charge), OfficerCallout.length);
+      setViewSize(tester, compact);
+      var done = 0;
+      await tester.pumpWidget(
+        appAround(
+          OfficerCallout(officer: officer, kind: CalloutKind.skill, ruleset: m5, onDone: () => done++),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 2000));
+      expect(find.byKey(const Key('callout-subtitle')), findsOneWidget);
+      expect(find.textContaining(phrase), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      final box = tester.getRect(find.byKey(const Key('callout-subtitle')));
+      expect(box.bottom, lessThanOrEqualTo(compact.height));
+      await tester.pump(Duration(seconds: seconds - 2));
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(done, 1);
+    });
+  }
+
+  testWidgets('a long voice line can be skipped with its button', (tester) async {
+    final m5 = ruleset('ch1_m5');
+    var done = 0;
+    setViewSize(tester, compact);
+    await tester.pumpWidget(
+      appAround(
+        OfficerCallout(
+          officer: m5.officers['tran-quoc-tuan']!,
+          kind: CalloutKind.skill,
+          ruleset: m5,
+          onDone: () => done++,
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.tap(find.byKey(const Key('callout-skip')));
+    expect(done, 1);
+  });
 }

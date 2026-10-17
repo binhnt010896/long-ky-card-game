@@ -550,6 +550,8 @@
   "@freePlayLost": {"description": "How free play ended."},
   "logFreePlayStarted": "Chơi tiếp bắt đầu.",
   "@logFreePlayStarted": {"description": "Log line."},
-  "calloutCharge": "Xung phong!",
-  "@calloutCharge": {"description": "Caption of the king's shout when the turn is resolved."}
+  "calloutCharge": "Tiến quân!",
+  "@calloutCharge": {"description": "Caption of the king's shout when the turn is resolved."},
+  "calloutSkip": "Bỏ qua",
+  "@calloutSkip": {"description": "Button on a long officer callout."}
 }

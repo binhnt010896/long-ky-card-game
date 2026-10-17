@@ -52,6 +52,8 @@ final class SkillDef {
     this.usesPerMission = 0,
     this.target = TargetKind.none,
     this.effects = const [],
+    this.voiceLine,
+    this.voiceSeconds = 0,
   });
 
   final String id;
@@ -63,6 +65,11 @@ final class SkillDef {
 
   /// Activated skills only. Passive skills are implemented by [id].
   final List<EffectDef> effects;
+
+  /// What the officer says when they use it (the subtitle of the voice line
+  /// `voice/<officerId>-skill.mp3`), and how long the recording is.
+  final LocalizedText? voiceLine;
+  final int voiceSeconds;
 }
 
 final class FlawDef {

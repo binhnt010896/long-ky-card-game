@@ -1044,5 +1044,8 @@ class AppLocalizationsVi extends AppLocalizations {
   String get logFreePlayStarted => 'Chơi tiếp bắt đầu.';
 
   @override
-  String get calloutCharge => 'Xung phong!';
+  String get calloutCharge => 'Tiến quân!';
+
+  @override
+  String get calloutSkip => 'Bỏ qua';
 }

@@ -1047,4 +1047,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calloutCharge => 'Charge!';
+
+  @override
+  String get calloutSkip => 'Skip';
 }

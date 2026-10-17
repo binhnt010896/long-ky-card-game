@@ -1811,8 +1811,14 @@ abstract class AppLocalizations {
   /// Caption of the king's shout when the turn is resolved.
   ///
   /// In vi, this message translates to:
-  /// **'Xung phong!'**
+  /// **'Tiến quân!'**
   String get calloutCharge;
+
+  /// Button on a long officer callout.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bỏ qua'**
+  String get calloutSkip;
 }
 
 class _AppLocalizationsDelegate
