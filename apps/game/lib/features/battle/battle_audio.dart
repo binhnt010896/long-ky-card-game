@@ -49,8 +49,8 @@ class BattleAudio {
   final String missionId;
   final int chapter;
 
-  /// The chapter's music starts (and keeps going if it already plays).
-  Future<void> start() => audio.playMusic(AudioPaths.chapterMusic(chapter));
+  /// The battle's music starts, replacing the menu music, and plays throughout.
+  Future<void> start() => audio.playMusic(AudioPaths.battleMusic);
 
   /// Which end-of-turn shout comes next: the two recordings take turns.
   int _endTurns = 0;
@@ -92,9 +92,9 @@ class BattleAudio {
     return null;
   }
 
-  /// Leaving the battle: the narration and the music stop.
+  /// Leaving the battle: the narration stops and the menu music comes back.
   Future<void> stop() async {
     await audio.stopVoice();
-    await audio.stopMusic();
+    await audio.playMusic(AudioPaths.menuMusic);
   }
 }

@@ -67,7 +67,6 @@ class _BriefingScreenState extends State<BriefingScreen> {
       final loaded = await loadMission(bundle, widget.missionId);
       if (!mounted) return;
       setState(() => _loaded = loaded);
-      unawaited(_audio.playMusic(AudioPaths.chapterMusic(loaded.ruleset.mission.chapter)));
       unawaited(_audio.playVoice(_voiceId));
     } on Object {
       if (mounted) setState(() => _failed = true);

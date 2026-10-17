@@ -23,6 +23,8 @@ class _AudioScopeState extends State<AudioScope> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     widget.audio.applySettings(context.read<ProgressCubit>().state.settings);
+    // The game opens to its music, which plays through the menus.
+    widget.audio.playMusic(AudioPaths.menuMusic);
   }
 
   @override

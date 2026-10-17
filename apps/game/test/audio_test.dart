@@ -24,9 +24,11 @@ import 'battle/board_support.dart' show ruleset;
 /// Records what the service asks of the backend.
 class RecordingBackend implements AudioBackend {
   final List<String> log = [];
-  final List<({AudioChannel channel, String path, double volume, bool loop})> played = [];
+  final List<({AudioChannel channel, String path, double volume, bool loop})>
+  played = [];
   final Map<AudioChannel, double> volumes = {};
-  final StreamController<AudioChannel> _done = StreamController<AudioChannel>.broadcast();
+  final StreamController<AudioChannel> _done =
+      StreamController<AudioChannel>.broadcast();
   bool failing = false;
 
   void finish(AudioChannel c) => _done.add(c);
@@ -35,14 +37,20 @@ class RecordingBackend implements AudioBackend {
   Stream<AudioChannel> get completions => _done.stream;
 
   @override
-  Future<void> play(AudioChannel channel, String path, {required double volume, bool loop = false}) async {
+  Future<void> play(
+    AudioChannel channel,
+    String path, {
+    required double volume,
+    bool loop = false,
+  }) async {
     if (failing) throw StateError('no audio device');
     log.add('play ${channel.name} $path');
     played.add((channel: channel, path: path, volume: volume, loop: loop));
   }
 
   @override
-  Future<void> stop(AudioChannel channel) async => log.add('stop ${channel.name}');
+  Future<void> stop(AudioChannel channel) async =>
+      log.add('stop ${channel.name}');
 
   @override
   Future<void> setVolume(AudioChannel channel, double volume) async {
@@ -60,14 +68,21 @@ class RecordingBackend implements AudioBackend {
   Future<void> dispose() async => log.add('dispose');
 }
 
-AudioService serviceWith(RecordingBackend b, Set<String> assets, {GameSettings settings = const GameSettings()}) =>
-    AudioService(backend: b, hasAsset: assets.contains, settings: settings);
+AudioService serviceWith(
+  RecordingBackend b,
+  Set<String> assets, {
+  GameSettings settings = const GameSettings(),
+}) => AudioService(backend: b, hasAsset: assets.contains, settings: settings);
 
 void main() {
   group('AudioService', () {
     test('plays voice, music and effects from the id-named paths, on their own channels', () async {
       final b = RecordingBackend();
-      final a = serviceWith(b, {'voice/ch1_m2_briefing.mp3', 'music/chapter1.mp3', 'effects/battle.mp3'});
+      final a = serviceWith(b, {
+        'voice/ch1_m2_briefing.mp3',
+        'music/chapter1.mp3',
+        'effects/battle.mp3',
+      });
       expect(await a.playVoice('ch1_m2_briefing'), isTrue);
       expect(await a.playMusic('chapter1'), isTrue);
       expect(await a.playEffect('battle'), isTrue);
@@ -80,32 +95,78 @@ void main() {
       expect(b.played[0].loop, isFalse);
     });
 
-    test('a file that is not there is skipped without a sound or an error', () async {
-      final b = RecordingBackend();
-      final a = serviceWith(b, {});
-      expect(await a.playVoice('ch1_m2_briefing'), isFalse);
-      expect(await a.playMusic('chapter1'), isFalse);
-      expect(await a.playEffect('battle'), isFalse);
-      expect(b.log, isEmpty);
-      expect(a.playingVoice, isNull);
-      expect(a.playingMusic, isNull);
-    });
-
-    test('plays at the volume of its channel in Settings, and follows changes at once', () async {
+    test('the music stays under the voices: a share of its setting, lower again while a voice speaks', () async {
       final b = RecordingBackend();
       final a = serviceWith(b, {
         'voice/x.mp3',
         'music/m.mp3',
-        'effects/e.mp3',
-      }, settings: const GameSettings(musicVolume: 0.2, voiceVolume: 0.9, effectsVolume: 0.4));
+      }, settings: const GameSettings(musicVolume: 1.0, voiceVolume: 1.0));
+      await a.playMusic('m');
+      expect(b.played.single.volume, AudioService.musicGain);
+      expect(b.played.single.volume, lessThan(a.volumeOf(AudioChannel.voice)));
+      await a.playVoice('x');
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        b.volumes[AudioChannel.music],
+        AudioService.musicGain * AudioService.musicDuck,
+      );
+      b.finish(AudioChannel.voice);
+      await Future<void>.delayed(Duration.zero);
+      expect(
+        b.volumes[AudioChannel.music],
+        AudioService.musicGain,
+        reason: 'the music comes back when the voice ends',
+      );
+    });
+
+    test(
+      'a file that is not there is skipped without a sound or an error',
+      () async {
+        final b = RecordingBackend();
+        final a = serviceWith(b, {});
+        expect(await a.playVoice('ch1_m2_briefing'), isFalse);
+        expect(await a.playMusic('chapter1'), isFalse);
+        expect(await a.playEffect('battle'), isFalse);
+        expect(b.log, isEmpty);
+        expect(a.playingVoice, isNull);
+        expect(a.playingMusic, isNull);
+      },
+    );
+
+    test('plays at the volume of its channel in Settings, and follows changes at once', () async {
+      final b = RecordingBackend();
+      final a = serviceWith(
+        b,
+        {'voice/x.mp3', 'music/m.mp3', 'effects/e.mp3'},
+        settings: const GameSettings(
+          musicVolume: 0.2,
+          voiceVolume: 0.9,
+          effectsVolume: 0.4,
+        ),
+      );
       await a.playVoice('x');
       await a.playMusic('m');
       await a.playEffect('e');
-      expect([for (final p in b.played) p.volume], [0.9, 0.2, 0.4]);
+      // The music is a bed: a share of its setting, and lower again while a voice speaks.
+      const bed = 0.2 * AudioService.musicGain;
+      expect(
+        [for (final p in b.played) p.volume],
+        [0.9, bed * AudioService.musicDuck, 0.4],
+      );
 
-      a.applySettings(const GameSettings(musicVolume: 0.0, voiceVolume: 0.5, effectsVolume: 1.0));
+      a.applySettings(
+        const GameSettings(
+          musicVolume: 0.0,
+          voiceVolume: 0.5,
+          effectsVolume: 1.0,
+        ),
+      );
       await Future<void>.delayed(Duration.zero);
-      expect(b.volumes, {AudioChannel.music: 0.0, AudioChannel.voice: 0.5, AudioChannel.effects: 1.0});
+      expect(b.volumes, {
+        AudioChannel.music: 0.0,
+        AudioChannel.voice: 0.5,
+        AudioChannel.effects: 1.0,
+      });
       await a.playEffect('e');
       expect(b.played.last.volume, 1.0);
     });
@@ -121,26 +182,35 @@ void main() {
       await a.stopMusic();
       expect(b.log.last, 'stop music');
       await a.stopMusic();
-      expect(b.log.where((e) => e == 'stop music'), hasLength(1), reason: 'nothing left to stop');
+      expect(
+        b.log.where((e) => e == 'stop music'),
+        hasLength(1),
+        reason: 'nothing left to stop',
+      );
     });
 
-    test('knows which narration is playing, until it ends or is stopped', () async {
-      final b = RecordingBackend();
-      final a = serviceWith(b, {'voice/one.mp3', 'voice/two.mp3'});
-      final seen = <String?>[];
-      a.voiceChanges.listen(seen.add);
-      await a.playVoice('one');
-      expect(a.playingVoice, 'one');
-      b.finish(AudioChannel.voice);
-      await Future<void>.delayed(Duration.zero);
-      expect(a.playingVoice, isNull, reason: 'it played to its end');
-      await a.playVoice('two');
-      await a.stopVoice();
-      expect(a.playingVoice, isNull);
-      await Future<void>.delayed(Duration.zero);
-      expect(seen, ['one', null, 'two', null]);
-      b.finish(AudioChannel.music); // other channels do not touch the voice state
-    });
+    test(
+      'knows which narration is playing, until it ends or is stopped',
+      () async {
+        final b = RecordingBackend();
+        final a = serviceWith(b, {'voice/one.mp3', 'voice/two.mp3'});
+        final seen = <String?>[];
+        a.voiceChanges.listen(seen.add);
+        await a.playVoice('one');
+        expect(a.playingVoice, 'one');
+        b.finish(AudioChannel.voice);
+        await Future<void>.delayed(Duration.zero);
+        expect(a.playingVoice, isNull, reason: 'it played to its end');
+        await a.playVoice('two');
+        await a.stopVoice();
+        expect(a.playingVoice, isNull);
+        await Future<void>.delayed(Duration.zero);
+        expect(seen, ['one', null, 'two', null]);
+        b.finish(
+          AudioChannel.music,
+        ); // other channels do not touch the voice state
+      },
+    );
 
     test('a backend that fails never fails the game', () async {
       final b = RecordingBackend()..failing = true;
@@ -184,9 +254,17 @@ void main() {
         for (final i in r.issues)
           if (i.message.contains('audio file')) i.message,
       ];
-      expect(audioErrors, isEmpty, reason: 'the player and the validator must agree on the file names');
+      expect(
+        audioErrors,
+        isEmpty,
+        reason: 'the player and the validator must agree on the file names',
+      );
       // And with none shipped, it is exactly these files that are missing.
-      final none = validateContent(files, assetPaths: <String>{}, release: false);
+      final none = validateContent(
+        files,
+        assetPaths: <String>{},
+        release: false,
+      );
       final missing = {
         for (final i in none.issues)
           if (i.message.contains('audio file')) i.message.split('assets/').last,
@@ -194,13 +272,16 @@ void main() {
       expect(missing, shipped);
     });
 
-    test('the audio folders are declared as assets, so shipped files are found', () {
-      final pubspec = File('pubspec.yaml').readAsStringSync();
-      for (final d in ['voice', 'music', 'effects']) {
-        expect(pubspec, contains('- assets/audio/$d/'));
-        expect(Directory('assets/audio/$d').existsSync(), isTrue);
-      }
-    });
+    test(
+      'the audio folders are declared as assets, so shipped files are found',
+      () {
+        final pubspec = File('pubspec.yaml').readAsStringSync();
+        for (final d in ['voice', 'music', 'effects']) {
+          expect(pubspec, contains('- assets/audio/$d/'));
+          expect(Directory('assets/audio/$d').existsSync(), isTrue);
+        }
+      },
+    );
   });
 
   group('effectFor', () {
@@ -218,7 +299,14 @@ void main() {
 
     test('nothing for steps with nothing worth a sound', () {
       expect(effectFor(const []), isNull);
-      expect(effectFor(const [TurnStarted(2), PhaseChanged(Phase.orders), OrderSet('x', null)]), isNull);
+      expect(
+        effectFor(const [
+          TurnStarted(2),
+          PhaseChanged(Phase.orders),
+          OrderSet('x', null),
+        ]),
+        isNull,
+      );
     });
 
     test('one sound per step: the most important thing that happened', () {
@@ -227,9 +315,18 @@ void main() {
       expect(effectFor([BattleResolved(report())]), 'battle');
       expect(effectFor(const [OfficerDefected('x')]), 'defect');
       expect(effectFor(const [OfficerCaptured('x', 'n')]), 'captured');
-      expect(effectFor([const CardPlayed('c'), BattleResolved(report())]), 'battle');
-      expect(effectFor([BattleResolved(report()), const OfficerCaptured('x', 'n')]), 'battle');
-      expect(effectFor([BattleResolved(report()), const MissionEnded(Outcome.won)]), 'victory');
+      expect(
+        effectFor([const CardPlayed('c'), BattleResolved(report())]),
+        'battle',
+      );
+      expect(
+        effectFor([BattleResolved(report()), const OfficerCaptured('x', 'n')]),
+        'battle',
+      );
+      expect(
+        effectFor([BattleResolved(report()), const MissionEnded(Outcome.won)]),
+        'victory',
+      );
       expect(effectFor(const [MissionEnded(Outcome.lost)]), 'defeat');
     });
   });
@@ -237,7 +334,8 @@ void main() {
   group('BattleAudio', () {
     final rules = ruleset('ch1_m2');
     final assets = {
-      'music/chapter1.mp3',
+      'music/bg1.mp3',
+      'music/bg-battle.mp3',
       'effects/card.mp3',
       'effects/battle.mp3',
       'effects/victory.mp3',
@@ -247,14 +345,18 @@ void main() {
     test('starts the chapter music, plays an effect per step, reads the debrief after a win, then stops', () async {
       final b = RecordingBackend();
       final audio = serviceWith(b, assets);
-      final sounds = BattleAudio(audio, missionId: 'ch1_m2', chapter: rules.mission.chapter);
+      final sounds = BattleAudio(
+        audio,
+        missionId: 'ch1_m2',
+        chapter: rules.mission.chapter,
+      );
       final cubit = BattleCubit(GameEngine(rules), seed: 1);
       addTearDown(cubit.close);
       final sub = cubit.stream.listen(sounds.onStep);
       addTearDown(sub.cancel);
 
       await sounds.start();
-      expect(b.log, ['play music music/chapter1.mp3']);
+      expect(b.log, ['play music music/bg-battle.mp3']);
 
       cubit.playCard('vuon-khong-nha-trong', target: 'binh-le-nguyen');
       await Future<void>.delayed(Duration.zero);
@@ -266,12 +368,19 @@ void main() {
       expect(b.log, contains('play voice voice/ch1_m2_debrief.mp3'));
 
       await sounds.stop();
-      expect(b.log.sublist(b.log.length - 2), ['stop voice', 'stop music']);
+      expect(b.log.sublist(b.log.length - 2), [
+        'stop voice',
+        'play music music/bg1.mp3',
+      ], reason: 'the menu music returns');
     });
 
     test('with no audio files at all, the whole battle is silent and nothing fails', () async {
       final b = RecordingBackend();
-      final sounds = BattleAudio(serviceWith(b, {}), missionId: 'ch1_m2', chapter: 1);
+      final sounds = BattleAudio(
+        serviceWith(b, {}),
+        missionId: 'ch1_m2',
+        chapter: 1,
+      );
       final cubit = BattleCubit(GameEngine(rules), seed: 1);
       addTearDown(cubit.close);
       final sub = cubit.stream.listen(sounds.onStep);
@@ -295,8 +404,12 @@ void main() {
       });
       final sounds = BattleAudio(audio, missionId: 'ch1_m2', chapter: 1);
       final state = GameEngine(rules).newGame(1).state;
-      List<String> voices() => [for (final p in b.played) if (p.channel == AudioChannel.voice) p.path];
-      void step(List<GameEvent> events) => sounds.onStep(BattleViewState(state: state, lastEvents: events));
+      List<String> voices() => [
+        for (final p in b.played)
+          if (p.channel == AudioChannel.voice) p.path,
+      ];
+      void step(List<GameEvent> events) =>
+          sounds.onStep(BattleViewState(state: state, lastEvents: events));
 
       step(const [PhaseChanged(Phase.resolution)]);
       step(const [PhaseChanged(Phase.resolution)]);
@@ -320,9 +433,16 @@ void main() {
 
     test('a lost mission has no debrief to hear', () async {
       final b = RecordingBackend();
-      final sounds = BattleAudio(serviceWith(b, assets), missionId: 'ch1_m2', chapter: 1);
+      final sounds = BattleAudio(
+        serviceWith(b, assets),
+        missionId: 'ch1_m2',
+        chapter: 1,
+      );
       sounds.onStep(
-        BattleViewState(state: GameEngine(rules).newGame(1).state, lastEvents: const [MissionEnded(Outcome.lost)]),
+        BattleViewState(
+          state: GameEngine(rules).newGame(1).state,
+          lastEvents: const [MissionEnded(Outcome.lost)],
+        ),
       );
       await Future<void>.delayed(Duration.zero);
       expect(b.played.where((p) => p.channel == AudioChannel.voice), isEmpty);
@@ -330,10 +450,15 @@ void main() {
   });
 
   group('AudioScope', () {
-    testWidgets('Settings volumes reach the audio as they change; the background pauses it', (tester) async {
+    testWidgets('the game opens to the menu music, which loops', (
+      tester,
+    ) async {
       final b = RecordingBackend();
-      final audio = serviceWith(b, {});
-      final progress = ProgressCubit(ProgressRepository(MemoryProgressStore()), const Progress());
+      final audio = serviceWith(b, {'music/bg1.mp3'});
+      final progress = ProgressCubit(
+        ProgressRepository(MemoryProgressStore()),
+        const Progress(),
+      );
       await tester.pumpWidget(
         BlocProvider.value(
           value: progress,
@@ -344,28 +469,59 @@ void main() {
         ),
       );
       await tester.pump();
-      expect(
-        b.volumes[AudioChannel.music],
-        const GameSettings().musicVolume,
-        reason: 'the first settings apply at once',
-      );
-
-      await progress.updateSettings((s) => s.copyWith(musicVolume: 0.1, voiceVolume: 0.3));
-      await tester.pump();
-      expect(b.volumes[AudioChannel.music], 0.1);
-      expect(b.volumes[AudioChannel.voice], 0.3);
-
-      final before = b.log.length;
-      await progress.setLanguage('en'); // not a volume: nothing to tell the audio
-      await tester.pump();
-      expect(b.log.length, before);
-
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-      await tester.pump();
-      expect(b.log.last, 'pause');
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pump();
-      expect(b.log.last, 'resume');
+      expect(b.played.single.path, 'music/bg1.mp3');
+      expect(b.played.single.loop, isTrue);
+      expect(audio.playingMusic, 'bg1');
     });
+
+    testWidgets(
+      'Settings volumes reach the audio as they change; the background pauses it',
+      (tester) async {
+        final b = RecordingBackend();
+        final audio = serviceWith(b, {});
+        final progress = ProgressCubit(
+          ProgressRepository(MemoryProgressStore()),
+          const Progress(),
+        );
+        await tester.pumpWidget(
+          BlocProvider.value(
+            value: progress,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: AudioScope(audio: audio, child: const SizedBox()),
+            ),
+          ),
+        );
+        await tester.pump();
+        expect(
+          b.volumes[AudioChannel.music],
+          const GameSettings().musicVolume * AudioService.musicGain,
+          reason: 'the first settings apply at once',
+        );
+
+        await progress.updateSettings(
+          (s) => s.copyWith(musicVolume: 0.1, voiceVolume: 0.3),
+        );
+        await tester.pump();
+        expect(b.volumes[AudioChannel.music], 0.1 * AudioService.musicGain);
+        expect(b.volumes[AudioChannel.voice], 0.3);
+
+        final before = b.log.length;
+        await progress.setLanguage(
+          'en',
+        ); // not a volume: nothing to tell the audio
+        await tester.pump();
+        expect(b.log.length, before);
+
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+        await tester.pump();
+        expect(b.log.last, 'pause');
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
+        await tester.pump();
+        expect(b.log.last, 'resume');
+      },
+    );
   });
 }

@@ -72,6 +72,12 @@ The game had no graphics at all; it now has painted art everywhere.
 - **Subtitles and length (same day):** a skill's `voiceLine` (vi/en) and `voiceSeconds` in `officers.json` set the subtitle and how long its callout lasts (Thủ Độ 5 s, Quốc Tuấn 8 s); a long callout has a Skip button and does not take other taps. The king's shout reads "Tiến quân!" (3.2 s). The victory and defeat voices have no subtitle. The en lines are drafted from vi, for review.
 - On the phone: the king's shout was checked. The skill callouts and the victory/defeat voices are covered by widget and audio tests only.
 
+## Update 2026-10-17 (latest 5): music
+
+- `music/bg1.mp3` plays from the moment the game opens, through the menus and briefings; `music/bg-battle.mp3` plays when a battle starts and throughout it; leaving the battle brings `bg1` back. Both loop. The old per-chapter `chapterN` music is no longer used.
+- The music is a bed under the voices (`AudioService.musicGain` 0.45 of its Settings volume, and `musicDuck` 0.5 of that while a voice line plays), so even with both sliders at 100% the voices are louder.
+- On the phone: the music starts on launch (an audio-focus request from the app shows in `dumpsys audio`); I could not judge the loudness by ear.
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

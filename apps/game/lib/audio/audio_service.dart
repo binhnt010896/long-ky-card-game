@@ -27,8 +27,10 @@ abstract final class AudioPaths {
   /// The line an officer says when they use their skill.
   static String skillVoice(String officerId) => '$officerId-skill';
 
-  /// The music of a chapter.
-  static String chapterMusic(int chapter) => 'chapter$chapter';
+  /// The music of the menus (from the moment the game opens) and of a battle
+  /// (from the moment it starts until it is left).
+  static const String menuMusic = 'bg1';
+  static const String battleMusic = 'bg-battle';
 }
 
 /// Whether the app ships the audio file `assets/audio/[path]`.
@@ -73,8 +75,14 @@ class AudioService {
   String? get playingVoice => _voice;
   String? get playingMusic => _music;
 
+  /// The music is a bed under the voices, never over them: it plays at this
+  /// share of its Settings volume, and at [musicDuck] of that while a voice
+  /// line is playing.
+  static const double musicGain = 0.45;
+  static const double musicDuck = 0.5;
+
   double volumeOf(AudioChannel c) => switch (c) {
-    AudioChannel.music => settings.musicVolume,
+    AudioChannel.music => settings.musicVolume * musicGain * (_voice != null ? musicDuck : 1.0),
     AudioChannel.voice => settings.voiceVolume,
     AudioChannel.effects => settings.effectsVolume,
   };
@@ -137,8 +145,13 @@ class AudioService {
   }
 
   void _setVoice(String? id) {
+    final wasTalking = _voice != null;
     _voice = id;
     if (!_voiceChanges.isClosed) _voiceChanges.add(id);
+    // The music steps back while someone speaks, and comes back after.
+    if (wasTalking != (id != null) && _music != null) {
+      unawaited(_safe(() => backend.setVolume(AudioChannel.music, volumeOf(AudioChannel.music))));
+    }
   }
 
   /// A sound that cannot play (no audio device, a damaged file) is never a
