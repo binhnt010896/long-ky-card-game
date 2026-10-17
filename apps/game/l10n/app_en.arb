@@ -284,5 +284,6 @@
   "freePlayHint": "Play on until one side has no troops left.",
   "freePlayWon": "Free play over: the Yuan have no troops left.",
   "freePlayLost": "Free play over: our troops are gone.",
-  "logFreePlayStarted": "Free play begins."
+  "logFreePlayStarted": "Free play begins.",
+  "calloutCharge": "Charge!"
 }

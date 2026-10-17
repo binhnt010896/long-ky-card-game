@@ -86,6 +86,7 @@ final class OfficerDef {
     this.loyaltyLocked = false,
     this.isKing = false,
     this.skill,
+    this.passiveSkill,
     this.flaw,
     this.portraitArt,
     this.cardArt,
@@ -100,13 +101,16 @@ final class OfficerDef {
   final bool loyaltyLocked;
   final bool isKing;
   final SkillDef? skill;
+
+  /// A passive alongside an activated [skill], for an officer who has both.
+  final SkillDef? passiveSkill;
   final FlawDef? flaw;
   final String? portraitArt;
   final String? cardArt;
   final List<String> sourceRefs;
 
   bool hasPassive(String passiveId) =>
-      skill != null && skill!.kind == SkillKind.passive && skill!.id == passiveId;
+      [skill, passiveSkill].any((x) => x != null && x.kind == SkillKind.passive && x.id == passiveId);
 
   /// Maximum troops this officer may have, or null for no cap.
   int? get troopCap => flaw?.id == FlawIds.troopCap ? flaw!.value : null;

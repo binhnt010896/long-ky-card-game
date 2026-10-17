@@ -75,4 +75,20 @@ void main() {
     expect(waits, containsAll(['select:army:mong-co-1258', 'card:vuon-khong-nha-trong', 'phase:orders', 'turn:2', 'turn:3', 'zoom']));
     expect({for (final t in steps) t.id}.length, steps.length, reason: 'step ids are unique');
   });
+
+  test('Trần Quốc Tuấn has an activated skill and keeps Holding the Border as a passive', () {
+    final b = loadContent(readContentDir(dir!));
+    final tuan = b.officers['tran-quoc-tuan']!;
+    expect((tuan.skill!.kind, tuan.skill!.usesPerMission), (SkillKind.activated, 1));
+    expect(tuan.passiveSkill!.id, PassiveIds.borderWatch);
+    expect(tuan.hasPassive(PassiveIds.borderWatch), isTrue);
+    final engine = GameEngine(b.ruleset('ch1_m5'));
+    final s = engine.newGame(1).state;
+    final use = GameAction.useSkill(officerId: 'tran-quoc-tuan');
+    expect(engine.legalActions(s), contains(use));
+    final after = engine.apply(s, use).state;
+    expect(after.revealDepth, 3, reason: 'two turns further than the base depth of 1');
+    expect(after.officers['tran-quoc-tuan']!.skillUsesLeft, 0);
+    expect(after.armies.values.first.morale, s.armies.values.first.morale - 1);
+  });
 }

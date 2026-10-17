@@ -15,6 +15,7 @@ import 'board/board_scene.dart';
 import 'labels.dart';
 import 'overlays/battle_menu.dart';
 import 'overlays/objectives_dialog.dart';
+import 'overlays/officer_callout.dart';
 import 'overlays/strategy_cutscene.dart';
 import 'overlays/card_dialog.dart';
 import 'overlays/choice_overlay.dart';
@@ -94,6 +95,9 @@ class _BattleScreenState extends State<BattleScreen> {
   /// The strategy whose cutscene is playing, and the step that started it.
   CardDef? _cutscene;
   int _cutsceneStep = -1;
+
+  /// The officer in the spotlight (the king's shout, a skill), if any.
+  Callout? _callout;
 
   /// The Result screen is shown on request, after the board has been looked at.
   bool _showResult = false;
@@ -339,6 +343,12 @@ class _BattleScreenState extends State<BattleScreen> {
   /// motion, and not for the cards the mission plays by itself).
   void _maybeCutscene(BattleViewState view) {
     if (view.step == _cutsceneStep || MediaQuery.disableAnimationsOf(context)) return;
+    final callout = calloutFor(widget.ruleset, view.state, view.lastEvents);
+    if (callout != null && widget.ruleset.officers.containsKey(callout.officerId)) {
+      _cutsceneStep = view.step;
+      setState(() => _callout = callout);
+      return;
+    }
     for (final e in view.lastEvents) {
       if (e is CardPlayed && !e.scripted) {
         final card = widget.ruleset.cards[e.cardId];
@@ -472,6 +482,16 @@ class _BattleScreenState extends State<BattleScreen> {
                           choice: view.state.pendingChoice!,
                           ruleset: widget.ruleset,
                           onChoose: _cubit.resolveChoice,
+                        ),
+                      ),
+                    if (_callout != null)
+                      Positioned.fill(
+                        child: OfficerCallout(
+                          key: ValueKey('callout-$_cutsceneStep'),
+                          officer: widget.ruleset.officers[_callout!.officerId]!,
+                          kind: _callout!.kind,
+                          ruleset: widget.ruleset,
+                          onDone: () => setState(() => _callout = null),
                         ),
                       ),
                     if (_cutscene != null)

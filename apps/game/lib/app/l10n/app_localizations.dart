@@ -1807,6 +1807,12 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Chơi tiếp bắt đầu.'**
   String get logFreePlayStarted;
+
+  /// Caption of the king's shout when the turn is resolved.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xung phong!'**
+  String get calloutCharge;
 }
 
 class _AppLocalizationsDelegate

@@ -52,14 +52,44 @@ class BattleAudio {
   /// The chapter's music starts (and keeps going if it already plays).
   Future<void> start() => audio.playMusic(AudioPaths.chapterMusic(chapter));
 
+  /// Which end-of-turn shout comes next: the two recordings take turns.
+  int _endTurns = 0;
+
   /// Sounds for the step that just happened.
   void onStep(BattleViewState view) {
-    final effect = effectFor(view.lastEvents);
+    final events = view.lastEvents;
+    final effect = effectFor(events);
     if (effect != null) audio.playEffect(effect);
-    for (final e in view.lastEvents) {
-      // The debrief is read out after a win; a loss has no debrief to hear.
-      if (e is MissionEnded && e.outcome == Outcome.won) audio.playVoice(AudioPaths.debrief(missionId));
+    final voice = _voiceFor(events);
+    if (voice != null) audio.playVoice(voice);
+  }
+
+  /// The voice line of the step, if it has one: how the mission or free play
+  /// ended, an officer's skill, or the king's shout when the turn is resolved.
+  String? _voiceFor(List<GameEvent> events) {
+    bool? won;
+    for (final e in events) {
+      if (e is MissionEnded) won = e.outcome == Outcome.won;
+      if (e is FreePlayEnded) won = e.playerWon;
     }
+    if (won != null) {
+      if (!won) return audio.hasVoice(AudioPaths.defeated) ? AudioPaths.defeated : null;
+      if (audio.hasVoice(AudioPaths.victorious)) return AudioPaths.victorious;
+      // Without the victory line, the debrief is read out after a win.
+      return events.any((e) => e is MissionEnded) ? AudioPaths.debrief(missionId) : null;
+    }
+    for (final e in events) {
+      if (e is SkillUsed) {
+        final id = AudioPaths.skillVoice(e.officerId);
+        if (audio.hasVoice(id)) return id;
+      }
+    }
+    if (events.any((e) => e is PhaseChanged && e.phase == Phase.resolution)) {
+      _endTurns++;
+      final id = _endTurns.isOdd ? AudioPaths.endTurn : AudioPaths.endTurnAlt;
+      if (audio.hasVoice(id)) return id;
+    }
+    return null;
   }
 
   /// Leaving the battle: the narration and the music stop.

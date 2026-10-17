@@ -1044,4 +1044,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logFreePlayStarted => 'Free play begins.';
+
+  @override
+  String get calloutCharge => 'Charge!';
 }

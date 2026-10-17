@@ -83,6 +83,20 @@
     "loyaltyLocked": true,
     "isKing": false,
     "skill": {
+      "id": "quan-lenh",
+      "kind": "activated",
+      "usesPerMission": 1,
+      "name": { "vi": "Quân lệnh", "en": "Command of the Army" },
+      "text": {
+        "vi": "Thấy trước ý đồ quân Nguyên thêm hai lượt và làm giảm 1 sĩ khí mọi đạo quân Nguyên.",
+        "en": "See the Yuan intents two turns further ahead and lower the morale of every Yuan army by 1."
+      },
+      "effects": [
+        { "op": "revealIntent", "turnsAhead": 2 },
+        { "op": "modArmy", "target": "allArmies", "field": "morale", "delta": -1 }
+      ]
+    },
+    "passiveSkill": {
       "id": "borderWatch",
       "kind": "passive",
       "name": { "vi": "Trấn biên", "en": "Holding the Border" },
@@ -101,7 +115,8 @@
     "sourceRefs": ["mytour-top7-vi-tuong"],
     "todo": [
       "title: not given in build-spec section 5.",
-      "skill and flaw names from docs/plan.md, not section 5; en text drafted from vi, needs review."
+      "skill and flaw names from docs/plan.md, not section 5; en text drafted from vi, needs review.",
+      "skill 'Quân lệnh' (activated, once per mission) is an invented gameplay skill added by the owner's request, with the voice line voice/tran-quoc-tuan-skill.mp3; its name and text must be matched to that line and reviewed. Trấn biên stays as his passive (passiveSkill)."
     ]
   },
   {

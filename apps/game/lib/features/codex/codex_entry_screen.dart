@@ -189,6 +189,7 @@ class CodexEntryScreen extends StatelessWidget {
     if (o != null) {
       return [
         if (o.skill != null) block(l.inspectorSkill, o.skill!.name, o.skill!.text),
+        if (o.passiveSkill != null) block(l.inspectorSkill, o.passiveSkill!.name, o.passiveSkill!.text),
         if (o.flaw != null) block(l.inspectorFlaw, o.flaw!.name, o.flaw!.text),
       ];
     }

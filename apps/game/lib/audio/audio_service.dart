@@ -16,6 +16,17 @@ abstract final class AudioPaths {
   static String briefing(String missionId) => '${missionId}_briefing';
   static String debrief(String missionId) => '${missionId}_debrief';
 
+  /// Voice lines of the battle (`assets/audio/voice/`).
+  static const String victorious = 'victorious';
+  static const String defeated = 'defeated';
+
+  /// The king's shout when the turn is resolved; the two take turns.
+  static const String endTurn = 'end-turn';
+  static const String endTurnAlt = 'end-turn-2';
+
+  /// The line an officer says when they use their skill.
+  static String skillVoice(String officerId) => '$officerId-skill';
+
   /// The music of a chapter.
   static String chapterMusic(int chapter) => 'chapter$chapter';
 }

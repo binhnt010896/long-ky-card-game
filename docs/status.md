@@ -64,6 +64,13 @@ The game had no graphics at all; it now has painted art everywhere.
 - **Mission 3 hint**: the briefing and the single coach tip now say to gather in Thăng Long, Hold, and starve the army (evacuate or Empty Gardens, Empty Houses). This is gameplay advice from the simulator's intended line, flagged in the mission's `todo` for review.
 - Not changed: balance. Mission 3 is still hard by design (see `docs/balance/t25-report.md`).
 
+## Update 2026-10-17 (latest 4): officer callouts and voice lines
+
+- **Callout** (`officer_callout.dart`): when the turn is resolved the king's "charge" painting sweeps in with rays, his name and "Xung phong!"; when an officer uses an activated skill the same happens with the skill's name. 3.2 s, takes no taps, skipped with Reduce motion, not shown on the step where the mission ends. Officers without a `charge.jpg` (Nhật Hiệu) use their card painting.
+- **Voice** (`BattleAudio`): `end-turn` and `end-turn-2` alternate on each resolved turn; `<officerId>-skill` on a skill; `victorious` / `defeated` when the mission (or free play) ends (the debrief is read after a win only if there is no `victorious` file).
+- **Trần Quốc Tuấn** now has an activated skill **Quân lệnh** (once per mission: see Yuan intents two turns further ahead, lower every Yuan army's morale by 1) and keeps Trấn biên as a passive (`passiveSkill` in `officers.json`). Invented at the owner's request; its name and text need matching to `tran-quoc-tuan-skill.mp3` and a review. The expert strategy does not use it, so balance numbers are unchanged.
+- Not on the phone yet (it was locked): the callouts and the voices. Covered by widget and audio tests.
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

@@ -118,6 +118,12 @@ final class ContentParser {
     final skillObj = o.obj('skill', nullable: true);
     final skill = skillObj == null ? null : _skill(skillObj);
     skillObj?.done();
+    final passiveObj = o.has('passiveSkill') ? o.obj('passiveSkill', nullable: true) : null;
+    final passiveSkill = passiveObj == null ? null : _skill(passiveObj);
+    passiveObj?.done();
+    if (passiveSkill != null && passiveSkill.kind != SkillKind.passive) {
+      issues.error(Rule.schema, 'passiveSkillKind', o.file, o.path, 'passiveSkill must be a passive skill');
+    }
     final flawObj = o.obj('flaw', nullable: true);
     final flaw = flawObj == null ? null : _flaw(flawObj);
     flawObj?.done();
@@ -134,6 +140,7 @@ final class ContentParser {
       loyaltyLocked: o.boolean('loyaltyLocked'),
       isKing: o.boolean('isKing'),
       skill: skill,
+      passiveSkill: passiveSkill,
       flaw: flaw,
       portraitArt: portrait,
       cardArt: card,

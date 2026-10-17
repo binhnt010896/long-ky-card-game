@@ -50,6 +50,9 @@ class ArtImage extends StatelessWidget {
     );
   }
 
+  /// The app's art library, or an empty one outside the app.
+  static ArtLibrary libraryOf(BuildContext context) => _library(context);
+
   static ArtLibrary _library(BuildContext context) {
     try {
       return context.read<ArtLibrary>();

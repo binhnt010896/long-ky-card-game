@@ -146,6 +146,11 @@ class InspectorPanel extends StatelessWidget {
           ),
           _Line(l.content(skill.text)),
         ],
+        if (def.passiveSkill != null) ...[
+          const SizedBox(height: 6),
+          _Heading('${l.inspectorSkill}: ${l.content(def.passiveSkill!.name)} (${l.skillPassive})'),
+          _Line(l.content(def.passiveSkill!.text)),
+        ],
         if (flaw != null) ...[
           const SizedBox(height: 6),
           _Heading('${l.inspectorFlaw}: ${l.content(flaw.name)}'),

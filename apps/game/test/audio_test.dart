@@ -283,6 +283,41 @@ void main() {
       expect(b.played, isEmpty);
     });
 
+    test('the voice lines: the king\'s shout (two takes in turn), a skill, and how the battle ends', () async {
+      final b = RecordingBackend();
+      final audio = serviceWith(b, {
+        'voice/end-turn.mp3',
+        'voice/end-turn-2.mp3',
+        'voice/tran-thu-do-skill.mp3',
+        'voice/victorious.mp3',
+        'voice/defeated.mp3',
+        'voice/ch1_m2_debrief.mp3',
+      });
+      final sounds = BattleAudio(audio, missionId: 'ch1_m2', chapter: 1);
+      final state = GameEngine(rules).newGame(1).state;
+      List<String> voices() => [for (final p in b.played) if (p.channel == AudioChannel.voice) p.path];
+      void step(List<GameEvent> events) => sounds.onStep(BattleViewState(state: state, lastEvents: events));
+
+      step(const [PhaseChanged(Phase.resolution)]);
+      step(const [PhaseChanged(Phase.resolution)]);
+      step(const [PhaseChanged(Phase.resolution)]);
+      step(const [SkillUsed('tran-thu-do', 'dau-than-chua-roi')]);
+      step(const [SkillUsed('tran-khanh-du', 'x')]);
+      step(const [PhaseChanged(Phase.resolution), MissionEnded(Outcome.won)]);
+      step(const [MissionEnded(Outcome.lost)]);
+      step(const [FreePlayEnded(playerWon: true)]);
+      await Future<void>.delayed(Duration.zero);
+      expect(voices(), [
+        'voice/end-turn.mp3',
+        'voice/end-turn-2.mp3',
+        'voice/end-turn.mp3',
+        'voice/tran-thu-do-skill.mp3',
+        'voice/victorious.mp3',
+        'voice/defeated.mp3',
+        'voice/victorious.mp3',
+      ]);
+    });
+
     test('a lost mission has no debrief to hear', () async {
       final b = RecordingBackend();
       final sounds = BattleAudio(serviceWith(b, assets), missionId: 'ch1_m2', chapter: 1);
