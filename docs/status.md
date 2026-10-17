@@ -58,6 +58,12 @@ The game had no graphics at all; it now has painted art everywhere.
 - **Strategy cutscene:** playing a strategy shows its painting, name and effect under a brush streak and embers for 2.4 s (`strategy_cutscene.dart`); it takes no taps and is skipped with Reduce motion. No sound effects were made: the ElevenLabs connector here cannot save audio files into the repo.
 - Checked on the phone: wide map, buttons, hand button, cutscene. Not on the phone: objectives dialog and the review banner (covered by widget tests).
 
+## Update 2026-10-17 (latest 3): free play and a hint for mission 3
+
+- **Free play ("Chơi tiếp")**: when a mission ends (won or lost) the player can keep playing from the review banner or the Result screen. New engine action `continueFreePlay` (log-replayable), new state fields `freePlay`, `freePlayOutcome`, `endedIn`, events `FreePlayStarted`/`FreePlayEnded`. The mission's result and stars stand; the rest of the turn that was cut short is finished; win/loss rules and the season end no longer apply. Free play ends for good when the Yuan armies or our officers have no troops left (checked in `checkFreePlayEnd`, Yuan first). It can be played once per battle; a save made during free play resumes into it.
+- **Mission 3 hint**: the briefing and the single coach tip now say to gather in Thăng Long, Hold, and starve the army (evacuate or Empty Gardens, Empty Houses). This is gameplay advice from the simulator's intended line, flagged in the mission's `todo` for review.
+- Not changed: balance. Mission 3 is still hard by design (see `docs/balance/t25-report.md`).
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

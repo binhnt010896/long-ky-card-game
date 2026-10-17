@@ -27,5 +27,9 @@ sealed class GameAction with _$GameAction {
   /// Council → Orders. Orders → Resolution, Upkeep, next Intel, Council.
   const factory GameAction.endPhase() = EndPhase;
 
+  /// After the mission has ended (won or lost): keep playing until either
+  /// side has no troops left. The mission's result and stars stand.
+  const factory GameAction.continueFreePlay() = ContinueFreePlay;
+
   factory GameAction.fromJson(Map<String, Object?> json) => _$GameActionFromJson(json);
 }

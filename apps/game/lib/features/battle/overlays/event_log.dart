@@ -61,6 +61,8 @@ String? describeEvent(AppLocalizations l, Ruleset ruleset, GameState state, Game
     UnityChanged() => l.logUnityChanged(l.pillarName(event.pillar), event.from, event.to),
     ResourceChanged() => l.logResourceChanged(l.resourceName(event.resource), event.from, event.to),
     MissionEnded() => event.outcome == Outcome.won ? l.logMissionWon : l.logMissionLost,
+    FreePlayStarted() => l.logFreePlayStarted,
+    FreePlayEnded() => event.playerWon ? l.freePlayWon : l.freePlayLost,
     _ => null,
   };
 }

@@ -81,3 +81,11 @@ EndPhase _$EndPhaseFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$EndPhaseToJson(EndPhase instance) => <String, dynamic>{
   'type': instance.$type,
 };
+
+ContinueFreePlay _$ContinueFreePlayFromJson(Map<String, dynamic> json) {
+  $checkKeys(json, allowedKeys: const ['type']);
+  return ContinueFreePlay($type: json['type'] as String?);
+}
+
+Map<String, dynamic> _$ContinueFreePlayToJson(ContinueFreePlay instance) =>
+    <String, dynamic>{'type': instance.$type};

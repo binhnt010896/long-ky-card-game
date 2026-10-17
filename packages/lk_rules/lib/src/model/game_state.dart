@@ -180,6 +180,15 @@ abstract class GameState with _$GameState {
     @Default(<String>[]) List<String> discard,
     PendingChoice? pendingChoice,
 
+    /// Free play: after the mission ended the player kept playing, until
+    /// either side has no troops left. [outcome] stays the mission's own
+    /// result; [freePlayOutcome] is how the free play itself ended.
+    @Default(false) bool freePlay,
+    Outcome? freePlayOutcome,
+
+    /// The phase the mission ended in, so that free play can carry on from there.
+    Phase? endedIn,
+
     /// Scripted event cards of this turn still waiting behind a choice.
     @Default(<String>[]) List<String> scriptedQueue,
     @Default(1) int revealDepth,

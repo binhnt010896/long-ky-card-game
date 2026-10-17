@@ -4157,6 +4157,15 @@ mixin _$GameState {
   List<String> get discard;
   PendingChoice? get pendingChoice;
 
+  /// Free play: after the mission ended the player kept playing, until
+  /// either side has no troops left. [outcome] stays the mission's own
+  /// result; [freePlayOutcome] is how the free play itself ended.
+  bool get freePlay;
+  Outcome? get freePlayOutcome;
+
+  /// The phase the mission ended in, so that free play can carry on from there.
+  Phase? get endedIn;
+
   /// Scripted event cards of this turn still waiting behind a choice.
   List<String> get scriptedQueue;
   int get revealDepth;
@@ -4222,6 +4231,12 @@ mixin _$GameState {
             ) &&
             (identical(other.pendingChoice, _this.pendingChoice) ||
                 other.pendingChoice == _this.pendingChoice) &&
+            (identical(other.freePlay, _this.freePlay) ||
+                other.freePlay == _this.freePlay) &&
+            (identical(other.freePlayOutcome, _this.freePlayOutcome) ||
+                other.freePlayOutcome == _this.freePlayOutcome) &&
+            (identical(other.endedIn, _this.endedIn) ||
+                other.endedIn == _this.endedIn) &&
             const DeepCollectionEquality().equals(
               other.scriptedQueue,
               _this.scriptedQueue,
@@ -4261,6 +4276,9 @@ mixin _$GameState {
       const DeepCollectionEquality().hash(_this.hand),
       const DeepCollectionEquality().hash(_this.discard),
       _this.pendingChoice,
+      _this.freePlay,
+      _this.freePlayOutcome,
+      _this.endedIn,
       const DeepCollectionEquality().hash(_this.scriptedQueue),
       _this.revealDepth,
       const DeepCollectionEquality().hash(_this.flags),
@@ -4274,7 +4292,7 @@ mixin _$GameState {
   @override
   String toString() {
     final _this = this as GameState;
-    return 'GameState(missionId: ${_this.missionId}, seed: ${_this.seed}, rng: ${_this.rng}, turn: ${_this.turn}, phase: ${_this.phase}, outcome: ${_this.outcome}, lossReason: ${_this.lossReason}, rice: ${_this.rice}, support: ${_this.support}, unity: ${_this.unity}, nodes: ${_this.nodes}, officers: ${_this.officers}, armies: ${_this.armies}, ambushes: ${_this.ambushes}, deck: ${_this.deck}, hand: ${_this.hand}, discard: ${_this.discard}, pendingChoice: ${_this.pendingChoice}, scriptedQueue: ${_this.scriptedQueue}, revealDepth: ${_this.revealDepth}, flags: ${_this.flags}, evacuationsThisTurn: ${_this.evacuationsThisTurn}, missionStats: ${_this.missionStats}, stars: ${_this.stars}, log: ${_this.log})';
+    return 'GameState(missionId: ${_this.missionId}, seed: ${_this.seed}, rng: ${_this.rng}, turn: ${_this.turn}, phase: ${_this.phase}, outcome: ${_this.outcome}, lossReason: ${_this.lossReason}, rice: ${_this.rice}, support: ${_this.support}, unity: ${_this.unity}, nodes: ${_this.nodes}, officers: ${_this.officers}, armies: ${_this.armies}, ambushes: ${_this.ambushes}, deck: ${_this.deck}, hand: ${_this.hand}, discard: ${_this.discard}, pendingChoice: ${_this.pendingChoice}, freePlay: ${_this.freePlay}, freePlayOutcome: ${_this.freePlayOutcome}, endedIn: ${_this.endedIn}, scriptedQueue: ${_this.scriptedQueue}, revealDepth: ${_this.revealDepth}, flags: ${_this.flags}, evacuationsThisTurn: ${_this.evacuationsThisTurn}, missionStats: ${_this.missionStats}, stars: ${_this.stars}, log: ${_this.log})';
   }
 }
 
@@ -4302,6 +4320,9 @@ abstract mixin class $GameStateCopyWith<$Res> {
     List<String> hand,
     List<String> discard,
     PendingChoice? pendingChoice,
+    bool freePlay,
+    Outcome? freePlayOutcome,
+    Phase? endedIn,
     List<String> scriptedQueue,
     int revealDepth,
     List<String> flags,
@@ -4346,6 +4367,9 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
     Object? hand = null,
     Object? discard = null,
     Object? pendingChoice = freezed,
+    Object? freePlay = null,
+    Object? freePlayOutcome = freezed,
+    Object? endedIn = freezed,
     Object? scriptedQueue = null,
     Object? revealDepth = null,
     Object? flags = null,
@@ -4428,6 +4452,18 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
             ? _self.pendingChoice
             : pendingChoice // ignore: cast_nullable_to_non_nullable
                   as PendingChoice?,
+        freePlay: null == freePlay
+            ? _self.freePlay
+            : freePlay // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        freePlayOutcome: freezed == freePlayOutcome
+            ? _self.freePlayOutcome
+            : freePlayOutcome // ignore: cast_nullable_to_non_nullable
+                  as Outcome?,
+        endedIn: freezed == endedIn
+            ? _self.endedIn
+            : endedIn // ignore: cast_nullable_to_non_nullable
+                  as Phase?,
         scriptedQueue: null == scriptedQueue
             ? _self.scriptedQueue
             : scriptedQueue // ignore: cast_nullable_to_non_nullable
@@ -4607,6 +4643,9 @@ extension GameStatePatterns on GameState {
       List<String> hand,
       List<String> discard,
       PendingChoice? pendingChoice,
+      bool freePlay,
+      Outcome? freePlayOutcome,
+      Phase? endedIn,
       List<String> scriptedQueue,
       int revealDepth,
       List<String> flags,
@@ -4640,6 +4679,9 @@ extension GameStatePatterns on GameState {
           _that.hand,
           _that.discard,
           _that.pendingChoice,
+          _that.freePlay,
+          _that.freePlayOutcome,
+          _that.endedIn,
           _that.scriptedQueue,
           _that.revealDepth,
           _that.flags,
@@ -4687,6 +4729,9 @@ extension GameStatePatterns on GameState {
       List<String> hand,
       List<String> discard,
       PendingChoice? pendingChoice,
+      bool freePlay,
+      Outcome? freePlayOutcome,
+      Phase? endedIn,
       List<String> scriptedQueue,
       int revealDepth,
       List<String> flags,
@@ -4719,6 +4764,9 @@ extension GameStatePatterns on GameState {
           _that.hand,
           _that.discard,
           _that.pendingChoice,
+          _that.freePlay,
+          _that.freePlayOutcome,
+          _that.endedIn,
           _that.scriptedQueue,
           _that.revealDepth,
           _that.flags,
@@ -4765,6 +4813,9 @@ extension GameStatePatterns on GameState {
       List<String> hand,
       List<String> discard,
       PendingChoice? pendingChoice,
+      bool freePlay,
+      Outcome? freePlayOutcome,
+      Phase? endedIn,
       List<String> scriptedQueue,
       int revealDepth,
       List<String> flags,
@@ -4797,6 +4848,9 @@ extension GameStatePatterns on GameState {
           _that.hand,
           _that.discard,
           _that.pendingChoice,
+          _that.freePlay,
+          _that.freePlayOutcome,
+          _that.endedIn,
           _that.scriptedQueue,
           _that.revealDepth,
           _that.flags,
@@ -4833,6 +4887,9 @@ class _GameState extends GameState {
     List<String> hand = const <String>[],
     List<String> discard = const <String>[],
     this.pendingChoice,
+    this.freePlay = false,
+    this.freePlayOutcome,
+    this.endedIn,
     List<String> scriptedQueue = const <String>[],
     this.revealDepth = 1,
     List<String> flags = const <String>[],
@@ -4940,6 +4997,19 @@ class _GameState extends GameState {
   @override
   final PendingChoice? pendingChoice;
 
+  /// Free play: after the mission ended the player kept playing, until
+  /// either side has no troops left. [outcome] stays the mission's own
+  /// result; [freePlayOutcome] is how the free play itself ended.
+  @override
+  @JsonKey()
+  final bool freePlay;
+  @override
+  final Outcome? freePlayOutcome;
+
+  /// The phase the mission ended in, so that free play can carry on from there.
+  @override
+  final Phase? endedIn;
+
   /// Scripted event cards of this turn still waiting behind a choice.
   final List<String> _scriptedQueue;
 
@@ -5038,6 +5108,11 @@ class _GameState extends GameState {
             const DeepCollectionEquality().equals(other.discard, _discard) &&
             (identical(other.pendingChoice, pendingChoice) ||
                 other.pendingChoice == pendingChoice) &&
+            (identical(other.freePlay, freePlay) ||
+                other.freePlay == freePlay) &&
+            (identical(other.freePlayOutcome, freePlayOutcome) ||
+                other.freePlayOutcome == freePlayOutcome) &&
+            (identical(other.endedIn, endedIn) || other.endedIn == endedIn) &&
             const DeepCollectionEquality().equals(
               other.scriptedQueue,
               _scriptedQueue,
@@ -5076,6 +5151,9 @@ class _GameState extends GameState {
       const DeepCollectionEquality().hash(_hand),
       const DeepCollectionEquality().hash(_discard),
       pendingChoice,
+      freePlay,
+      freePlayOutcome,
+      endedIn,
       const DeepCollectionEquality().hash(_scriptedQueue),
       revealDepth,
       const DeepCollectionEquality().hash(_flags),
@@ -5088,7 +5166,7 @@ class _GameState extends GameState {
 
   @override
   String toString() {
-    return 'GameState(missionId: $missionId, seed: $seed, rng: $rng, turn: $turn, phase: $phase, outcome: $outcome, lossReason: $lossReason, rice: $rice, support: $support, unity: $unity, nodes: $nodes, officers: $officers, armies: $armies, ambushes: $ambushes, deck: $deck, hand: $hand, discard: $discard, pendingChoice: $pendingChoice, scriptedQueue: $scriptedQueue, revealDepth: $revealDepth, flags: $flags, evacuationsThisTurn: $evacuationsThisTurn, missionStats: $missionStats, stars: $stars, log: $log)';
+    return 'GameState(missionId: $missionId, seed: $seed, rng: $rng, turn: $turn, phase: $phase, outcome: $outcome, lossReason: $lossReason, rice: $rice, support: $support, unity: $unity, nodes: $nodes, officers: $officers, armies: $armies, ambushes: $ambushes, deck: $deck, hand: $hand, discard: $discard, pendingChoice: $pendingChoice, freePlay: $freePlay, freePlayOutcome: $freePlayOutcome, endedIn: $endedIn, scriptedQueue: $scriptedQueue, revealDepth: $revealDepth, flags: $flags, evacuationsThisTurn: $evacuationsThisTurn, missionStats: $missionStats, stars: $stars, log: $log)';
   }
 }
 
@@ -5120,6 +5198,9 @@ abstract mixin class _$GameStateCopyWith<$Res>
     List<String> hand,
     List<String> discard,
     PendingChoice? pendingChoice,
+    bool freePlay,
+    Outcome? freePlayOutcome,
+    Phase? endedIn,
     List<String> scriptedQueue,
     int revealDepth,
     List<String> flags,
@@ -5167,6 +5248,9 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
     Object? hand = null,
     Object? discard = null,
     Object? pendingChoice = freezed,
+    Object? freePlay = null,
+    Object? freePlayOutcome = freezed,
+    Object? endedIn = freezed,
     Object? scriptedQueue = null,
     Object? revealDepth = null,
     Object? flags = null,
@@ -5249,6 +5333,18 @@ class __$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
             ? _self.pendingChoice
             : pendingChoice // ignore: cast_nullable_to_non_nullable
                   as PendingChoice?,
+        freePlay: null == freePlay
+            ? _self.freePlay
+            : freePlay // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        freePlayOutcome: freezed == freePlayOutcome
+            ? _self.freePlayOutcome
+            : freePlayOutcome // ignore: cast_nullable_to_non_nullable
+                  as Outcome?,
+        endedIn: freezed == endedIn
+            ? _self.endedIn
+            : endedIn // ignore: cast_nullable_to_non_nullable
+                  as Phase?,
         scriptedQueue: null == scriptedQueue
             ? _self._scriptedQueue
             : scriptedQueue // ignore: cast_nullable_to_non_nullable

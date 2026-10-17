@@ -259,3 +259,15 @@ final class MissionEnded extends GameEvent {
   final String? reason;
   final List<bool> stars;
 }
+
+/// The player chose to keep playing after the mission ended.
+final class FreePlayStarted extends GameEvent {
+  const FreePlayStarted();
+}
+
+/// Free play is over: one side has no troops left. [playerWon] is true when
+/// it was the Yuan side.
+final class FreePlayEnded extends GameEvent {
+  const FreePlayEnded({required this.playerWon});
+  final bool playerWon;
+}

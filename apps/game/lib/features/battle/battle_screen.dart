@@ -456,6 +456,7 @@ class _BattleScreenState extends State<BattleScreen> {
                       Positioned.fill(
                         child: ResultScreen(
                           onReview: () => setState(() => _showResult = false),
+                          onContinue: _continueFreePlay,
                           state: view.state,
                           ruleset: widget.ruleset,
                           onBack: widget.onExit,
@@ -496,11 +497,14 @@ class _BattleScreenState extends State<BattleScreen> {
   /// After the last step the board stays, so the player can look at who is
   /// where; the Result screen opens when they ask for it.
   Widget _reviewBanner(GameState state, AppLocalizations l) {
-    final won = state.outcome == Outcome.won;
+    // After free play the banner tells how free play ended; the mission's own
+    // result is on the Result screen.
+    final won = state.freePlay ? state.freePlayOutcome == Outcome.won : state.outcome == Outcome.won;
     final accent = won ? LongKyColors.goldLeaf : const Color(0xFFE88A80);
+    final title = state.freePlay ? (won ? l.freePlayWon : l.freePlayLost) : (won ? l.outcomeWon : l.outcomeLost);
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 640),
+        constraints: const BoxConstraints(maxWidth: 680),
         child: Container(
           key: const Key('review-banner'),
           padding: const EdgeInsets.fromLTRB(14, 8, 8, 8),
@@ -517,26 +521,49 @@ class _BattleScreenState extends State<BattleScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      won ? l.outcomeWon : l.outcomeLost,
+                      title,
                       key: const Key('review-title'),
-                      style: TextStyle(color: accent, fontSize: 20, fontWeight: FontWeight.w700),
+                      style: TextStyle(color: accent, fontSize: state.freePlay ? 16 : 20, fontWeight: FontWeight.w700),
                     ),
-                    Text(l.reviewHint, style: const TextStyle(color: LongKyColors.ivory, fontSize: 13)),
+                    Text(
+                      state.freePlay ? l.reviewHint : '${l.reviewHint} ${l.freePlayHint}',
+                      style: const TextStyle(color: LongKyColors.ivory, fontSize: 13),
+                    ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              FilledButton(
-                key: const Key('review-result'),
-                onPressed: () => setState(() => _showResult = true),
-                style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
-                child: Text(l.reviewResult),
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                alignment: WrapAlignment.end,
+                children: [
+                  if (!state.freePlay)
+                    OutlinedButton(
+                      key: const Key('review-continue'),
+                      onPressed: _continueFreePlay,
+                      style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                      child: Text(l.freePlayContinue),
+                    ),
+                  FilledButton(
+                    key: const Key('review-result'),
+                    onPressed: () => setState(() => _showResult = true),
+                    style: FilledButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                    child: Text(l.reviewResult),
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  /// Goes on playing after the mission ended, until one side has no troops.
+  void _continueFreePlay() {
+    setState(() => _showResult = false);
+    _cubit.continueFreePlay();
   }
 
   Widget _board(BattleViewState view, AppLocalizations l) => BoardHover(
@@ -742,6 +769,7 @@ class _BattleScreenState extends State<BattleScreen> {
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (view.state.freePlay && !view.state.isOver) const _FreePlayTag(),
                     ObjectivesButton(onPressed: _openObjectives),
                     LogButton(onPressed: _toggleLog),
                   ],
@@ -833,7 +861,13 @@ class _BattleScreenState extends State<BattleScreen> {
         return Stack(
           children: [
             Positioned.fromRect(rect: boardRect, child: _board(view, l)),
-            Positioned(left: 0, right: 0, top: 0, child: _topBar(view, mode, trailing: ObjectivesButton(onPressed: _openObjectives))),
+            Positioned(left: 0, right: 0, top: 0, child: _topBar(view, mode, trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (view.state.freePlay && !view.state.isOver) const _FreePlayTag(),
+                ObjectivesButton(onPressed: _openObjectives),
+              ],
+            ))),
             Positioned(
               left: 0,
               top: top,
@@ -946,4 +980,25 @@ class _FloatingInspectorDelegate extends SingleChildLayoutDelegate {
 
   @override
   bool shouldRelayout(_FloatingInspectorDelegate old) => old.anchor != anchor || old.gap != gap || old.bounds != bounds;
+}
+
+
+/// "Free play" in the top bar: the mission has ended and the player plays on.
+class _FreePlayTag extends StatelessWidget {
+  const _FreePlayTag();
+
+  @override
+  Widget build(BuildContext context) => Container(
+    key: const Key('free-play-tag'),
+    margin: const EdgeInsets.only(right: 4),
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: LongKyColors.goldLeaf),
+    ),
+    child: Text(
+      AppLocalizations.of(context).freePlayTag,
+      style: const TextStyle(color: LongKyColors.goldLeaf, fontSize: 12, fontWeight: FontWeight.w700),
+    ),
+  );
 }

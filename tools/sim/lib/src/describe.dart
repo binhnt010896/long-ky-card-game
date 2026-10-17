@@ -35,6 +35,7 @@ final class Describer {
         SetOrder(:final officerId, :final order) => '${officer(officerId)}: ${this.order(order)}',
         ClearOrder(:final officerId) => '${officer(officerId)}: clear order',
         EndPhase() => 'end ${s.phase.name}',
+        ContinueFreePlay() => 'continue in free play',
       };
 
   String _optionLabel(GameState s, int index) {
@@ -92,6 +93,8 @@ final class Describer {
         InducementResisted(:final officerId) => '${officer(officerId)} resists the inducement',
         CardsDrawn(:final cardIds) => 'Drew ${cardIds.map(card).join(', ')}',
         DeckShuffled(:final size) => 'Discard reshuffled into the deck ($size cards)',
+        FreePlayStarted() => '*** Free play ***',
+        FreePlayEnded(:final playerWon) => '*** Free play over: ${playerWon ? 'the Yuan have no troops' : 'our troops are gone'} ***',
         MissionEnded(:final outcome, :final reason, :final stars) =>
           '*** Mission ${outcome.name.toUpperCase()}${reason == null ? '' : ' ($reason)'} · stars ${stars.where((x) => x).length}/${stars.length} ***',
       };

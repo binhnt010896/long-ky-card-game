@@ -106,7 +106,9 @@ final class GameEngine {
   /// Applies [action] to [state]. Throws [IllegalAction] if it is not legal;
   /// the input state is never modified.
   StepResult apply(GameState state, GameAction action) {
-    if (state.isOver) throw const IllegalAction(IllegalCodes.gameOver);
+    if (state.isOver && !(action is ContinueFreePlay && state.outcome != null && !state.freePlay)) {
+      throw const IllegalAction(IllegalCodes.gameOver);
+    }
     if (state.pendingChoice != null && action is! ResolveChoice) {
       throw const IllegalAction(IllegalCodes.choicePending);
     }
@@ -126,6 +128,9 @@ final class GameEngine {
       case ClearOrder():
         _requirePhase(state, Phase.orders);
         clearOrder(tx, action);
+      case ContinueFreePlay():
+        if (!state.isOver) throw IllegalAction(IllegalCodes.wrongPhase, 'free play starts after the mission ends');
+        continueFreePlay(tx);
       case EndPhase():
         if (state.phase == Phase.council) {
           if (state.hasFlag(GameFlags.skipOrders)) {

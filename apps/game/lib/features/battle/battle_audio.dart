@@ -21,6 +21,8 @@ String? effectFor(Iterable<GameEvent> events) {
     switch (e) {
       case MissionEnded():
         offer(e.outcome == Outcome.won ? 'victory' : 'defeat', 5);
+      case FreePlayEnded():
+        offer(e.playerWon ? 'victory' : 'defeat', 5);
       case BattleResolved():
         offer('battle', 4);
       case OfficerCaptured():

@@ -25,6 +25,8 @@ GameAction _$GameActionFromJson(Map<String, dynamic> json) {
       return ClearOrder.fromJson(json);
     case 'endPhase':
       return EndPhase.fromJson(json);
+    case 'continueFreePlay':
+      return ContinueFreePlay.fromJson(json);
 
     default:
       throw CheckedFromJsonException(
@@ -84,6 +86,7 @@ extension GameActionPatterns on GameAction {
     TResult Function(SetOrder value)? setOrder,
     TResult Function(ClearOrder value)? clearOrder,
     TResult Function(EndPhase value)? endPhase,
+    TResult Function(ContinueFreePlay value)? continueFreePlay,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -100,6 +103,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that);
       case EndPhase() when endPhase != null:
         return endPhase(_that);
+      case ContinueFreePlay() when continueFreePlay != null:
+        return continueFreePlay(_that);
       case _:
         return orElse();
     }
@@ -126,6 +131,7 @@ extension GameActionPatterns on GameAction {
     required TResult Function(SetOrder value) setOrder,
     required TResult Function(ClearOrder value) clearOrder,
     required TResult Function(EndPhase value) endPhase,
+    required TResult Function(ContinueFreePlay value) continueFreePlay,
   }) {
     final _that = this;
     switch (_that) {
@@ -141,6 +147,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that);
       case EndPhase():
         return endPhase(_that);
+      case ContinueFreePlay():
+        return continueFreePlay(_that);
     }
   }
 
@@ -164,6 +172,7 @@ extension GameActionPatterns on GameAction {
     TResult? Function(SetOrder value)? setOrder,
     TResult? Function(ClearOrder value)? clearOrder,
     TResult? Function(EndPhase value)? endPhase,
+    TResult? Function(ContinueFreePlay value)? continueFreePlay,
   }) {
     final _that = this;
     switch (_that) {
@@ -179,6 +188,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that);
       case EndPhase() when endPhase != null:
         return endPhase(_that);
+      case ContinueFreePlay() when continueFreePlay != null:
+        return continueFreePlay(_that);
       case _:
         return null;
     }
@@ -204,6 +215,7 @@ extension GameActionPatterns on GameAction {
     TResult Function(String officerId, Order order)? setOrder,
     TResult Function(String officerId)? clearOrder,
     TResult Function()? endPhase,
+    TResult Function()? continueFreePlay,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -220,6 +232,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that.officerId);
       case EndPhase() when endPhase != null:
         return endPhase();
+      case ContinueFreePlay() when continueFreePlay != null:
+        return continueFreePlay();
       case _:
         return orElse();
     }
@@ -246,6 +260,7 @@ extension GameActionPatterns on GameAction {
     required TResult Function(String officerId, Order order) setOrder,
     required TResult Function(String officerId) clearOrder,
     required TResult Function() endPhase,
+    required TResult Function() continueFreePlay,
   }) {
     final _that = this;
     switch (_that) {
@@ -261,6 +276,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that.officerId);
       case EndPhase():
         return endPhase();
+      case ContinueFreePlay():
+        return continueFreePlay();
     }
   }
 
@@ -284,6 +301,7 @@ extension GameActionPatterns on GameAction {
     TResult? Function(String officerId, Order order)? setOrder,
     TResult? Function(String officerId)? clearOrder,
     TResult? Function()? endPhase,
+    TResult? Function()? continueFreePlay,
   }) {
     final _that = this;
     switch (_that) {
@@ -299,6 +317,8 @@ extension GameActionPatterns on GameAction {
         return clearOrder(_that.officerId);
       case EndPhase() when endPhase != null:
         return endPhase();
+      case ContinueFreePlay() when continueFreePlay != null:
+        return continueFreePlay();
       case _:
         return null;
     }
@@ -751,5 +771,36 @@ class EndPhase implements GameAction {
   @override
   String toString() {
     return 'GameAction.endPhase()';
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class ContinueFreePlay implements GameAction {
+  const ContinueFreePlay({String? $type}) : $type = $type ?? 'continueFreePlay';
+  factory ContinueFreePlay.fromJson(Map<String, dynamic> json) =>
+      _$ContinueFreePlayFromJson(json);
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$ContinueFreePlayToJson(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is ContinueFreePlay);
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'GameAction.continueFreePlay()';
   }
 }

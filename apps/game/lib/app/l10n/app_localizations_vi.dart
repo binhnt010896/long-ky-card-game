@@ -1024,4 +1024,22 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get reviewHint =>
       'Chạm vào tướng hoặc địa điểm để xem. Phóng to, kéo để di chuyển.';
+
+  @override
+  String get freePlayContinue => 'Chơi tiếp';
+
+  @override
+  String get freePlayTag => 'Chơi tiếp';
+
+  @override
+  String get freePlayHint => 'Chơi tiếp đến khi một bên hết quân.';
+
+  @override
+  String get freePlayWon => 'Chơi tiếp kết thúc: quân Nguyên hết quân.';
+
+  @override
+  String get freePlayLost => 'Chơi tiếp kết thúc: quân ta hết quân.';
+
+  @override
+  String get logFreePlayStarted => 'Chơi tiếp bắt đầu.';
 }

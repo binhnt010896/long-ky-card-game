@@ -189,7 +189,9 @@ class _BattlePageState extends State<BattlePage> {
     final s = view.state;
     if (s.isOver) {
       _saves?.clear();
-      if (s.outcome == Outcome.won) _progress?.recordStars(s.missionId, s.stars);
+      // Free play changes nothing about the mission's result, which was
+      // recorded when the mission ended.
+      if (s.outcome == Outcome.won && !s.freePlay) _progress?.recordStars(s.missionId, s.stars);
       return;
     }
     _saves?.save(SaveGame(missionId: s.missionId, contentHash: content.contentHash, seed: s.seed, actions: s.log));

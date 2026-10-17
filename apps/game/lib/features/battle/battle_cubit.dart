@@ -90,6 +90,9 @@ class BattleCubit extends Cubit<BattleViewState> {
 
   bool resolveChoice(int index) => perform(GameAction.resolveChoice(index: index));
 
+  /// After the mission has ended: keep playing until one side has no troops.
+  bool continueFreePlay() => perform(const GameAction.continueFreePlay());
+
   /// Orders can be changed freely until the phase ends.
   bool setOrder(String officerId, Order order) => perform(GameAction.setOrder(officerId: officerId, order: order));
 

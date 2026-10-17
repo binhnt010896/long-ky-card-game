@@ -56,6 +56,10 @@ bool kingCaptured(Tx tx) => tx.s.officers.entries.any(
 /// objectives hold or the season is over. Losses are checked first.
 void checkEnd(Tx tx, {required bool endOfTurn}) {
   if (tx.s.isOver) return;
+  if (tx.s.freePlay) {
+    checkFreePlayEnd(tx);
+    return;
+  }
   final lossReason = _lossReason(tx);
   if (lossReason != null) {
     endMission(tx, Outcome.lost, lossReason);
@@ -81,8 +85,27 @@ String? _lossReason(Tx tx) {
   return null;
 }
 
+/// Free play ends when one side has no troops left: the Yuan armies (the
+/// side that is still standing) or the Đại Việt officers. The Yuan are
+/// checked first, so if both are gone it is a win.
+void checkFreePlayEnd(Tx tx) {
+  if (tx.s.isOver) return;
+  final yuan = tx.s.armies.values.where((a) => a.status == ArmyStatus.active).fold(0, (n, a) => n + a.troops);
+  final ours = tx.s.officers.values.where((o) => o.status == OfficerStatus.active).fold(0, (n, o) => n + o.troops);
+  if (yuan > 0 && ours > 0) return;
+  final won = yuan <= 0;
+  tx.s = tx.s.copyWith(
+    phase: Phase.ended,
+    pendingChoice: null,
+    scriptedQueue: const [],
+    freePlayOutcome: won ? Outcome.won : Outcome.lost,
+  );
+  tx.emit(FreePlayEnded(playerWon: won));
+}
+
 void endMission(Tx tx, Outcome outcome, String? reason) {
   tx.s = tx.s.copyWith(
+    endedIn: tx.s.phase,
     phase: Phase.ended,
     pendingChoice: null,
     scriptedQueue: const [],

@@ -1771,6 +1771,42 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Chạm vào tướng hoặc địa điểm để xem. Phóng to, kéo để di chuyển.'**
   String get reviewHint;
+
+  /// Button: go on playing after the mission ended.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp'**
+  String get freePlayContinue;
+
+  /// Tag in the top bar during free play.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp'**
+  String get freePlayTag;
+
+  /// Hint on the review banner.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp đến khi một bên hết quân.'**
+  String get freePlayHint;
+
+  /// How free play ended.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp kết thúc: quân Nguyên hết quân.'**
+  String get freePlayWon;
+
+  /// How free play ended.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp kết thúc: quân ta hết quân.'**
+  String get freePlayLost;
+
+  /// Log line.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chơi tiếp bắt đầu.'**
+  String get logFreePlayStarted;
 }
 
 class _AppLocalizationsDelegate

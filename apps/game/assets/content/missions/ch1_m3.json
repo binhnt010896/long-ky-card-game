@@ -7,8 +7,8 @@
     "en": "Leaving Thăng Long Open"
   },
   "briefing": {
-    "vi": "Mục tiêu: trụ vững đủ 6 lượt và đến cuối nhiệm vụ, quân Nguyên còn không quá một phần tư Lương thảo.",
-    "en": "Goal: hold out for 6 turns, ending with the Yuan army at no more than a quarter of its Supply."
+    "vi": "Mục tiêu: trụ vững đủ 6 lượt và đến cuối nhiệm vụ, quân Nguyên còn không quá một phần tư Lương thảo. Gợi ý: quân Nguyên mạnh hơn nhiều, đừng giao tranh ngoài đồng. Dồn các tướng về Thăng Long và ra lệnh Giữ; dùng Vườn không nhà trống để quân Nguyên cạn lương rồi tự suy yếu.",
+    "en": "Goal: hold out for 6 turns, ending with the Yuan army at no more than a quarter of its Supply. Hint: the Yuan army is much stronger, so do not fight it in the open. Gather your officers in Thăng Long and order them to Hold, and use Empty Gardens, Empty Houses to leave the army without rice until it wastes away."
   },
   "debrief": {
     "vi": "Kết thúc nhiệm vụ Bỏ ngỏ Thăng Long.",
@@ -120,8 +120,8 @@
     {
       "id": "m3-tip",
       "text": {
-        "vi": "Sơ tán các nút trước khi quân Nguyên tới, để họ không cướp được lương.",
-        "en": "Evacuate nodes before the Yuan arrive, so they find no rice to forage."
+        "vi": "Quân Nguyên mạnh hơn nhiều: đừng đánh ngoài đồng. Dồn các tướng về Thăng Long và ra lệnh Giữ. Rồi sơ tán các nút hoặc dùng Vườn không nhà trống để quân Nguyên không cướp được lương và cạn Lương thảo.",
+        "en": "The Yuan are far stronger: do not fight in the open. Gather your officers in Thăng Long and order Hold. Then evacuate nodes or play Empty Gardens, Empty Houses so the Yuan find no rice and run out of Supply."
       },
       "highlight": "map"
     }
@@ -134,6 +134,7 @@
   "todo": [
     "briefing/debrief: section 5 gives no narration; these are objective summaries only. Historian-approved narration (also the ElevenLabs script) is needed.",
     "en title, briefing, debrief and tutorial drafted from vi, need review.",
+    "briefing hint and the m3-tip tutorial step are gameplay advice from the simulator's intended line (stack and hold, starve the army), not history.",
     "sourceRefs taken from the docs/plan.md campaign table; history reviewer to confirm.",
     "tutorial highlight ids are placeholders until the battle UI defines them (T-22).",
     "T-25 balance (docs/balance/t25-report.md): the starting troops of the Đại Việt officers are 60% of build-spec section 5 (7/4/4/2/5 for Thái Tông, Thủ Độ, Lê Phụ Trần, Nhật Hiệu, Khánh Dư), or standing and fighting at Thăng Long won against any play."

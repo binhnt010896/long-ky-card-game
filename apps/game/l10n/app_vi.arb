@@ -537,5 +537,17 @@
   "reviewResult": "Xem kết quả",
   "@reviewResult": {"description": "Button on the review banner."},
   "reviewHint": "Chạm vào tướng hoặc địa điểm để xem. Phóng to, kéo để di chuyển.",
-  "@reviewHint": {"description": "Hint while looking at the board after the battle."}
+  "@reviewHint": {"description": "Hint while looking at the board after the battle."},
+  "freePlayContinue": "Chơi tiếp",
+  "@freePlayContinue": {"description": "Button: go on playing after the mission ended."},
+  "freePlayTag": "Chơi tiếp",
+  "@freePlayTag": {"description": "Tag in the top bar during free play."},
+  "freePlayHint": "Chơi tiếp đến khi một bên hết quân.",
+  "@freePlayHint": {"description": "Hint on the review banner."},
+  "freePlayWon": "Chơi tiếp kết thúc: quân Nguyên hết quân.",
+  "@freePlayWon": {"description": "How free play ended."},
+  "freePlayLost": "Chơi tiếp kết thúc: quân ta hết quân.",
+  "@freePlayLost": {"description": "How free play ended."},
+  "logFreePlayStarted": "Chơi tiếp bắt đầu.",
+  "@logFreePlayStarted": {"description": "Log line."}
 }

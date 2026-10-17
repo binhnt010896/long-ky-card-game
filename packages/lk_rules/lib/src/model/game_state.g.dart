@@ -336,6 +336,9 @@ _GameState _$GameStateFromJson(Map<String, dynamic> json) {
       'hand',
       'discard',
       'pendingChoice',
+      'freePlay',
+      'freePlayOutcome',
+      'endedIn',
       'scriptedQueue',
       'revealDepth',
       'flags',
@@ -382,6 +385,12 @@ _GameState _$GameStateFromJson(Map<String, dynamic> json) {
     pendingChoice: json['pendingChoice'] == null
         ? null
         : PendingChoice.fromJson(json['pendingChoice'] as Map<String, dynamic>),
+    freePlay: json['freePlay'] as bool? ?? false,
+    freePlayOutcome: $enumDecodeNullable(
+      _$OutcomeEnumMap,
+      json['freePlayOutcome'],
+    ),
+    endedIn: $enumDecodeNullable(_$PhaseEnumMap, json['endedIn']),
     scriptedQueue:
         (json['scriptedQueue'] as List<dynamic>?)
             ?.map((e) => e as String)
@@ -426,6 +435,9 @@ Map<String, dynamic> _$GameStateToJson(_GameState instance) =>
       'hand': instance.hand,
       'discard': instance.discard,
       'pendingChoice': instance.pendingChoice?.toJson(),
+      'freePlay': instance.freePlay,
+      'freePlayOutcome': _$OutcomeEnumMap[instance.freePlayOutcome],
+      'endedIn': _$PhaseEnumMap[instance.endedIn],
       'scriptedQueue': instance.scriptedQueue,
       'revealDepth': instance.revealDepth,
       'flags': instance.flags,

@@ -1026,4 +1026,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get reviewHint =>
       'Tap officers or places to look. Zoom and drag to explore.';
+
+  @override
+  String get freePlayContinue => 'Keep playing';
+
+  @override
+  String get freePlayTag => 'Free play';
+
+  @override
+  String get freePlayHint => 'Play on until one side has no troops left.';
+
+  @override
+  String get freePlayWon => 'Free play over: the Yuan have no troops left.';
+
+  @override
+  String get freePlayLost => 'Free play over: our troops are gone.';
+
+  @override
+  String get logFreePlayStarted => 'Free play begins.';
 }

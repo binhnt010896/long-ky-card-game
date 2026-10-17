@@ -278,5 +278,11 @@
   "objectivesStars": "Bonus stars",
   "reviewBoard": "Review the battlefield",
   "reviewResult": "See the result",
-  "reviewHint": "Tap officers or places to look. Zoom and drag to explore."
+  "reviewHint": "Tap officers or places to look. Zoom and drag to explore.",
+  "freePlayContinue": "Keep playing",
+  "freePlayTag": "Free play",
+  "freePlayHint": "Play on until one side has no troops left.",
+  "freePlayWon": "Free play over: the Yuan have no troops left.",
+  "freePlayLost": "Free play over: our troops are gone.",
+  "logFreePlayStarted": "Free play begins."
 }

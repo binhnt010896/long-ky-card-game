@@ -28,6 +28,7 @@ class ResultScreen extends StatelessWidget {
     this.newlyUnlocked = false,
     this.onNext,
     this.onReview,
+    this.onContinue,
   });
 
   final GameState state;
@@ -42,6 +43,9 @@ class ResultScreen extends StatelessWidget {
 
   /// Goes back to the board to look at where everyone stands.
   final VoidCallback? onReview;
+
+  /// Goes on playing in free play (not offered once free play has been played).
+  final VoidCallback? onContinue;
 
   String _lossReason(AppLocalizations l) {
     final r = state.lossReason;
@@ -102,6 +106,14 @@ class ResultScreen extends StatelessWidget {
                           key: const Key('result-title'),
                           style: TextStyle(color: accent, fontSize: 30, fontWeight: FontWeight.w700),
                         ),
+                        if (state.freePlayOutcome != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            state.freePlayOutcome == Outcome.won ? l.freePlayWon : l.freePlayLost,
+                            key: const Key('result-free-play'),
+                            style: const TextStyle(color: LongKyColors.goldLeaf, fontSize: 14),
+                          ),
+                        ],
                         if (!won) ...[
                           const SizedBox(height: 4),
                           Text(
@@ -184,6 +196,13 @@ class ResultScreen extends StatelessWidget {
                           onPressed: onReview,
                           style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
                           child: Text(l.reviewBoard),
+                        ),
+                      if (onContinue != null && !state.freePlay)
+                        OutlinedButton(
+                          key: const Key('result-continue'),
+                          onPressed: onContinue,
+                          style: OutlinedButton.styleFrom(minimumSize: const Size(0, minTouch)),
+                          child: Text(l.freePlayContinue),
                         ),
                       if (onRetry != null)
                         OutlinedButton(
