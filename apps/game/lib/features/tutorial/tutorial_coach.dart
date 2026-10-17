@@ -74,6 +74,8 @@ class TutorialCoach extends StatelessWidget {
     required this.target,
     required this.onNext,
     required this.onSkip,
+    this.waitingForAction = false,
+    this.onSkipStep,
     this.safe = EdgeInsets.zero,
   });
 
@@ -87,6 +89,11 @@ class TutorialCoach extends StatelessWidget {
   final Rect? target;
   final VoidCallback onNext;
   final VoidCallback onSkip;
+
+  /// The step waits for the player to do what it says (guided tutorial): it
+  /// shows a hint and "Skip this step" instead of Next.
+  final bool waitingForAction;
+  final VoidCallback? onSkipStep;
   final EdgeInsets safe;
 
   @override
@@ -107,7 +114,8 @@ class TutorialCoach extends StatelessWidget {
             CustomSingleChildLayout(
               delegate: _BubbleDelegate(screen: screen, target: target, safe: safe),
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: width),
+                // Never taller than the screen: a long step scrolls inside it.
+                constraints: BoxConstraints(maxWidth: width, maxHeight: math.max(120, screen.height - 16)),
                 child: Semantics(
                   container: true,
                   liveRegion: true,
@@ -126,13 +134,34 @@ class TutorialCoach extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ExcludeSemantics(
-                            child: Text(
-                              text,
-                              key: const Key('tutorial-text'),
-                              style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.35),
+                          // Only as tall as the text, and scrolling if that is more than the screen.
+                          Flexible(
+                            child: ListView(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              children: [
+                                ExcludeSemantics(
+                                  child: Text(
+                                    text,
+                                    key: const Key('tutorial-text'),
+                                    style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.35),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          if (waitingForAction) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              l.tutorialDoIt,
+                              key: const Key('tutorial-hint'),
+                              style: const TextStyle(
+                                color: LongKyColors.goldLeaf,
+                                fontSize: 13,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 6),
                           // Wraps rather than overflows, at any text size.
                           Wrap(
@@ -160,12 +189,26 @@ class TutorialCoach extends StatelessWidget {
                                     style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.7), fontSize: 12),
                                   ),
                                   const SizedBox(width: 8),
-                                  FilledButton(
-                                    key: const Key('tutorial-next'),
-                                    onPressed: onNext,
-                                    style: FilledButton.styleFrom(minimumSize: const Size(minTouch, minTouch)),
-                                    child: Text(last ? l.tutorialGotIt : l.tutorialNext),
-                                  ),
+                                  if (waitingForAction)
+                                    OutlinedButton(
+                                      key: const Key('tutorial-skip-step'),
+                                      onPressed: onSkipStep ?? onNext,
+                                      style: OutlinedButton.styleFrom(
+                                        minimumSize: const Size(minTouch, minTouch),
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                      ),
+                                      child: Text(l.tutorialSkipStep),
+                                    )
+                                  else
+                                    FilledButton(
+                                      key: const Key('tutorial-next'),
+                                      onPressed: onNext,
+                                      style: FilledButton.styleFrom(
+                                        minimumSize: const Size(minTouch, minTouch),
+                                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                                      ),
+                                      child: Text(last ? l.tutorialGotIt : l.tutorialNext),
+                                    ),
                                 ],
                               ),
                             ],

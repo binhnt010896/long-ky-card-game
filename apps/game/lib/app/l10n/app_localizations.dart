@@ -1693,6 +1693,30 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Xem toàn bản đồ'**
   String get boardZoomReset;
+
+  /// Under a guided tutorial step that waits for the player to act.
+  ///
+  /// In vi, this message translates to:
+  /// **'Làm theo hướng dẫn để tiếp tục.'**
+  String get tutorialDoIt;
+
+  /// Skips one guided tutorial step.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bỏ qua bước'**
+  String get tutorialSkipStep;
+
+  /// Name of chapter 0, the training mission (instead of 'Chương 0').
+  ///
+  /// In vi, this message translates to:
+  /// **'Huấn luyện'**
+  String get campaignTraining;
+
+  /// Under the training chapter in the campaign.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bài huấn luyện dạy cách chơi từng bước.'**
+  String get campaignTrainingHint;
 }
 
 class _AppLocalizationsDelegate

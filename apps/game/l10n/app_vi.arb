@@ -511,5 +511,13 @@
   "boardZoomOut": "Thu nhỏ bản đồ",
   "@boardZoomOut": {"description": "Tooltip of the board's zoom-out button."},
   "boardZoomReset": "Xem toàn bản đồ",
-  "@boardZoomReset": {"description": "Tooltip of the button that shows the whole map again."}
+  "@boardZoomReset": {"description": "Tooltip of the button that shows the whole map again."},
+  "tutorialDoIt": "Làm theo hướng dẫn để tiếp tục.",
+  "@tutorialDoIt": {"description": "Under a guided tutorial step that waits for the player to act."},
+  "tutorialSkipStep": "Bỏ qua bước",
+  "@tutorialSkipStep": {"description": "Skips one guided tutorial step."},
+  "campaignTraining": "Huấn luyện",
+  "@campaignTraining": {"description": "Name of chapter 0, the training mission (instead of 'Chương 0')."},
+  "campaignTrainingHint": "Bài huấn luyện dạy cách chơi từng bước.",
+  "@campaignTrainingHint": {"description": "Under the training chapter in the campaign."}
 }

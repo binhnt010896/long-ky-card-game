@@ -39,7 +39,11 @@ void main() {
   });
 
   testWidgets('routing: Campaign and Codex open and go back', (tester) async {
-    await startApp(tester);
+    // A player who has already seen the training (a new one is taken to it).
+    await startApp(
+      tester,
+      store: MemoryProgressStore(jsonEncode({'version': 2, 'tutorialDone': ['ch0_training']})),
+    );
     await tester.tap(find.text('Chiến dịch'));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(AppBar, 'Chiến dịch'), findsOneWidget);

@@ -265,5 +265,9 @@
   "lossTroopsOver": "Our losses pass {n},000 troops",
   "boardZoomIn": "Zoom in",
   "boardZoomOut": "Zoom out",
-  "boardZoomReset": "Show the whole map"
+  "boardZoomReset": "Show the whole map",
+  "tutorialDoIt": "Do what the prompt says to continue.",
+  "tutorialSkipStep": "Skip step",
+  "campaignTraining": "Training",
+  "campaignTrainingHint": "A step-by-step lesson on how to play."
 }

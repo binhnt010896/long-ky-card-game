@@ -1,0 +1,374 @@
+{
+  "id": "ch0_training",
+  "chapter": 0,
+  "order": 1,
+  "title": {
+    "vi": "Huấn luyện",
+    "en": "Training"
+  },
+  "briefing": {
+    "vi": "Bài huấn luyện: làm quen bản đồ, mưu kế và hạ lệnh, rồi nhử quân Nguyên hết lương và phản công tại Bình Lệ Nguyên.",
+    "en": "Training: learn the map, stratagems and orders, then lure the Yuan into running out of Supply and counterattack at Bình Lệ Nguyên."
+  },
+  "debrief": {
+    "vi": "Kết thúc bài huấn luyện.",
+    "en": "End of training."
+  },
+  "map": "ch1",
+  "art": "ui/title-cover.jpg",
+  "seasonTurns": 5,
+  "heatStartTurn": null,
+  "start": {
+    "rice": 6,
+    "support": 6,
+    "unity": {
+      "court": 3,
+      "clan": 6,
+      "people": 6
+    }
+  },
+  "playerOfficers": [
+    {
+      "officerId": "tran-thai-tong",
+      "nodeId": "thang-long",
+      "troops": 12
+    },
+    {
+      "officerId": "tran-thu-do",
+      "nodeId": "thang-long",
+      "troops": 6
+    },
+    {
+      "officerId": "le-phu-tran",
+      "nodeId": "thang-long",
+      "troops": 6
+    },
+    {
+      "officerId": "tran-khanh-du",
+      "nodeId": "phu-lo",
+      "troops": 8
+    }
+  ],
+  "yuanArmies": [
+    {
+      "id": "mong-co-1258",
+      "commanderId": "ngot-luong-hop-thai",
+      "nodeId": "bach-hac",
+      "troops": 12,
+      "supply": 8,
+      "maxSupply": 20,
+      "morale": 5,
+      "retreatNodeId": "bien-gioi"
+    }
+  ],
+  "deck": [
+    {
+      "cardId": "vuon-khong-nha-trong",
+      "count": 1
+    },
+    {
+      "cardId": "lui-binh-bao-toan",
+      "count": 1
+    },
+    {
+      "cardId": "phuc-kich-ben-song",
+      "count": 1
+    },
+    {
+      "cardId": "phan-cong",
+      "count": 1
+    }
+  ],
+  "handSize": 4,
+  "scriptedEvents": [],
+  "inducements": [],
+  "yuanScript": [
+    {
+      "turn": 1,
+      "armyId": "mong-co-1258",
+      "intent": "advance",
+      "targetNodeId": "binh-le-nguyen"
+    },
+    {
+      "turn": 2,
+      "armyId": "mong-co-1258",
+      "intent": "hold"
+    },
+    {
+      "turn": 3,
+      "armyId": "mong-co-1258",
+      "intent": "hold"
+    }
+  ],
+  "win": [
+    {
+      "anyOf": [
+        {
+          "type": "counterattackAt",
+          "nodeId": "binh-le-nguyen"
+        },
+        {
+          "type": "allArmiesBroken"
+        }
+      ]
+    }
+  ],
+  "loss": [
+    {
+      "type": "kingNotCaptured"
+    },
+    {
+      "type": "unityAllAbove",
+      "value": 0
+    }
+  ],
+  "stars": [
+    {
+      "type": "won"
+    },
+    {
+      "type": "noCaptures"
+    },
+    {
+      "type": "winByTurn",
+      "turn": 3
+    }
+  ],
+  "tutorial": [
+    {
+      "id": "t0-welcome",
+      "text": {
+        "vi": "Chào mừng đến bài huấn luyện. Bạn sẽ học cách chỉ huy: xem bản đồ, dùng mưu kế, hạ lệnh cho tướng và giành chiến thắng. Cứ làm theo hướng dẫn; có thể bấm \"Bỏ qua bước\" bất cứ lúc nào.",
+        "en": "Welcome to training. You will learn to command: read the map, play stratagems, give your officers orders and win. Just follow the prompts; you can tap \"Skip step\" at any time."
+      }
+    },
+    {
+      "id": "t0-goal",
+      "text": {
+        "vi": "THẮNG: nhử quân Nguyên vào chỗ hết lương rồi chủ động phản công ở Bình Lệ Nguyên khi chúng còn dưới nửa lương thảo. THUA: vua bị bắt, hoặc một trong ba cột Đoàn kết (Triều đình, Tông thất, Dân chúng) về 0.",
+        "en": "WIN: lure the Yuan to where they run out of supply, then attack them at Bình Lệ Nguyên while they are below half Supply. LOSE: the king is captured, or any of the three Unity pillars (Court, Clan, People) falls to 0."
+      }
+    },
+    {
+      "id": "t0-topbar",
+      "text": {
+        "vi": "Thanh trên cùng: Lương, Lòng dân, ba cột Đoàn kết (mỗi cột 0–10) và đồng hồ mùa. Bài này có 5 lượt, mỗi lượt gồm Trinh sát, Triều nghị, Hạ lệnh, Giao tranh, Hậu cần.",
+        "en": "The top bar: Rice, Support, the three Unity pillars (0–10 each) and the season clock. This lesson has 5 turns; each turn has Intel, Council, Orders, Resolution and Upkeep."
+      },
+      "highlight": "topBar"
+    },
+    {
+      "id": "t0-map",
+      "text": {
+        "vi": "Bản đồ: mỗi vòng tròn là một địa điểm, các đường nối là lối đi: đường sông màu lam (thuyền đi được hai chặng) và đường bộ nét đứt (một chặng). Viền vàng là nơi ta giữ, viền đỏ là nơi quân Nguyên chiếm.",
+        "en": "The map: each circle is a place and the lines are routes: blue rivers (boats can go two steps) and dashed roads (one step). A gold ring is held by us, a red ring by the Yuan."
+      },
+      "highlight": "map"
+    },
+    {
+      "id": "t0-zoom",
+      "text": {
+        "vi": "Bản đồ phóng to được. Bấm nút + (hoặc chụm hai ngón tay, lăn chuột, chạm đúp) để phóng to, kéo để di chuyển.",
+        "en": "The map zooms. Tap + (or pinch, scroll the mouse wheel, double-tap) to zoom in, and drag to move around."
+      },
+      "highlight": "zoom",
+      "until": "zoom"
+    },
+    {
+      "id": "t0-zoom-back",
+      "text": {
+        "vi": "Muốn xem toàn bản đồ, bấm nút khung ở dưới nút −. Hãy quay lại toàn bản đồ rồi bấm Tiếp.",
+        "en": "To see the whole map again, tap the frame button under −. Go back to the whole map, then tap Next."
+      },
+      "highlight": "zoom"
+    },
+    {
+      "id": "t0-select-army",
+      "text": {
+        "vi": "Chạm vào đạo quân Nguyên (ô đỏ) để xem quân số, sĩ khí và lương thảo của chúng.",
+        "en": "Tap the Yuan army (the red tile) to see its troops, morale and Supply."
+      },
+      "highlight": "army:mong-co-1258",
+      "until": "select:army:mong-co-1258"
+    },
+    {
+      "id": "t0-intent",
+      "text": {
+        "vi": "Mũi tên cho biết đạo quân sẽ đi đâu lượt này. Lượt này nó tiến vào Bình Lệ Nguyên. Luôn đọc ý đồ của địch trước khi quyết định.",
+        "en": "The arrow shows where the army will go this turn: here it advances into Bình Lệ Nguyên. Always read the enemy's intent before you decide."
+      },
+      "highlight": "intentArrows"
+    },
+    {
+      "id": "t0-select-king",
+      "text": {
+        "vi": "Giờ là tướng của ta. Chạm vào Trần Thái Tông ở thanh tướng phía dưới (hoặc chạm ô của ông trên bản đồ).",
+        "en": "Now your officers. Tap Trần Thái Tông in the strip at the bottom (or tap his tile on the map)."
+      },
+      "highlight": "officer:tran-thai-tong",
+      "until": "select:officer:tran-thai-tong"
+    },
+    {
+      "id": "t0-inspector",
+      "text": {
+        "vi": "Bảng thông tin: quân số, sĩ khí, chỉ số, lệnh hiện tại và kỹ năng. Trần Thái Tông là vua: nếu ông bị bắt, bạn thua. Bấm \"Đóng\" khi xong.",
+        "en": "The inspector: troops, morale, stats, current order and skill. Trần Thái Tông is the king: if he is captured you lose. Close it when you are done."
+      },
+      "highlight": "inspector"
+    },
+    {
+      "id": "t0-court",
+      "text": {
+        "vi": "Triều đình đang ở 3. Dưới 4, mỗi lá bài tốn thêm 1 Lòng dân. Hãy khôi phục nó bằng kỹ năng của Trần Thủ Độ.",
+        "en": "Court is at 3. Below 4, every card costs 1 extra Support. Restore it with Trần Thủ Độ's skill."
+      },
+      "highlight": "topBar"
+    },
+    {
+      "id": "t0-select-chancellor",
+      "text": {
+        "vi": "Chạm vào Trần Thủ Độ.",
+        "en": "Tap Trần Thủ Độ."
+      },
+      "highlight": "officer:tran-thu-do",
+      "until": "select:officer:tran-thu-do"
+    },
+    {
+      "id": "t0-skill",
+      "text": {
+        "vi": "Trong bảng thông tin, bấm \"Dùng kỹ năng\". \"Đầu thần chưa rơi\" đưa Triều đình về tối đa, nhưng chỉ dùng được một lần mỗi nhiệm vụ.",
+        "en": "In the inspector, tap \"Use skill\". \"My Head Has Not Fallen\" restores Court to full, but only once per mission."
+      },
+      "highlight": "inspector",
+      "until": "skill:tran-thu-do"
+    },
+    {
+      "id": "t0-hand",
+      "text": {
+        "vi": "Mở \"Bài trên tay\" để xem các mưu kế của bạn.",
+        "en": "Open \"Hand\" to see your stratagems."
+      },
+      "highlight": "hand",
+      "until": "hand"
+    },
+    {
+      "id": "t0-cards",
+      "text": {
+        "vi": "Mỗi lá bài tốn Lương và/hoặc Lòng dân. Vườn không nhà trống: sơ tán một nơi ta giữ. Lui binh: rút một tướng về, không mất quân. Phục kích: đặt phục binh trên khúc sông. Phản công: nhân đôi sức mạnh khi địch dưới nửa lương thảo.",
+        "en": "Each card costs Rice and/or Support. Empty Gardens: evacuate a place we hold. Withdraw: pull an officer back with no losses. Ambush: set an ambush on a river. Counterattack: double power when the enemy is below half Supply."
+      },
+      "highlight": "hand"
+    },
+    {
+      "id": "t0-play-evac",
+      "text": {
+        "vi": "Chạm lá \"Vườn không nhà trống\", chọn Bình Lệ Nguyên rồi bấm \"Dùng bài\". Ta thu hết lương ở đó và quân Nguyên tới sẽ không cướp được gì.",
+        "en": "Tap \"Empty Gardens, Empty Houses\", pick Bình Lệ Nguyên and tap \"Play card\". We take in all its rice and the Yuan will find nothing there."
+      },
+      "highlight": "hand",
+      "until": "card:vuon-khong-nha-trong"
+    },
+    {
+      "id": "t0-end-council",
+      "text": {
+        "vi": "Xong Triều nghị. Bấm \"Sang hạ lệnh\" để sang giai đoạn Hạ lệnh.",
+        "en": "Council is done. Tap \"To Orders\" to move to the Orders phase."
+      },
+      "highlight": "phaseButton",
+      "until": "phase:orders"
+    },
+    {
+      "id": "t0-orders-intro",
+      "text": {
+        "vi": "Hạ lệnh: mỗi tướng nhận một lệnh. Không giao lệnh nghĩa là Cố thủ: đứng yên và phòng thủ (+20% sức mạnh khi bị đánh). Các lệnh khác: Hành quân (tiến), Sơ tán, Tập kích, Phục kích, Chiêu mộ.",
+        "en": "Orders: each officer gets one. No order means Hold: stand still and defend (+20% power when attacked). The others: Move (advance), Evacuate, Raid, Ambush, Rally."
+      },
+      "highlight": "officerStrip"
+    },
+    {
+      "id": "t0-hold-king",
+      "text": {
+        "vi": "Chạm Trần Thái Tông và chọn lệnh \"Cố thủ\". Vua giữ kinh thành, an toàn phía sau.",
+        "en": "Tap Trần Thái Tông and choose the order \"Hold\". The king stays safe behind the lines."
+      },
+      "highlight": "officer:tran-thai-tong",
+      "until": "order:tran-thai-tong:hold"
+    },
+    {
+      "id": "t0-end-orders",
+      "text": {
+        "vi": "Bấm \"Chốt lệnh\". Giao tranh diễn ra theo thứ tự: ta di chuyển, quân Nguyên di chuyển, giao chiến, cướp lương; rồi đến Hậu cần.",
+        "en": "Tap \"Resolve turn\". Resolution runs in order: we move, the Yuan move, battles, foraging; then Upkeep."
+      },
+      "highlight": "phaseButton",
+      "until": "turn:2"
+    },
+    {
+      "id": "t0-log",
+      "text": {
+        "vi": "Nhật ký ghi lại những gì vừa xảy ra. Quân Nguyên vào Bình Lệ Nguyên nhưng không có lương để cướp, và mỗi lượt chúng tiêu hao lương thảo.",
+        "en": "The log records what just happened. The Yuan entered Bình Lệ Nguyên but found no rice, and they use up Supply every turn."
+      },
+      "highlight": "log"
+    },
+    {
+      "id": "t0-raid",
+      "text": {
+        "vi": "Lượt 2, Triều nghị: bấm \"Sang hạ lệnh\". Rồi giao Trần Khánh Dư (ở Phù Lỗ, kề Bình Lệ Nguyên) lệnh \"Tập kích\": không giao chiến, chỉ phá lương thảo của địch.",
+        "en": "Turn 2: go to Orders. Then give Trần Khánh Dư (at Phù Lỗ, next to Bình Lệ Nguyên) the order \"Raid\": no battle, it only destroys enemy Supply."
+      },
+      "highlight": "officer:tran-khanh-du",
+      "until": "order:tran-khanh-du:raid"
+    },
+    {
+      "id": "t0-end-turn-2",
+      "text": {
+        "vi": "Bấm \"Chốt lệnh\" để kết thúc lượt 2.",
+        "en": "Tap \"Resolve turn\" to end turn 2."
+      },
+      "highlight": "phaseButton",
+      "until": "turn:3"
+    },
+    {
+      "id": "t0-starving",
+      "text": {
+        "vi": "Quân Nguyên đã hết lương: chúng mất sĩ khí và hao quân. Đây là lúc phản công, khi chúng dưới nửa lương thảo.",
+        "en": "The Yuan are out of Supply: they lose morale and men. Now is the time to counterattack, while they are below half Supply."
+      },
+      "highlight": "army:mong-co-1258"
+    },
+    {
+      "id": "t0-counter-card",
+      "text": {
+        "vi": "Lượt 3: mở bài trên tay, chạm \"Phản công\", chọn Lê Phụ Trần rồi \"Dùng bài\". Sức mạnh của ông sẽ nhân đôi trong trận kế tiếp.",
+        "en": "Turn 3: open your hand, tap \"Counterattack\", choose Lê Phụ Trần and \"Play card\". His power doubles in his next battle."
+      },
+      "highlight": "hand",
+      "until": "card:phan-cong"
+    },
+    {
+      "id": "t0-advance",
+      "text": {
+        "vi": "Bấm \"Sang hạ lệnh\", rồi giao Lê Phụ Trần lệnh \"Hành quân\" tới Bình Lệ Nguyên để tấn công. Bạn sẽ thấy \"Dự báo giao tranh\": sức mạnh hai bên và thiệt hại dự kiến.",
+        "en": "Go to Orders, then order Lê Phụ Trần to \"Move\" to Bình Lệ Nguyên and attack. You will see the \"Battle preview\": both sides' power and the expected losses."
+      },
+      "highlight": "officer:le-phu-tran",
+      "until": "order:le-phu-tran:move"
+    },
+    {
+      "id": "t0-finish",
+      "text": {
+        "vi": "Chấp nhận dự báo, rồi bấm \"Chốt lệnh\". Thắng một trận do ta chủ động tấn công khi địch dưới nửa lương thảo là chiến thắng của bài huấn luyện.",
+        "en": "Accept the preview, then tap \"Resolve turn\". Winning a battle we start while the enemy is below half Supply wins this lesson."
+      },
+      "highlight": "phaseButton"
+    }
+  ],
+  "longKyEventId": "khang-chien-mong-co-lan-mot",
+  "sourceRefs": [
+    "vietjack-sbt7-p48"
+  ],
+  "todo": [
+    "Training mission: the scenario is a teaching device, not a historical battle; it reuses the Chapter 1 map, officers and cards. The step texts are game instructions (en drafted from vi, needs review)."
+  ]
+}

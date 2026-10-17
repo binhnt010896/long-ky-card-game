@@ -18,4 +18,5 @@ export 'src/model/defs.dart';
 export 'src/model/enums.dart';
 export 'src/model/game_state.dart';
 export 'src/model/save_game.dart';
+export 'src/model/tutorial.dart';
 export 'src/rng/seeded_rng.dart';

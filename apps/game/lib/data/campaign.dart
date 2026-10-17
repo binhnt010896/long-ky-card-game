@@ -5,6 +5,10 @@ import 'progress.dart';
 /// The order of the missions and what is open (build-spec section 6): the
 /// missions of all chapters in one line, by chapter and then by their order
 /// in it; mission N opens when N−1 is won, and the first one is always open.
+///
+/// Chapter 0 holds the training mission. It is always open and is not in the
+/// chain: the first mission of chapter 1 does not wait for it, so players
+/// who skip it (or who played before it existed) are not locked out.
 final class Campaign {
   Campaign(Iterable<MissionDef> missions)
     : sequence = (missions.toList()
@@ -36,11 +40,25 @@ final class Campaign {
   /// A mission is won once its first star (the "won" star) is earned.
   static bool isWon(Progress p, String id) => (p.stars[id] ?? const []).firstOrNull == true;
 
+  /// The chapter number of the training missions.
+  static const int trainingChapter = 0;
+
+  /// Whether [id] is a training mission.
+  bool isTraining(String id) => mission(id)?.chapter == trainingChapter;
+
+  /// The first training mission, if the content has one.
+  MissionDef? get training => sequence.where((m) => m.chapter == trainingChapter).firstOrNull;
+
   /// Whether [id] can be played now.
   bool isUnlocked(Progress p, String id) {
     final i = sequence.indexWhere((m) => m.id == id);
     if (i < 0) return false;
-    return i == 0 || isWon(p, sequence[i - 1].id);
+    if (sequence[i].chapter == trainingChapter) return true;
+    // The mission before it in the chain, leaving the training out of it.
+    for (var j = i - 1; j >= 0; j--) {
+      if (sequence[j].chapter != trainingChapter) return isWon(p, sequence[j].id);
+    }
+    return true;
   }
 
   /// A chapter is open once its first mission is.

@@ -42,10 +42,26 @@ class CampaignScreen extends StatefulWidget {
 }
 
 class _CampaignScreenState extends State<CampaignScreen> with _ContentLoader<CampaignScreen> {
+  bool _offered = false;
+
   @override
   void initState() {
     super.initState();
     loadCampaignContent();
+  }
+
+  /// A player who has not played anything yet is taken to the training
+  /// mission, once; backing out of it leaves the campaign list as usual.
+  void _offerTraining(Campaign campaign, Progress progress) {
+    final training = campaign.training;
+    if (_offered || training == null) return;
+    _offered = true;
+    if (progress.stars.isNotEmpty || progress.tutorialDone.contains(training.id)) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<ProgressCubit>().markTutorialDone(training.id);
+      Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BriefingScreen(missionId: training.id)));
+    });
   }
 
   @override
@@ -58,6 +74,7 @@ class _CampaignScreenState extends State<CampaignScreen> with _ContentLoader<Cam
         : BlocBuilder<ProgressCubit, Progress>(
             builder: (context, progress) {
               final campaign = Campaign(bundle!.missions.values);
+              _offerTraining(campaign, progress);
               return _CentredList(
                 children: [
                   for (final chapter in campaign.chapters)
@@ -123,10 +140,11 @@ class _ChapterCard extends StatelessWidget {
       campaign.starsInChapter(progress, chapter),
       campaign.starsPossible(chapter),
     );
+    final training = chapter == Campaign.trainingChapter;
     return _Tile(
       artPath: 'ui/title-cover.jpg',
-      title: l.campaignChapter(chapter),
-      subtitle: open ? summary : l.campaignLocked,
+      title: training ? l.campaignTraining : l.campaignChapter(chapter),
+      subtitle: !open ? l.campaignLocked : (training ? '${l.campaignTrainingHint} · $summary' : summary),
       locked: !open,
       onTap: open
           ? () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => ChapterScreen(chapter: chapter)))
@@ -212,7 +230,10 @@ class _ChapterScreenState extends State<ChapterScreen> with _ContentLoader<Chapt
               );
             },
           );
-    return LacquerPage(title: l.campaignChapter(widget.chapter), body: body);
+    return LacquerPage(
+      title: widget.chapter == Campaign.trainingChapter ? l.campaignTraining : l.campaignChapter(widget.chapter),
+      body: body,
+    );
   }
 }
 
@@ -238,7 +259,9 @@ class _MissionTile extends StatelessWidget {
     return _Tile(
       artPath: mission.art,
       title: l.content(mission.title),
-      subtitle: unlocked ? l.campaignMissionNumber(mission.order) : l.campaignLockedHint,
+      subtitle: !unlocked
+          ? l.campaignLockedHint
+          : (mission.chapter == Campaign.trainingChapter ? l.campaignTrainingHint : l.campaignMissionNumber(mission.order)),
       locked: !unlocked,
       stars: unlocked ? (earned: earned, total: total) : null,
       onTap: unlocked ? onOpen : null,

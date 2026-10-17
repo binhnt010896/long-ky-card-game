@@ -153,7 +153,12 @@ class _BattlePageState extends State<BattlePage> {
 
   /// Coach marks are for a player who has not been through them: only with
   /// a progress record to say so, and not once they are done.
-  bool get _showTutorial => _progress != null && !_progress!.state.tutorialDone.contains(widget.missionId);
+  /// Coach marks show until read or skipped once; a guided lesson (the
+  /// training mission) shows every time it is played.
+  bool get _showTutorial =>
+      _progress != null &&
+      (!_progress!.state.tutorialDone.contains(widget.missionId) ||
+          (_ruleset?.mission.tutorial.any((t) => t.until != null) ?? false));
 
   void _adopt(Ruleset ruleset, BattleCubit cubit) {
     final old = _cubit;

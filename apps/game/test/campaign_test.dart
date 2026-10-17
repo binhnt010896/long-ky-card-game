@@ -39,9 +39,13 @@ void main() {
   );
 
   group('Campaign rules', () {
-    test('the missions run in chapter order', () {
-      expect([for (final m in campaign.sequence) m.id], ids);
-      expect(campaign.chapters, [1]);
+    test('the training comes first, then the missions of chapter 1 in order', () {
+      expect([for (final m in campaign.sequence) m.id], ['ch0_training', ...ids]);
+      expect(campaign.chapters, [0, 1]);
+      expect(campaign.training?.id, 'ch0_training');
+      expect(campaign.isTraining('ch0_training'), isTrue);
+      expect(campaign.isTraining('ch1_m1'), isFalse);
+      expect(campaign.next('ch0_training')?.id, 'ch1_m1');
       expect(campaign.next('ch1_m2')?.id, 'ch1_m3');
       expect(campaign.next('ch1_m5'), isNull);
       expect(campaign.next('nope'), isNull);
@@ -50,12 +54,26 @@ void main() {
     test('a new player has only the first mission; winning N opens N+1', () {
       var p = const Progress();
       expect([for (final id in ids) campaign.isUnlocked(p, id)], [true, false, false, false, false]);
+      expect(campaign.isUnlocked(p, 'ch0_training'), isTrue, reason: 'training is always open');
       for (var i = 0; i < ids.length - 1; i++) {
         p = won(ids.take(i + 1));
         expect(campaign.isUnlocked(p, ids[i + 1]), isTrue, reason: 'after ${ids[i]}');
         if (i + 2 < ids.length) expect(campaign.isUnlocked(p, ids[i + 2]), isFalse, reason: 'after ${ids[i]}');
       }
       expect(campaign.isUnlocked(const Progress(), 'nope'), isFalse);
+    });
+
+    test('the training is not part of the chain: chapter 1 does not wait for it, and winning it opens nothing', () {
+      const none = Progress();
+      expect(campaign.isUnlocked(none, 'ch1_m1'), isTrue);
+      final trained = won(['ch0_training']);
+      expect(campaign.isUnlocked(trained, 'ch1_m1'), isTrue);
+      expect(campaign.isUnlocked(trained, 'ch1_m2'), isFalse);
+      expect(campaign.chapterUnlocked(none, 0), isTrue);
+      // A player from before the training existed keeps what they had.
+      final old = won(['ch1_m1', 'ch1_m2']);
+      expect(campaign.isUnlocked(old, 'ch1_m3'), isTrue);
+      expect(campaign.isUnlocked(old, 'ch0_training'), isTrue);
     });
 
     test('only the first star counts as a win; later stars do not open anything', () {
@@ -78,7 +96,7 @@ void main() {
       expect(Campaign.starsEarned(p, 'ch1_m1'), 2);
       expect(campaign.starsInChapter(p, 1), 3);
       expect(campaign.wonInChapter(p, 1), 2);
-      expect(campaign.starsPossible(1), campaign.sequence.fold(0, (n, m) => n + m.stars.length));
+      expect(campaign.starsPossible(1), campaign.missionsOf(1).fold(0, (n, m) => n + m.stars.length));
       expect(campaign.chapterUnlocked(const Progress(), 1), isTrue);
       expect(campaign.chapterUnlocked(const Progress(), 2), isFalse);
     });
@@ -86,6 +104,9 @@ void main() {
 
   group('Campaign screens', () {
     late MemoryBattleSaveStore store;
+
+    /// A player who has already been offered the training.
+    const seen = Progress(tutorialDone: ['ch0_training']);
 
     Future<ProgressCubit> pump(
       WidgetTester tester,
@@ -186,7 +207,7 @@ void main() {
     }
 
     testWidgets('the chapter card opens the chapter', (tester) async {
-      await pump(tester, compact, const Progress());
+      await pump(tester, compact, seen);
       await tester.tap(find.byKey(const Key('chapter-1')));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
@@ -219,8 +240,50 @@ void main() {
 
     testWidgets('the titles follow the language', (tester) async {
       await pump(tester, regular, const Progress(), lang: 'en', home: const ChapterScreen(chapter: 1));
-      expect(find.text(campaign.sequence.first.title.en), findsOneWidget);
+      expect(find.text(campaign.missionsOf(1).first.title.en), findsOneWidget);
       expect(find.text(strings('en').campaignLockedHint), findsNWidgets(4));
+    });
+
+    group('the training', () {
+      testWidgets('a new player is taken to its briefing once, and backing out leaves the list', (tester) async {
+        final cubit = await pump(tester, compact, const Progress());
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.byType(BriefingScreen), findsOneWidget, reason: 'offered at once');
+        expect(cubit.state.tutorialDone, contains('ch0_training'), reason: 'and not offered again');
+        expect(find.byKey(const Key('briefing-title')), findsOneWidget);
+        expect(find.text('Huấn luyện'), findsWidgets);
+        tester.state<NavigatorState>(find.byType(Navigator).last).pop();
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.byType(BriefingScreen), findsNothing);
+        expect(find.byKey(const Key('chapter-0')), findsOneWidget);
+        expect(find.byKey(const Key('chapter-1')), findsOneWidget);
+      });
+
+      testWidgets('it is not offered to a player who has played, or who has seen it', (tester) async {
+        await pump(tester, compact, Progress(stars: {'ch1_m1': const [true, false, false]}));
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.byType(BriefingScreen), findsNothing);
+        await pump(tester, compact, seen);
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.byType(BriefingScreen), findsNothing);
+      });
+
+      testWidgets('the chapter list shows it as Training, always open, above Chapter 1', (tester) async {
+        await pump(tester, compact, seen);
+        await tester.pump(const Duration(milliseconds: 400));
+        final training = tester.getTopLeft(find.byKey(const Key('chapter-0'))).dy;
+        final chapter1 = tester.getTopLeft(find.byKey(const Key('chapter-1'))).dy;
+        expect(training, lessThan(chapter1));
+        expect(find.text('Huấn luyện'), findsOneWidget);
+        expect(find.text('Chương 0'), findsNothing);
+        await tester.tap(find.byKey(const Key('chapter-0')));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.byType(ChapterScreen), findsOneWidget);
+        expect(find.byKey(const Key('mission-ch0_training')), findsOneWidget);
+        expect(find.byKey(const Key('lock')), findsNothing);
+      });
     });
   });
 }

@@ -447,15 +447,29 @@ final class ContentParser {
       issues.error(Rule.schema, 'starOne', o.file, '${o.sub('stars')}[0]', 'star 1 is always {"type": "won"}');
     }
 
-    final tutorial = o.objects(
-      'tutorial',
-      (t) => TutorialStep(id: t.str('id'), text: t.text('text'), highlight: t.strOrNull('highlight')),
-      required: false,
-    );
+    final tutorial = o.objects('tutorial', (t) {
+      final until = t.strOrNull('until');
+      TutorialCondition? condition;
+      if (until != null) {
+        condition = TutorialCondition.parse(until);
+        if (condition == null) {
+          issues.error(Rule.closedLists, 'unknownTutorialCondition', t.file, t.sub('until'),
+              '"$until" is not in the closed list of tutorial conditions');
+        } else {
+          _tutorialRefs(condition, t, id, mapId);
+        }
+      }
+      return TutorialStep(
+        id: t.str('id'),
+        text: t.text('text'),
+        highlight: t.strOrNull('highlight'),
+        until: condition,
+      );
+    }, required: false);
 
     final def = MissionDef(
       id: id,
-      chapter: o.integer('chapter', min: 1),
+      chapter: o.integer('chapter', min: 0),
       order: o.integer('order', min: 1),
       title: o.text('title'),
       briefing: o.text('briefing'),
@@ -485,6 +499,30 @@ final class ContentParser {
     }
     _todo(o);
     return def;
+  }
+
+  /// Records the ids a tutorial condition names, to be checked like any other reference.
+  void _tutorialRefs(TutorialCondition c, Obj o, String missionId, String mapId) {
+    final path = o.sub('until');
+    switch (c) {
+      case SelectedCondition(:final kind, :final id) when kind != null && id != null:
+        switch (kind) {
+          case SelectionTarget.node:
+            refs.add(Ref(RefKind.node, id, o.file, path, scope: mapId));
+          case SelectionTarget.officer:
+            refs.add(Ref(RefKind.officer, id, o.file, path));
+          case SelectionTarget.army:
+            refs.add(Ref(RefKind.army, id, o.file, path, scope: missionId));
+        }
+      case CardPlayedCondition(:final cardId):
+        refs.add(Ref(RefKind.card, cardId, o.file, path));
+      case SkillUsedCondition(:final officerId):
+        refs.add(Ref(RefKind.officer, officerId, o.file, path));
+      case OrderGivenCondition(:final officerId):
+        refs.add(Ref(RefKind.officer, officerId, o.file, path));
+      default:
+        break;
+    }
   }
 
   ObjectiveDef? _objective(Obj o, String missionId, String mapId) {

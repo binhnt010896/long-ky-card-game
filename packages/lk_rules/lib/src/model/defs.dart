@@ -5,6 +5,7 @@
 library;
 
 import 'enums.dart';
+import 'tutorial.dart';
 
 /// Player-facing text in both languages. Vietnamese is the source language.
 final class LocalizedText {
@@ -467,10 +468,14 @@ final class YuanScriptEntry {
 }
 
 final class TutorialStep {
-  const TutorialStep({required this.id, required this.text, this.highlight});
+  const TutorialStep({required this.id, required this.text, this.highlight, this.until});
   final String id;
   final LocalizedText text;
   final String? highlight;
+
+  /// What the step waits for; null means the player taps Next (see
+  /// `TutorialCondition`).
+  final TutorialCondition? until;
 }
 
 final class MissionDef {

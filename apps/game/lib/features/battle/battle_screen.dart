@@ -26,6 +26,7 @@ import 'overlays/panel.dart';
 import 'overlays/phase_button.dart';
 import 'overlays/preview_dialog.dart';
 import 'overlays/top_bar.dart';
+import '../tutorial/guided_flow.dart';
 import '../tutorial/tutorial_coach.dart';
 import '../tutorial/tutorial_flow.dart';
 
@@ -94,6 +95,8 @@ class _BattleScreenState extends State<BattleScreen> {
   final Set<String> _readTips = {};
   bool _tutorialReported = false;
   String? _measuredFor;
+  String? _guidedTargetFor;
+  Rect? _guidedTarget;
   final GlobalKey _stackKey = GlobalKey();
   final GlobalKey _topBarKey = GlobalKey();
   final GlobalKey _stripKey = GlobalKey();
@@ -105,13 +108,50 @@ class _BattleScreenState extends State<BattleScreen> {
     super.initState();
     // A battle picked up late (resumed in turn 3) has nothing left to teach.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && _tutorialOn && _flow.finished(_cubit.game, _readTips)) _reportTutorialDone();
+      if (!mounted) return;
+      final guided = _guided;
+      if (guided != null) {
+        // Pick the lesson up where the game is.
+        setState(() => guided.resumeAt(_tutorialContext(BattleLayoutMode.forWidth(MediaQuery.sizeOf(context).width))));
+        return;
+      }
+      if (_tutorialOn && _flow.finished(_cubit.game, _readTips)) _reportTutorialDone();
     });
   }
 
   late final TutorialFlow _flow = TutorialFlow([for (final t in widget.tutorial) t.id]);
 
-  bool get _tutorialOn => widget.tutorial.isNotEmpty && !_tutorialReported;
+  /// The training mission has steps that wait for the player to act (`until`);
+  /// its tutorial is guided instead of a list of tips.
+  late final GuidedFlow? _guided = widget.tutorial.any((t) => t.until != null) ? GuidedFlow(widget.tutorial) : null;
+
+  bool get _tutorialOn => widget.tutorial.isNotEmpty && !_tutorialReported && !(_guided?.finished ?? false);
+
+  /// Nothing is left to teach: every step is over, or the mission is.
+  bool _flowFinished(GameState state) {
+    final guided = _guided;
+    return guided == null ? _flow.finished(state, _readTips) : (state.isOver || guided.finished);
+  }
+
+  /// What the game and the screen look like now, for the guided steps.
+  TutorialContext _tutorialContext(BattleLayoutMode mode) {
+    final s = _selection;
+    final kind = switch (s?.kind) {
+      SelectionKind.node => SelectionTarget.node,
+      SelectionKind.officer => SelectionTarget.officer,
+      SelectionKind.army => SelectionTarget.army,
+      null => null,
+    };
+    return TutorialContext(
+      state: _cubit.game,
+      ruleset: widget.ruleset,
+      selectedKind: kind,
+      selectedId: s?.id,
+      // The regular layout always shows the hand.
+      handOpen: !mode.isCompact || _handOpen,
+      zoomed: _boardKey.currentState?.game.view.value.isZoomed ?? false,
+    );
+  }
 
   void _reportTutorialDone() {
     if (_tutorialReported) return;
@@ -122,6 +162,13 @@ class _BattleScreenState extends State<BattleScreen> {
   void _readTip(String id) {
     setState(() => _readTips.add(id));
     if (_flow.finished(_cubit.game, _readTips)) _reportTutorialDone();
+  }
+
+  /// Next (or "skip this step") on a guided step.
+  void _guidedAdvance() {
+    final guided = _guided!;
+    setState(guided.advance);
+    if (guided.finished) _reportTutorialDone();
   }
 
   /// A rect of an element, in the coordinates of the screen's own stack.
@@ -146,6 +193,12 @@ class _BattleScreenState extends State<BattleScreen> {
         return _rectOf(_handKey);
       case 'map':
         return _rectOf(_boardKey);
+      case 'zoom':
+        return _unionOfKeys(const [Key('zoom-in'), Key('zoom-out'), Key('zoom-reset')]);
+      case 'inspector':
+        return _firstRectOfKeys(const [Key('inspector-officer'), Key('inspector-node'), Key('inspector-army')]);
+      case 'log':
+        return _firstRectOfKeys(const [Key('log-panel'), Key('log-button')]);
       case 'intentArrows':
         final board = _rectOf(_boardKey);
         final scene = _boardKey.currentState?.game.scene;
@@ -156,8 +209,64 @@ class _BattleScreenState extends State<BattleScreen> {
         }
         return r.inflate(scene.layout.nodeRadius).shift(board.topLeft);
       default:
+        // `officer:<id>` (its tile in the strip), `army:<id>` and `node:<id>` (on the board).
+        final parts = highlight?.split(':');
+        if (parts == null || parts.length != 2) return null;
+        switch (parts[0]) {
+          case 'officer':
+            return _rectOfKey(Key('officer-${parts[1]}'));
+          case 'army':
+          case 'node':
+            final board = _rectOf(_boardKey);
+            final scene = _boardKey.currentState?.game.scene;
+            if (board == null || scene == null) return null;
+            if (parts[0] == 'node') {
+              final n = scene.nodes.where((n) => n.id == parts[1]).firstOrNull;
+              return n == null ? null : Rect.fromCircle(center: n.center, radius: n.radius + 4).shift(board.topLeft);
+            }
+            final t = scene.tokens.where((t) => t.id == parts[1]).firstOrNull;
+            return t == null ? null : Rect.fromCircle(center: t.center, radius: t.radius + 4).shift(board.topLeft);
+        }
         return null;
     }
+  }
+
+  /// The rect of the widget with [key] anywhere under the screen's stack.
+  Rect? _rectOfKey(Key key) {
+    final stack = _stackKey.currentContext;
+    final stackBox = stack?.findRenderObject();
+    if (stack == null || stackBox is! RenderBox || !stackBox.attached) return null;
+    Element? found;
+    void visit(Element e) {
+      if (found != null) return;
+      if (e.widget.key == key) {
+        found = e;
+        return;
+      }
+      e.visitChildren(visit);
+    }
+
+    stack.visitChildElements(visit);
+    final box = found?.renderObject;
+    if (box is! RenderBox || !box.attached || !box.hasSize) return null;
+    return box.localToGlobal(Offset.zero, ancestor: stackBox) & box.size;
+  }
+
+  Rect? _firstRectOfKeys(List<Key> keys) {
+    for (final k in keys) {
+      final r = _rectOfKey(k);
+      if (r != null) return r;
+    }
+    return null;
+  }
+
+  Rect? _unionOfKeys(List<Key> keys) {
+    Rect? out;
+    for (final k in keys) {
+      final r = _rectOfKey(k);
+      if (r != null) out = out == null ? r : out.expandToInclude(r);
+    }
+    return out;
   }
 
   /// Also true in the frame between a step and the board starting to play it.
@@ -277,7 +386,7 @@ class _BattleScreenState extends State<BattleScreen> {
             child: BlocListener<BattleCubit, BattleViewState>(
               // A player who goes on without reading the rest has seen enough.
               listener: (context, view) {
-                if (_tutorialOn && _flow.finished(view.state, _readTips)) _reportTutorialDone();
+                if (_tutorialOn && _flowFinished(view.state)) _reportTutorialDone();
               },
               child: BlocBuilder<BattleCubit, BattleViewState>(
                 builder: (context, view) => Stack(
@@ -330,7 +439,8 @@ class _BattleScreenState extends State<BattleScreen> {
       onBusyChanged: (busy) => setState(() => _busy = busy),
       // The inspector follows the selection, which moves when the map does.
       onViewChanged: () {
-        if (_selection != null && mounted) setState(() {});
+        // The guided tutorial also watches the zoom.
+        if ((_selection != null || _guided != null) && mounted) setState(() {});
       },
     ),
   );
@@ -410,6 +520,7 @@ class _BattleScreenState extends State<BattleScreen> {
   /// the game.
   List<Widget> _coach(BattleViewState view, BattleLayoutMode mode) {
     if (!_tutorialOn || _busy || view.state.pendingChoice != null || view.state.isOver) return const [];
+    if (_guided != null) return _guidedCoach(view, mode);
     final id = _flow.current(view.state, _readTips);
     if (id == null) return const [];
     final step = widget.tutorial.firstWhere((t) => t.id == id);
@@ -434,6 +545,52 @@ class _BattleScreenState extends State<BattleScreen> {
           onNext: () => _readTip(id),
           onSkip: () {
             setState(() => _readTips.addAll(_flow.steps));
+            _reportTutorialDone();
+          },
+        ),
+      ),
+    ];
+  }
+
+  /// The guided coach mark: the step the player is on, moved along first by
+  /// whatever they have already done.
+  List<Widget> _guidedCoach(BattleViewState view, BattleLayoutMode mode) {
+    final guided = _guided!;
+    if (guided.update(_tutorialContext(mode)) && guided.finished) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _reportTutorialDone();
+      });
+    }
+    final step = guided.current;
+    if (step == null) return const [];
+    final l = AppLocalizations.of(context);
+    // Finding a highlighted widget walks the element tree, which cannot be
+    // done while building: measure after the frame and keep the last result
+    // (a moved element is measured again by the next frame).
+    final target = _guidedTargetFor == step.id ? _guidedTarget : null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final measured = _spotlight(step.highlight, mode);
+      if (_guidedTargetFor != step.id || measured != _guidedTarget) {
+        setState(() {
+          _guidedTargetFor = step.id;
+          _guidedTarget = measured;
+        });
+      }
+    });
+    return [
+      Positioned.fill(
+        child: TutorialCoach(
+          key: ValueKey(step.id),
+          text: l.content(step.text),
+          position: guided.position,
+          total: widget.tutorial.length,
+          target: target,
+          waitingForAction: guided.waitingForAction,
+          onNext: _guidedAdvance,
+          onSkipStep: _guidedAdvance,
+          onSkip: () {
+            setState(guided.finish);
             _reportTutorialDone();
           },
         ),

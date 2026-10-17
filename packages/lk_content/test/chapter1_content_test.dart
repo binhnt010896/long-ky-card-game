@@ -15,9 +15,10 @@ void main() {
     expect(result.warnings.every((w) => w.code == 'missingAsset'), isTrue, reason: result.warnings.join('\n'));
   });
 
-  test('Chapter 1 has the five missions in order, each playable by the engine', () {
+  test('the training mission comes first, then Chapter 1 with its five missions, each playable by the engine', () {
     final bundle = loadContent(readContentDir(dir!));
-    expect(bundle.missions.keys, ['ch1_m1', 'ch1_m2', 'ch1_m3', 'ch1_m4', 'ch1_m5']);
+    expect(bundle.missions.keys, ['ch0_training', 'ch1_m1', 'ch1_m2', 'ch1_m3', 'ch1_m4', 'ch1_m5']);
+    expect(bundle.missions['ch0_training']!.chapter, 0);
     expect(bundle.officers.keys.toSet(), {
       'tran-thai-tong',
       'tran-thu-do',
@@ -63,5 +64,15 @@ void main() {
     final files = readContentDir(dir!).keys.where((f) => f.endsWith('.json')).toSet();
     expect(files, containsAll(requiredFiles));
     expect(File('${dir.path}/maps/ch1.json').existsSync(), isTrue);
+  });
+
+  test('the training steps wait for conditions from the closed list and name things that exist', () {
+    final b = loadContent(readContentDir(dir!));
+    final steps = b.missions['ch0_training']!.tutorial;
+    expect(steps.length, greaterThanOrEqualTo(20));
+    expect(steps.first.until, isNull, reason: 'the welcome is read, not acted on');
+    final waits = steps.where((t) => t.until != null).map((t) => t.until!.source).toList();
+    expect(waits, containsAll(['select:army:mong-co-1258', 'card:vuon-khong-nha-trong', 'phase:orders', 'turn:2', 'turn:3', 'zoom']));
+    expect({for (final t in steps) t.id}.length, steps.length, reason: 'step ids are unique');
   });
 }

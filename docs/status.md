@@ -42,6 +42,13 @@ The game had no graphics at all; it now has painted art everywhere.
 - **Look:** painted title screen with logo, painted backdrops on campaign, briefing, result, settings and codex, mission tiles with thumbnails, gold-edged lacquer buttons and panels (`lib/app/lacquer.dart`), officer portraits in the strip, on tokens and in the briefing, painted map (with a dimmed copy behind it) on the board, card art in the frames.
 - Still missing: narration, music and effects (10 audio files; the validator warns), a human paint-over, and per-person art for any new officer.
 
+## Update 2026-10-17 (latest): training mission and vivid links
+
+- Map links (rivers, roads) are drawn bold with a dark halo so they stay visible over the painted map.
+- New chapter 0 mission `ch0_training` (27 steps): a guided lesson that walks through the goal, top bar, map and zoom, selecting armies and officers, skills, hand and cards, Council/Orders phases, holding, the log, winning and losing conditions, and counter-cards. Steps wait for the player to do the action (`until` conditions, a closed list parsed in `lk_rules/model/tutorial.dart`, evaluated by `GuidedFlow` in the app).
+- Chapter 0 is always open, not part of the unlock chain, and is offered once to new players (`tutorialDone` marker).
+- Verified in tests only (analyze clean; full workspace tests pass). Not yet checked on the phone, which was locked.
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

@@ -983,4 +983,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boardZoomReset => 'Show the whole map';
+
+  @override
+  String get tutorialDoIt => 'Do what the prompt says to continue.';
+
+  @override
+  String get tutorialSkipStep => 'Skip step';
+
+  @override
+  String get campaignTraining => 'Training';
+
+  @override
+  String get campaignTrainingHint => 'A step-by-step lesson on how to play.';
 }

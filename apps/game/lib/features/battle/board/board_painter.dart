@@ -170,33 +170,41 @@ final class BoardPainter {
   }
 
   void _paintEdge(Canvas canvas, EdgeView e) {
+    // Every link gets a dark halo first, so it reads on any part of the
+    // painting, then a bright line on top: rivers in luminous teal and gold,
+    // roads as bold dashed parchment.
+    final halo = Paint()
+      ..strokeCap = StrokeCap.round
+      ..color = const Color(0xE60A0605);
     if (e.kind == EdgeKind.river) {
+      canvas.drawLine(e.a, e.b, halo..strokeWidth = 10);
       canvas.drawLine(
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 4
+          ..strokeWidth = 6
           ..strokeCap = StrokeCap.round
-          ..color = LongKyColors.riverBlue,
+          ..color = const Color(0xFF2FB4C4),
       );
       canvas.drawLine(
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 1
-          ..color = LongKyColors.goldLeaf.withValues(alpha: 0.7),
+          ..strokeWidth = 1.6
+          ..color = const Color(0xFFF4DC8E),
       );
     } else {
+      _dashedLine(canvas, e.a, e.b, halo..strokeWidth = 8, dash: 12, gap: 6);
       _dashedLine(
         canvas,
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 1.8
+          ..strokeWidth = 4
           ..strokeCap = StrokeCap.round
-          ..color = LongKyColors.ivory.withValues(alpha: 0.55),
-        dash: 9,
-        gap: 7,
+          ..color = const Color(0xFFF6EBCB),
+        dash: 12,
+        gap: 6,
       );
     }
     if (e.ambushed) {

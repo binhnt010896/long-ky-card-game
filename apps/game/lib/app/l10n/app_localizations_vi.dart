@@ -981,4 +981,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get boardZoomReset => 'Xem toàn bản đồ';
+
+  @override
+  String get tutorialDoIt => 'Làm theo hướng dẫn để tiếp tục.';
+
+  @override
+  String get tutorialSkipStep => 'Bỏ qua bước';
+
+  @override
+  String get campaignTraining => 'Huấn luyện';
+
+  @override
+  String get campaignTrainingHint => 'Bài huấn luyện dạy cách chơi từng bước.';
 }
