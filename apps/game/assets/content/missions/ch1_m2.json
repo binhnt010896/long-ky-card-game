@@ -15,6 +15,7 @@
     "en": "End of the mission Bình Lệ Nguyên."
   },
   "map": "ch1",
+  "art": "missions/ch1_m2.jpg",
   "seasonTurns": 4,
   "heatStartTurn": null,
   "start": {

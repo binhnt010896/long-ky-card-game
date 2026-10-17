@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lk_content/lk_content.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/long_ky_app.dart';
 import '../../app/theme.dart';
 import '../../data/content_repository.dart';
@@ -25,8 +26,8 @@ class _CreditsScreenState extends State<CreditsScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final heading = Theme.of(context).textTheme.titleMedium?.copyWith(color: LongKyColors.goldLeaf);
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsCredits)),
+    return LacquerPage(
+      title: l.settingsCredits,
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),

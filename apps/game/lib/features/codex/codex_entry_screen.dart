@@ -4,6 +4,7 @@ import 'package:lk_content/lk_content.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/theme.dart';
 import '../../art/art_image.dart';
 import '../../data/codex.dart';
@@ -28,8 +29,8 @@ class CodexEntryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final title = entry.title == null ? null : l.content(entry.title!);
-    return Scaffold(
-      appBar: AppBar(title: Text(l.content(entry.name))),
+    return LacquerPage(
+      title: l.content(entry.name),
       body: SafeArea(
         child: Align(
           alignment: Alignment.topCenter,

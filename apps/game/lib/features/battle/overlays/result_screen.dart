@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/l10n/app_localizations.dart';
+import '../../../app/lacquer.dart';
 import '../../../app/theme.dart';
 import '../../codex/read_more.dart';
 import '../labels.dart';
@@ -67,8 +68,16 @@ class ResultScreen extends StatelessWidget {
     final objectives = ruleset.mission.stars;
     return Material(
       key: const Key('result-screen'),
-      color: LongKyColors.lacquer.withValues(alpha: 0.96),
-      child: SafeArea(
+      color: LongKyColors.lacquer,
+      child: LacquerBackdrop(
+        // The mission's own painting, dark enough to read the result over.
+        path: ruleset.mission.art,
+        scrim: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xCC0E0B0A), Color(0xF20E0B0A)],
+        ),
+        child: SafeArea(
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 600),
@@ -195,6 +204,7 @@ class ResultScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

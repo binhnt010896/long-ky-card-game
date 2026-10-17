@@ -15,6 +15,7 @@
     "en": "End of the mission My Head Has Not Fallen."
   },
   "map": "ch1",
+  "art": "missions/ch1_m4.jpg",
   "seasonTurns": 5,
   "heatStartTurn": 3,
   "start": {

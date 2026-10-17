@@ -7,7 +7,7 @@ import '../board/board_scene.dart';
 import '../labels.dart';
 import 'panel.dart';
 
-/// One tile per officer: portrait placeholder, name, troops, morale, order.
+/// One tile per officer: portrait, name, troops, morale, order.
 /// Tapping an active officer selects them on the board.
 class OfficerStrip extends StatelessWidget {
   const OfficerStrip({
@@ -122,7 +122,12 @@ class OfficerTile extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    InitialsBadge(initials: initialsOf(def.name.vi), size: compact ? 30 : 40, heavy: def.isKing),
+                    PortraitBadge(
+                      path: def.portraitArt,
+                      initials: initialsOf(def.name.vi),
+                      size: compact ? 34 : 46,
+                      heavy: def.isKing,
+                    ),
                     SizedBox(width: compact ? 6 : 8),
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: compact ? 120 : 150),

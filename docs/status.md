@@ -33,6 +33,15 @@ Commands: see `README.md`. Flutter 3.47.7 (needs `/opt/fl/flutter/bin` on PATH i
 - **Art on the board:** the map (`maps/ch1.png`, named by the new optional `image` field in `maps/ch1.json`, `MapDef.imagePath`) and the officer and commander portraits (`portraitArt` in the content) are drawn when shipped, with the old vector placeholders otherwise. **The repo still holds no art or audio files** (only `.gitkeep`), so nothing painted can show yet. Paths: `docs/review/` and `dart run packages/lk_content/bin/validate.dart --release` list every file expected.
 - Test phone: an earlier test left the app's text size at 150% on the owner's phone; set it back to 100% (Settings, Text size).
 
+## Update 2026-10-17 (later): painted art and a new look
+
+The game had no graphics at all; it now has painted art everywhere.
+
+- **Art sources and prompts:** `docs/art/README.md`. Seven portraits, the title cover, the dragon splash, the logo and the mission 2 and 4 paintings come from the owner's **viet-su** project (`tools/art/import_viet_su.sh`). The **painted Chapter 1 map**, the **six card illustrations** and the mission 1, 3 and 5 backdrops were **generated with Higgsfield** (`nano_banana_pro`, viet-su style lock; mission 1 and 5 were redone to remove writing on a plaque and a banner). **All AI-made pictures are drafts: they need a human paint-over and a history review before release** (plan.md, "Art pipeline").
+- **Content:** missions now have an `art` field (`MissionDef.art`); `maps/ch1.json` points at `maps/ch1.jpg` and its nine node positions were fitted by eye to the painted map; officer and card art are `.jpg`. Saved battles from before this change restart (content hash changed).
+- **Look:** painted title screen with logo, painted backdrops on campaign, briefing, result, settings and codex, mission tiles with thumbnails, gold-edged lacquer buttons and panels (`lib/app/lacquer.dart`), officer portraits in the strip, on tokens and in the briefing, painted map (with a dimmed copy behind it) on the board, card art in the frames.
+- Still missing: narration, music and effects (10 audio files; the validator warns), a human paint-over, and per-person art for any new officer.
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).

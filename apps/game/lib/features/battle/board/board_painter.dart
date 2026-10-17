@@ -141,9 +141,19 @@ final class BoardPainter {
   // -- Map ---------------------------------------------------------------------
 
   void _paintMapPanel(Canvas canvas, BoardScene scene) {
+    final map = _art?.image(scene.mapImagePath);
+    if (map != null) {
+      // The map is 16:9 and the board often is not: fill the space around it
+      // with a darkened, enlarged copy of the same painting.
+      final all = Offset.zero & scene.layout.size;
+      canvas.save();
+      canvas.clipRect(all);
+      _drawCover(canvas, map, all, Paint()..filterQuality = FilterQuality.low);
+      canvas.drawRect(all, Paint()..color = LongKyColors.lacquer.withValues(alpha: 0.72));
+      canvas.restore();
+    }
     final r = RRect.fromRectAndRadius(scene.layout.mapRect.inflate(6), const Radius.circular(10));
     canvas.drawRRect(r, Paint()..color = LongKyColors.lacquerRaised);
-    final map = _art?.image(scene.mapImagePath);
     if (map != null) {
       canvas.save();
       canvas.clipRRect(r);

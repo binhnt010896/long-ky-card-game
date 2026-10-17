@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lk_content/lk_content.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/theme.dart';
 import '../../data/codex.dart';
 import '../../data/content_repository.dart';
@@ -57,10 +58,7 @@ class _CodexScreenState extends State<CodexScreen> {
     } else {
       body = _CodexList(content: content, codex: Codex(content));
     }
-    return Scaffold(
-      appBar: AppBar(title: Text(l.menuCodex)),
-      body: SafeArea(child: body),
-    );
+    return LacquerPage(title: l.menuCodex, body: body);
   }
 }
 

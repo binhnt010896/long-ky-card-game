@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/routes.dart';
 import '../../app/theme.dart';
 import '../../data/battle_save_repository.dart';
@@ -60,49 +61,84 @@ class _TitleScreenState extends State<TitleScreen> {
     final l = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  l.appTitle,
-                  textAlign: TextAlign.center,
-                  style: textTheme.displaySmall?.copyWith(color: LongKyColors.goldLeaf, fontWeight: FontWeight.w700),
+      body: LacquerBackdrop(
+        path: 'ui/title-cover.jpg',
+        alignment: const Alignment(0.35, 0),
+        scrim: LacquerBackdrop.fromLeft,
+        child: SafeArea(
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 320),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Logo and title side by side, so the menu fits a phone held sideways.
+                    Row(
+                      children: [
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: LongKyColors.goldLeaf.withValues(alpha: 0.8), width: 1),
+                            boxShadow: [BoxShadow(color: LongKyColors.goldLeaf.withValues(alpha: 0.35), blurRadius: 20)],
+                          ),
+                          child: const PaintedImage(path: 'ui/logo.png', width: 56, height: 56, circle: true),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            l.appTitle,
+                            style: textTheme.titleLarge?.copyWith(
+                              color: LongKyColors.goldLeaf,
+                              fontWeight: FontWeight.w700,
+                              height: 1.15,
+                              shadows: const [Shadow(color: Colors.black, blurRadius: 12)],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Center(child: GoldDivider(width: 280)),
+                    const SizedBox(height: 16),
+                    // Continue resumes the saved battle, if there is one.
+                    FilledButton(
+                      key: const Key('menu-continue'),
+                      onPressed: _continueMission == null ? null : _continue,
+                      child: Text(l.menuContinue),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: () => Navigator.pushNamed(context, Routes.campaign),
+                      child: Text(l.menuCampaign),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: () => Navigator.pushNamed(context, Routes.codex),
+                      child: Text(l.menuCodex),
+                    ),
+                    const SizedBox(height: 10),
+                    OutlinedButton(
+                      onPressed: () => Navigator.pushNamed(context, Routes.settings),
+                      child: Text(l.menuSettings),
+                    ),
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 10),
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, Routes.boardPreview).then((_) => _refresh()),
+                        child: const Text('Board preview (debug)'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, Routes.briefingPreview),
+                        child: const Text('Briefing preview (debug)'),
+                      ),
+                    ],
+                  ],
                 ),
-                const SizedBox(height: 40),
-                // Continue resumes the saved battle, if there is one.
-                FilledButton(
-                  key: const Key('menu-continue'),
-                  onPressed: _continueMission == null ? null : _continue,
-                  child: Text(l.menuContinue),
-                ),
-                const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, Routes.campaign),
-                  child: Text(l.menuCampaign),
-                ),
-                const SizedBox(height: 12),
-                OutlinedButton(onPressed: () => Navigator.pushNamed(context, Routes.codex), child: Text(l.menuCodex)),
-                const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: () => Navigator.pushNamed(context, Routes.settings),
-                  child: Text(l.menuSettings),
-                ),
-                if (kDebugMode) ...[
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () => Navigator.pushNamed(context, Routes.boardPreview).then((_) => _refresh()),
-                    child: const Text('Board preview (debug)'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pushNamed(context, Routes.briefingPreview),
-                    child: const Text('Briefing preview (debug)'),
-                  ),
-                ],
-              ],
+              ),
             ),
           ),
         ),

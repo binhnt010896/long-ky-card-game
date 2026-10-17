@@ -41,11 +41,11 @@ void main() {
 
   group('the content names the art', () {
     test('the map and every portrait path come from the content', () {
-      expect(scene.mapImagePath, 'maps/ch1.png');
+      expect(scene.mapImagePath, 'maps/ch1.jpg');
       final king = scene.tokens.firstWhere((t) => t.id == 'tran-thai-tong');
-      expect(king.artPath, 'officers/tran-thai-tong/portrait.png');
+      expect(king.artPath, 'officers/tran-thai-tong/portrait.jpg');
       final army = scene.tokens.firstWhere((t) => t.id == 'mong-co-1258');
-      expect(army.artPath, 'enemies/ngot-luong-hop-thai/portrait.png');
+      expect(army.artPath, 'enemies/ngot-luong-hop-thai/portrait.jpg');
     });
   });
 
@@ -53,42 +53,45 @@ void main() {
     testWidgets('decodes shipped files once and ignores files that are not shipped', (tester) async {
       final png = (await tester.runAsync(makePng))!;
       final bundle = MemoryArtBundle({
-        'assets/images/maps/ch1.png': png,
-        'assets/images/officers/tran-thai-tong/portrait.png': png,
+        'assets/images/maps/ch1.jpg': png,
+        'assets/images/officers/tran-thai-tong/portrait.jpg': png,
       });
       final cache = BoardArtCache(bundle.library);
-      expect(cache.image('maps/ch1.png'), isNull, reason: 'decoding has only just started');
-      expect(cache.image('officers/le-phu-tran/portrait.png'), isNull, reason: 'not shipped');
+      expect(cache.image('maps/ch1.jpg'), isNull, reason: 'decoding has only just started');
+      expect(cache.image('officers/le-phu-tran/portrait.jpg'), isNull, reason: 'not shipped');
       expect(cache.image(null), isNull);
-      cache.image('officers/tran-thai-tong/portrait.png');
+      cache.image('officers/tran-thai-tong/portrait.jpg');
       await decode(tester);
-      expect(cache.image('maps/ch1.png'), isNotNull);
-      expect(cache.image('officers/tran-thai-tong/portrait.png')!.width, 240);
-      expect(cache.image('officers/le-phu-tran/portrait.png'), isNull);
+      expect(cache.image('maps/ch1.jpg'), isNotNull);
+      expect(cache.image('officers/tran-thai-tong/portrait.jpg')!.width, 240);
+      expect(cache.image('officers/le-phu-tran/portrait.jpg'), isNull);
       expect(cache.loaded, 2);
       cache.dispose();
       expect(cache.loaded, 0);
     });
 
     testWidgets('a file that cannot be decoded is just absent', (tester) async {
-      final bundle = MemoryArtBundle({'assets/images/maps/ch1.png': Uint8List.fromList([1, 2, 3])});
-      final cache = BoardArtCache(bundle.library)..image('maps/ch1.png');
+      final bundle = MemoryArtBundle({'assets/images/maps/ch1.jpg': Uint8List.fromList([1, 2, 3])});
+      final cache = BoardArtCache(bundle.library)..image('maps/ch1.jpg');
       await decode(tester);
-      expect(cache.image('maps/ch1.png'), isNull);
+      expect(cache.image('maps/ch1.jpg'), isNull);
     });
   });
 
   group('the board draws the art that is shipped', () {
     testWidgets('the painted map fills the map area; without it the lacquer placeholder shows', (tester) async {
       final png = (await tester.runAsync(makePng))!;
-      final cache = BoardArtCache(MemoryArtBundle({'assets/images/maps/ch1.png': png}).library);
-      cache.image('maps/ch1.png');
+      final cache = BoardArtCache(MemoryArtBundle({'assets/images/maps/ch1.jpg': png}).library);
+      cache.image('maps/ch1.jpg');
       await decode(tester);
       final spot = Offset(scene.layout.mapRect.left + 20, scene.layout.mapRect.bottom - 20);
       final plain = await render(tester, scene, null);
       final painted = await render(tester, scene, cache);
       expect(pixel(plain, 1600, spot), _lacquerRaised);
       expect(pixel(painted, 1600, spot), isNot(_lacquerRaised));
+      // The board around the 16:9 map is painted too, not left black.
+      expect(pixel(plain, 1600, const Offset(4, 4)) & 0xFF000000, 0, reason: 'nothing drawn there without art');
+      expect(pixel(painted, 1600, const Offset(4, 4)) & 0xFF000000, isNot(0), reason: 'dimmed painting there');
       // The same, with nothing shipped: identical to no art cache at all.
       final none = await render(tester, scene, BoardArtCache.empty());
       expect(pixel(none, 1600, spot), _lacquerRaised);
@@ -97,9 +100,9 @@ void main() {
     testWidgets('a portrait replaces the initials in the officer token', (tester) async {
       final png = (await tester.runAsync(makePng))!;
       final cache = BoardArtCache(
-        MemoryArtBundle({'assets/images/officers/tran-thai-tong/portrait.png': png}).library,
+        MemoryArtBundle({'assets/images/officers/tran-thai-tong/portrait.jpg': png}).library,
       );
-      cache.image('officers/tran-thai-tong/portrait.png');
+      cache.image('officers/tran-thai-tong/portrait.jpg');
       await decode(tester);
       final king = scene.tokens.firstWhere((t) => t.id == 'tran-thai-tong');
       final other = scene.tokens.firstWhere((t) => t.id == 'tran-thu-do');
@@ -120,7 +123,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     final png = (await tester.runAsync(makePng))!;
-    final library = MemoryArtBundle({'assets/images/maps/ch1.png': png}).library;
+    final library = MemoryArtBundle({'assets/images/maps/ch1.jpg': png}).library;
     await tester.pumpWidget(
       RepositoryProvider<ArtLibrary>.value(
         value: library,

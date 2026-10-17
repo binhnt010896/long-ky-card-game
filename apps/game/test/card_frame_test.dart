@@ -194,7 +194,7 @@ void main() {
         await tester.pump();
         expect(find.byType(Image), findsOneWidget);
         expect(find.byKey(const Key('art-placeholder')), findsNothing);
-        expect(stratagem.art, 'cards/vuon-khong-nha-trong.png');
+        expect(stratagem.art, 'cards/vuon-khong-nha-trong.jpg');
       });
 
       testWidgets('in English', (tester) async {

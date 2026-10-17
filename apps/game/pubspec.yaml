@@ -38,8 +38,10 @@ flutter:
     - assets/content/
     - assets/content/maps/
     - assets/content/missions/
-    # Painted art, by content id (build-spec section 6): cards/<id>.png and
-    # officers|enemies/<id>/{portrait,card}.png. Missing art draws a placeholder.
+    # Painted art, by content id (build-spec section 6): cards/<id>.jpg,
+    # officers|enemies/<id>/{portrait,card}.jpg, maps/<id>.jpg and
+    # missions/<id>.jpg. ui/ holds the menu pictures named in the code.
+    # Missing art draws a placeholder.
     - assets/images/cards/
     - assets/images/enemies/ngot-luong-hop-thai/
     - assets/images/officers/le-phu-tran/
@@ -48,7 +50,10 @@ flutter:
     - assets/images/officers/tran-quoc-tuan/
     - assets/images/officers/tran-thai-tong/
     - assets/images/officers/tran-thu-do/
-    - assets/images/maps/    # Narration, music and effects, named by content id (build-spec section 6).
+    - assets/images/maps/
+    - assets/images/missions/
+    - assets/images/ui/
+    # Narration, music and effects, named by content id (build-spec section 6).
     # The files come with the audio production; until then they are skipped.
     - assets/audio/voice/
     - assets/audio/music/

@@ -5,7 +5,7 @@
     "name": { "vi": "Ngột Lương Hợp Thai", "en": "Uriyangkhadai" },
     "title": null,
     "stats": { "leadership": 9, "war": 9, "intelligence": 7 },
-    "art": { "portrait": "enemies/ngot-luong-hop-thai/portrait.png", "card": "enemies/ngot-luong-hop-thai/card.png" },
+    "art": { "portrait": "enemies/ngot-luong-hop-thai/portrait.jpg", "card": "enemies/ngot-luong-hop-thai/card.jpg" },
     "sourceRefs": ["vietjack-ls11-p50"],
     "todo": [
       "title: not given in build-spec section 5."

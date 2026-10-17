@@ -12,7 +12,7 @@
     "conditions": [],
     "effects": [ { "op": "evacuateNode", "target": "$node" } ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/vuon-khong-nha-trong.png",
+    "art": "cards/vuon-khong-nha-trong.jpg",
     "sourceRefs": ["vietjack-sbt7-p48"],
     "todo": ["en text drafted from vi, needs review."]
   },
@@ -29,7 +29,7 @@
     "conditions": [],
     "effects": [ { "op": "withdrawOfficer", "target": "$officer" } ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/lui-binh-bao-toan.png",
+    "art": "cards/lui-binh-bao-toan.jpg",
     "sourceRefs": ["luatminhkhue-ba-lan-khang-chien"],
     "todo": ["en name and text drafted from vi, need review.", "longKyEventId: assumed to be the 1258 war event."]
   },
@@ -46,7 +46,7 @@
     "conditions": [],
     "effects": [ { "op": "placeAmbush", "target": "$edge" } ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/phuc-kich-ben-song.png",
+    "art": "cards/phuc-kich-ben-song.jpg",
     "sourceRefs": ["vietjack-sbt7-p48"],
     "todo": [
       "sourceRefs: no source in the docs covers river ambushes in 1258; the general war source is a placeholder. History reviewer to supply one.",
@@ -69,7 +69,7 @@
       { "op": "powerMultiplier", "target": "$officer", "value": 2.0, "duration": "nextBattle", "enemySupplyBelow": 0.5 }
     ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/phan-cong.png",
+    "art": "cards/phan-cong.jpg",
     "sourceRefs": ["loigiaihay-tbd7-p19"],
     "todo": ["en text drafted from vi, needs review.", "longKyEventId: assumed to be the 1258 war event."]
   },
@@ -100,7 +100,7 @@
       }
     ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/su-gia-phuong-bac.png",
+    "art": "cards/su-gia-phuong-bac.jpg",
     "sourceRefs": ["vietjack-ls11-p50", "wikipedia-tran-thai-tong"],
     "todo": [
       "Event narration (what the envoys said) is not in section 5; only the mechanical text is written.",
@@ -117,7 +117,7 @@
     "conditions": [],
     "effects": [ { "op": "modArmy", "target": "allArmies", "field": "troops", "delta": -1 } ],
     "longKyEventId": "khang-chien-mong-co-lan-mot",
-    "art": "cards/nang-nong.png",
+    "art": "cards/nang-nong.jpg",
     "sourceRefs": ["weaponsandwarfare-mongol-vietnam"],
     "todo": ["en text drafted from vi, needs review.", "longKyEventId: assumed to be the 1258 war event."]
   }

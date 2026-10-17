@@ -478,6 +478,7 @@ final class ContentParser {
       tutorial: tutorial,
       longKyEventId: _longKy(o, 'longKyEventId', RefKind.longKyEvent),
       sourceRefs: _sourceRefs(o),
+      art: _image(o, 'art', required: false),
     );
     for (final key in ['briefing', 'debrief']) {
       refs.add(Ref(RefKind.audio, 'voice/${id}_$key.mp3', o.file, o.sub(key)));

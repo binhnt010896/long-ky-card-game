@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/routes.dart';
 import '../../app/theme.dart';
 import '../../data/progress.dart';
@@ -37,8 +38,8 @@ class SettingsScreen extends StatelessWidget {
           trailing: Text(l.percentValue((value * 100).round())),
         );
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l.settingsTitle)),
+    return LacquerPage(
+      title: l.settingsTitle,
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 640),

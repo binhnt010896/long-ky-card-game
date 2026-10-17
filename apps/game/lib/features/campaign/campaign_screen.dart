@@ -5,13 +5,13 @@ import 'package:lk_content/lk_content.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/theme.dart';
 import '../../data/battle_save_repository.dart';
 import '../../data/campaign.dart';
 import '../../data/content_repository.dart';
 import '../../data/progress.dart';
 import '../battle/labels.dart';
-import '../battle/overlays/panel.dart';
 import '../briefing/briefing_screen.dart';
 import '../settings/progress_cubit.dart';
 
@@ -71,10 +71,7 @@ class _CampaignScreenState extends State<CampaignScreen> with _ContentLoader<Cam
               );
             },
           );
-    return Scaffold(
-      appBar: AppBar(title: Text(l.menuCampaign)),
-      body: SafeArea(child: body),
-    );
+    return LacquerPage(title: l.menuCampaign, body: body);
   }
 }
 
@@ -89,11 +86,19 @@ class _CentredList extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 680),
-        child: ListView.separated(
+        // A chapter has a handful of rows: build them all, so none below the
+        // fold is dropped by a lazy list.
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          itemCount: children.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 10),
-          itemBuilder: (_, i) => children[i],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < children.length; i++) ...[
+                if (i > 0) const SizedBox(height: 10),
+                children[i],
+              ],
+            ],
+          ),
         ),
       ),
     );
@@ -119,6 +124,7 @@ class _ChapterCard extends StatelessWidget {
       campaign.starsPossible(chapter),
     );
     return _Tile(
+      artPath: 'ui/title-cover.jpg',
       title: l.campaignChapter(chapter),
       subtitle: open ? summary : l.campaignLocked,
       locked: !open,
@@ -206,10 +212,7 @@ class _ChapterScreenState extends State<ChapterScreen> with _ContentLoader<Chapt
               );
             },
           );
-    return Scaffold(
-      appBar: AppBar(title: Text(l.campaignChapter(widget.chapter))),
-      body: SafeArea(child: body),
-    );
+    return LacquerPage(title: l.campaignChapter(widget.chapter), body: body);
   }
 }
 
@@ -233,6 +236,7 @@ class _MissionTile extends StatelessWidget {
     final earned = Campaign.starsEarned(progress, mission.id);
     final total = mission.stars.length;
     return _Tile(
+      artPath: mission.art,
       title: l.content(mission.title),
       subtitle: unlocked ? l.campaignMissionNumber(mission.order) : l.campaignLockedHint,
       locked: !unlocked,
@@ -244,8 +248,17 @@ class _MissionTile extends StatelessWidget {
 
 /// A row of the campaign: a title, a line under it, the stars or a lock.
 class _Tile extends StatelessWidget {
-  const _Tile({required this.title, required this.subtitle, required this.locked, this.stars, this.onTap});
+  const _Tile({
+    required this.title,
+    required this.subtitle,
+    required this.locked,
+    this.artPath,
+    this.stars,
+    this.onTap,
+  });
 
+  /// The painted picture on the left, under `assets/images/`.
+  final String? artPath;
   final String title;
   final String subtitle;
   final bool locked;
@@ -260,45 +273,76 @@ class _Tile extends StatelessWidget {
       enabled: !locked,
       label: [title, subtitle, if (stars != null) l.campaignStarsSemantics(stars!.earned, stars!.total)].join(', '),
       excludeSemantics: true,
-      child: Opacity(
-        opacity: locked ? 0.55 : 1,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 64),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: lacquerPanel(),
-              child: Row(
-                children: [
-                  Expanded(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 84),
+            clipBehavior: Clip.antiAlias,
+            decoration: lacquerCard(glow: !locked && onTap != null),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 150,
+                  height: 84,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      const ColoredBox(color: Color(0xFF1A0D0C)),
+                      PaintedImage(path: artPath),
+                      // A locked mission is dimmed and shows a lock.
+                      if (locked)
+                        ColoredBox(
+                          color: Colors.black.withValues(alpha: 0.65),
+                          child: const Center(
+                            child: Icon(Icons.lock_outline, key: Key('lock'), color: LongKyColors.ivory),
+                          ),
+                        ),
+                      // Fade into the panel.
+                      const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [Color(0x00000000), Color(0xFF1B0F0D)],
+                            stops: [0.55, 1.0],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
-                            color: LongKyColors.goldLeaf,
-                            fontSize: 18,
+                          style: TextStyle(
+                            color: locked ? LongKyColors.goldLeaf.withValues(alpha: 0.6) : LongKyColors.goldLeaf,
+                            fontSize: 17,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           subtitle,
-                          style: TextStyle(color: LongKyColors.ivory.withValues(alpha: 0.85), fontSize: 13),
+                          style: TextStyle(color: LongKyColors.ivory.withValues(alpha: locked ? 0.6 : 0.85), fontSize: 13),
                         ),
                       ],
                     ),
                   ),
-                  if (locked)
-                    const Icon(Icons.lock_outline, key: Key('lock'), color: LongKyColors.ivory)
-                  else if (stars != null)
-                    // Filled or outlined, so the count is not told by colour alone.
-                    Row(
+                ),
+                if (!locked && stars != null)
+                  // Filled or outlined, so the count is not told by colour alone.
+                  Padding(
+                    padding: const EdgeInsets.only(right: 14),
+                    child: Row(
                       key: const Key('stars'),
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -309,11 +353,14 @@ class _Tile extends StatelessWidget {
                             color: LongKyColors.goldLeaf,
                           ),
                       ],
-                    )
-                  else
-                    const Icon(Icons.chevron_right, color: LongKyColors.goldLeaf),
-                ],
-              ),
+                    ),
+                  )
+                else if (!locked)
+                  const Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: Icon(Icons.chevron_right, color: LongKyColors.goldLeaf),
+                  ),
+              ],
             ),
           ),
         ),

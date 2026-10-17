@@ -499,6 +499,7 @@ final class MissionDef {
     this.tutorial = const [],
     this.longKyEventId,
     this.sourceRefs = const [],
+    this.art,
   });
 
   final String id;
@@ -531,6 +532,11 @@ final class MissionDef {
   final List<TutorialStep> tutorial;
   final String? longKyEventId;
   final List<String> sourceRefs;
+
+  /// A painted backdrop under `assets/images/` (for example
+  /// `missions/ch1_m2.jpg`), shown on the campaign, briefing and result
+  /// screens. Placeholders are drawn when the file is not shipped.
+  final String? art;
 }
 
 // ---------------------------------------------------------------------------

@@ -47,8 +47,16 @@ ThemeData buildLongKyTheme() {
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         minimumSize: const Size(220, 48),
-        backgroundColor: LongKyColors.goldLeaf,
+        backgroundColor: const Color(0xFFD9B35A),
         foregroundColor: LongKyColors.lacquer,
+        disabledBackgroundColor: LongKyColors.ivory.withValues(alpha: 0.12),
+        disabledForegroundColor: LongKyColors.ivory.withValues(alpha: 0.45),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: Color(0xFFF1D58A), width: 1),
+        ),
+        elevation: 3,
+        shadowColor: Colors.black,
         textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w600),
       ),
     ),
@@ -56,10 +64,14 @@ ThemeData buildLongKyTheme() {
       style: OutlinedButton.styleFrom(
         minimumSize: const Size(220, 48),
         foregroundColor: LongKyColors.ivory,
-        side: const BorderSide(color: LongKyColors.goldLeaf),
+        backgroundColor: const Color(0xCC2B1411),
+        side: BorderSide(color: LongKyColors.goldLeaf.withValues(alpha: 0.8), width: 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 0,
         textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w500),
       ),
     ),
+    cardTheme: const CardThemeData(color: LongKyColors.lacquerRaised),
     dividerTheme: const DividerThemeData(color: LongKyColors.lacquerRaised),
   );
 }

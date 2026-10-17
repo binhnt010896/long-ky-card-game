@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lk_rules/lk_rules.dart';
 
 import '../../app/l10n/app_localizations.dart';
+import '../../app/lacquer.dart';
 import '../../app/theme.dart';
 import '../../audio/audio_service.dart';
 import '../../data/mission_loader.dart';
@@ -118,7 +119,11 @@ class _BriefingScreenState extends State<BriefingScreen> {
       loseIf: namer.extraLossRules(mission),
       officers: [
         for (final p in mission.playerOfficers)
-          (name: namer.officer(p.officerId), line: l.briefingOfficerLine(l.troopsFull(p.troops), namer.node(p.nodeId))),
+          (
+            name: namer.officer(p.officerId),
+            line: l.briefingOfficerLine(l.troopsFull(p.troops), namer.node(p.nodeId)),
+            portrait: ruleset.officers[p.officerId]?.portraitArt,
+          ),
       ],
     );
     final start = FilledButton(
@@ -129,9 +134,17 @@ class _BriefingScreenState extends State<BriefingScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: compact
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(backgroundColor: Colors.transparent),
+      body: LacquerBackdrop(
+        path: mission.art,
+        scrim: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x990E0B0A), Color(0xD90E0B0A)],
+        ),
+        child: SafeArea(
+          child: compact
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -168,6 +181,7 @@ class _BriefingScreenState extends State<BriefingScreen> {
                   ),
                 ],
               ),
+        ),
       ),
     );
   }
@@ -209,8 +223,8 @@ class _Narration extends StatelessWidget {
             child: Container(
               key: const Key('briefing-subtitles'),
               width: double.infinity,
-              padding: const EdgeInsets.all(14),
-              decoration: lacquerPanel(),
+              padding: const EdgeInsets.all(16),
+              decoration: lacquerCard(opacity: 0.9),
               child: Text(text, style: const TextStyle(color: LongKyColors.ivory, fontSize: 17, height: 1.5)),
             ),
           ),
@@ -236,14 +250,17 @@ class _Facts extends StatelessWidget {
 
   /// Extra ways to lose, beyond the standard ones.
   final List<String> loseIf;
-  final List<({String name, String line})> officers;
+  final List<({String name, String line, String? portrait})> officers;
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(12, 8, 16, 8),
-      child: Column(
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: lacquerCard(opacity: 0.9),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _heading(l.briefingObjectives),
@@ -274,21 +291,37 @@ class _Facts extends StatelessWidget {
           for (var i = 0; i < officers.length; i++)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: officers[i].name,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: LongKyColors.goldLeaf.withValues(alpha: 0.8), width: 1),
                     ),
-                    TextSpan(text: ' · ${officers[i].line}'),
-                  ],
-                ),
-                key: Key('briefing-officer-$i'),
-                style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.3),
+                    child: PaintedImage(path: officers[i].portrait, width: 34, height: 34, circle: true),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: officers[i].name,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                          TextSpan(text: ' · ${officers[i].line}'),
+                        ],
+                      ),
+                      key: Key('briefing-officer-$i'),
+                      style: const TextStyle(color: LongKyColors.ivory, fontSize: 15, height: 1.3),
+                    ),
+                  ),
+                ],
               ),
             ),
         ],
+      ),
       ),
     );
   }

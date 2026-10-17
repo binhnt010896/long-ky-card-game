@@ -21,7 +21,7 @@
       "name": { "vi": "Bậc quân vương", "en": "The Sovereign" },
       "text": { "vi": "Nếu vua bị bắt, nhiệm vụ thất bại.", "en": "If the king is captured, the mission is lost." }
     },
-    "art": { "portrait": "officers/tran-thai-tong/portrait.png", "card": "officers/tran-thai-tong/card.png" },
+    "art": { "portrait": "officers/tran-thai-tong/portrait.jpg", "card": "officers/tran-thai-tong/card.jpg" },
     "sourceRefs": ["loigiaihay-ls7-cd-b17"],
     "todo": [
       "title: not given in build-spec section 5.",
@@ -45,7 +45,7 @@
       "effects": [ { "op": "setUnity", "pillar": "court", "value": 10 } ]
     },
     "flaw": null,
-    "art": { "portrait": "officers/tran-thu-do/portrait.png", "card": "officers/tran-thu-do/card.png" },
+    "art": { "portrait": "officers/tran-thu-do/portrait.jpg", "card": "officers/tran-thu-do/card.jpg" },
     "sourceRefs": ["vietjack-sbt7-p48"],
     "todo": ["title and skill text taken from the build-spec section 3 example."]
   },
@@ -67,7 +67,7 @@
       }
     },
     "flaw": null,
-    "art": { "portrait": "officers/le-phu-tran/portrait.png", "card": "officers/le-phu-tran/card.png" },
+    "art": { "portrait": "officers/le-phu-tran/portrait.jpg", "card": "officers/le-phu-tran/card.jpg" },
     "sourceRefs": ["mytour-le-phu-tran"],
     "todo": [
       "title: not given in build-spec section 5.",
@@ -97,7 +97,7 @@
       "name": { "vi": "Chức thấp", "en": "Junior Rank" },
       "text": { "vi": "Chỉ chỉ huy tối đa 6 đơn vị quân trong Chương 1.", "en": "Commands at most 6 troops in Chapter 1." }
     },
-    "art": { "portrait": "officers/tran-quoc-tuan/portrait.png", "card": "officers/tran-quoc-tuan/card.png" },
+    "art": { "portrait": "officers/tran-quoc-tuan/portrait.jpg", "card": "officers/tran-quoc-tuan/card.jpg" },
     "sourceRefs": ["mytour-top7-vi-tuong"],
     "todo": [
       "title: not given in build-spec section 5.",
@@ -122,7 +122,7 @@
       }
     },
     "flaw": null,
-    "art": { "portrait": "officers/tran-khanh-du/portrait.png", "card": "officers/tran-khanh-du/card.png" },
+    "art": { "portrait": "officers/tran-khanh-du/portrait.jpg", "card": "officers/tran-khanh-du/card.jpg" },
     "sourceRefs": ["mytour-top7-vi-tuong"],
     "todo": [
       "title: not given in build-spec section 5.",
@@ -153,7 +153,7 @@
       ]
     },
     "flaw": null,
-    "art": { "portrait": "officers/tran-nhat-hieu/portrait.png", "card": "officers/tran-nhat-hieu/card.png" },
+    "art": { "portrait": "officers/tran-nhat-hieu/portrait.jpg", "card": "officers/tran-nhat-hieu/card.jpg" },
     "sourceRefs": ["znews-10-cau-noi"],
     "todo": [
       "title: not given in build-spec section 5.",

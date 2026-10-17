@@ -15,6 +15,7 @@
     "en": "End of the mission Đông Bộ Đầu."
   },
   "map": "ch1",
+  "art": "missions/ch1_m5.jpg",
   "seasonTurns": 6,
   "heatStartTurn": 6,
   "start": {

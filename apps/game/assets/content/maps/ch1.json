@@ -1,33 +1,174 @@
 {
   "id": "ch1",
-  "image": "maps/ch1.png",
+  "image": "maps/ch1.jpg",
   "todo": [
-    "x, y are placeholders until the painted Chapter 1 map exists.",
-    "en node names (Border (toward Yunnan), Thao River, Lô River) drafted from vi, need review."
+    "en node names (Border (toward Yunnan), Thao River, Lô River) drafted from vi, need review.",
+    "x, y fitted by eye to the generated painted map (Higgsfield); the history reviewer should confirm that the node placement is geographically acceptable."
   ],
   "nodes": [
-    { "id": "bien-gioi", "name": { "vi": "Biên giới (hướng Vân Nam)", "en": "Border (toward Yunnan)" }, "terrain": "hill", "x": 0.08, "y": 0.12, "riceYield": 0, "isBorder": true },
-    { "id": "song-thao", "name": { "vi": "Sông Thao", "en": "Thao River" }, "terrain": "river", "x": 0.20, "y": 0.25, "riceYield": 1, "isBorder": true },
-    { "id": "bach-hac", "name": { "vi": "Bạch Hạc", "en": "Bạch Hạc" }, "terrain": "river", "x": 0.35, "y": 0.38, "riceYield": 2 },
-    { "id": "song-lo", "name": { "vi": "Sông Lô", "en": "Lô River" }, "terrain": "river", "x": 0.42, "y": 0.20, "riceYield": 1 },
-    { "id": "binh-le-nguyen", "name": { "vi": "Bình Lệ Nguyên", "en": "Bình Lệ Nguyên" }, "terrain": "plain", "x": 0.45, "y": 0.35, "riceYield": 2 },
-    { "id": "phu-lo", "name": { "vi": "Phù Lỗ", "en": "Phù Lỗ" }, "terrain": "river", "x": 0.58, "y": 0.32, "riceYield": 2 },
-    { "id": "thang-long", "name": { "vi": "Thăng Long", "en": "Thăng Long" }, "terrain": "city", "x": 0.62, "y": 0.50, "riceYield": 3, "isCapital": true },
-    { "id": "dong-bo-dau", "name": { "vi": "Đông Bộ Đầu", "en": "Đông Bộ Đầu" }, "terrain": "river", "x": 0.66, "y": 0.44, "riceYield": 1 },
-    { "id": "thien-mac", "name": { "vi": "Thiên Mạc", "en": "Thiên Mạc" }, "terrain": "river", "x": 0.75, "y": 0.68, "riceYield": 2 }
+    {
+      "id": "bien-gioi",
+      "name": {
+        "vi": "Biên giới (hướng Vân Nam)",
+        "en": "Border (toward Yunnan)"
+      },
+      "terrain": "hill",
+      "x": 0.09,
+      "y": 0.15,
+      "riceYield": 0,
+      "isBorder": true
+    },
+    {
+      "id": "song-thao",
+      "name": {
+        "vi": "Sông Thao",
+        "en": "Thao River"
+      },
+      "terrain": "river",
+      "x": 0.2,
+      "y": 0.28,
+      "riceYield": 1,
+      "isBorder": true
+    },
+    {
+      "id": "bach-hac",
+      "name": {
+        "vi": "Bạch Hạc",
+        "en": "Bạch Hạc"
+      },
+      "terrain": "river",
+      "x": 0.38,
+      "y": 0.44,
+      "riceYield": 2
+    },
+    {
+      "id": "song-lo",
+      "name": {
+        "vi": "Sông Lô",
+        "en": "Lô River"
+      },
+      "terrain": "river",
+      "x": 0.47,
+      "y": 0.17,
+      "riceYield": 1
+    },
+    {
+      "id": "binh-le-nguyen",
+      "name": {
+        "vi": "Bình Lệ Nguyên",
+        "en": "Bình Lệ Nguyên"
+      },
+      "terrain": "plain",
+      "x": 0.5,
+      "y": 0.62,
+      "riceYield": 2
+    },
+    {
+      "id": "phu-lo",
+      "name": {
+        "vi": "Phù Lỗ",
+        "en": "Phù Lỗ"
+      },
+      "terrain": "river",
+      "x": 0.6,
+      "y": 0.45,
+      "riceYield": 2
+    },
+    {
+      "id": "thang-long",
+      "name": {
+        "vi": "Thăng Long",
+        "en": "Thăng Long"
+      },
+      "terrain": "city",
+      "x": 0.68,
+      "y": 0.34,
+      "riceYield": 3,
+      "isCapital": true
+    },
+    {
+      "id": "dong-bo-dau",
+      "name": {
+        "vi": "Đông Bộ Đầu",
+        "en": "Đông Bộ Đầu"
+      },
+      "terrain": "river",
+      "x": 0.8,
+      "y": 0.47,
+      "riceYield": 1
+    },
+    {
+      "id": "thien-mac",
+      "name": {
+        "vi": "Thiên Mạc",
+        "en": "Thiên Mạc"
+      },
+      "terrain": "river",
+      "x": 0.9,
+      "y": 0.74,
+      "riceYield": 2
+    }
   ],
   "edges": [
-    { "from": "bien-gioi", "to": "song-thao", "kind": "river" },
-    { "from": "song-thao", "to": "bach-hac", "kind": "river" },
-    { "from": "bach-hac", "to": "song-lo", "kind": "river" },
-    { "from": "bach-hac", "to": "binh-le-nguyen", "kind": "land" },
-    { "from": "song-lo", "to": "binh-le-nguyen", "kind": "land" },
-    { "from": "binh-le-nguyen", "to": "phu-lo", "kind": "land" },
-    { "from": "binh-le-nguyen", "to": "thang-long", "kind": "land" },
-    { "from": "phu-lo", "to": "thang-long", "kind": "land" },
-    { "from": "phu-lo", "to": "dong-bo-dau", "kind": "river" },
-    { "from": "thang-long", "to": "dong-bo-dau", "kind": "river" },
-    { "from": "thang-long", "to": "thien-mac", "kind": "river" },
-    { "from": "dong-bo-dau", "to": "thien-mac", "kind": "river" }
+    {
+      "from": "bien-gioi",
+      "to": "song-thao",
+      "kind": "river"
+    },
+    {
+      "from": "song-thao",
+      "to": "bach-hac",
+      "kind": "river"
+    },
+    {
+      "from": "bach-hac",
+      "to": "song-lo",
+      "kind": "river"
+    },
+    {
+      "from": "bach-hac",
+      "to": "binh-le-nguyen",
+      "kind": "land"
+    },
+    {
+      "from": "song-lo",
+      "to": "binh-le-nguyen",
+      "kind": "land"
+    },
+    {
+      "from": "binh-le-nguyen",
+      "to": "phu-lo",
+      "kind": "land"
+    },
+    {
+      "from": "binh-le-nguyen",
+      "to": "thang-long",
+      "kind": "land"
+    },
+    {
+      "from": "phu-lo",
+      "to": "thang-long",
+      "kind": "land"
+    },
+    {
+      "from": "phu-lo",
+      "to": "dong-bo-dau",
+      "kind": "river"
+    },
+    {
+      "from": "thang-long",
+      "to": "dong-bo-dau",
+      "kind": "river"
+    },
+    {
+      "from": "thang-long",
+      "to": "thien-mac",
+      "kind": "river"
+    },
+    {
+      "from": "dong-bo-dau",
+      "to": "thien-mac",
+      "kind": "river"
+    }
   ]
 }

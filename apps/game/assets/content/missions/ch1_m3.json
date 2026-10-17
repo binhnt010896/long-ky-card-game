@@ -15,6 +15,7 @@
     "en": "End of the mission Leaving Thăng Long Open."
   },
   "map": "ch1",
+  "art": "missions/ch1_m3.jpg",
   "seasonTurns": 6,
   "heatStartTurn": 5,
   "start": {
