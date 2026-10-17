@@ -76,7 +76,7 @@ The game had no graphics at all; it now has painted art everywhere.
 
 - `music/bg1.mp3` plays from the moment the game opens, through the menus and briefings; `music/bg-battle.mp3` plays when a battle starts and throughout it; leaving the battle brings `bg1` back. Both loop. The old per-chapter `chapterN` music is no longer used.
 - The music is a bed under the voices (`AudioService.musicGain` 0.45 of its Settings volume, and `musicDuck` 0.5 of that while a voice line plays), so even with both sliders at 100% the voices are louder.
-- On the phone: the music starts on launch (an audio-focus request from the app shows in `dumpsys audio`); I could not judge the loudness by ear.
+- Voices and effects play on top of the music without stopping it: every channel's player uses a mixing audio context (no audio focus), set before anything plays (`FlameAudioBackend`). Before this, on Android the voice player took audio focus and the music stopped for good. Checked on the phone with `dumpsys media.audio_flinger`: the music track stays active before, during and after an end-turn voice line, and the voice track is active alongside it. I could not judge the loudness by ear.
 
 ## Needs the owner (the agent cannot do these)
 

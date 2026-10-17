@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame_audio/flame_audio.dart';
 
 /// The three audio channels (build-spec section 6): music loops quietly,
@@ -30,8 +32,29 @@ abstract interface class AudioBackend {
 /// reads assets from the bundle (never from the network).
 final class FlameAudioBackend implements AudioBackend {
   FlameAudioBackend() {
+    final setups = <Future<void>>[];
     for (final c in AudioChannel.values) {
-      _players[c] = AudioPlayer()..audioCache = FlameAudio.audioCache;
+      final player = AudioPlayer()..audioCache = FlameAudio.audioCache;
+      _players[c] = player;
+      // The channels play together, on top of each other: none may ask the
+      // system for audio focus, or the voice would stop the music (on Android
+      // a player that gains focus makes the others pause).
+      setups.add(_mix(player));
+    }
+    _ready = Future.wait(setups);
+  }
+
+  /// The players are set up before anything plays: changing a player's audio
+  /// context while it plays stops it.
+  late final Future<void> _ready;
+
+  static final AudioContext _mixing = AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers).build();
+
+  static Future<void> _mix(AudioPlayer player) async {
+    try {
+      await player.setAudioContext(_mixing);
+    } on Object {
+      // No audio device or an unsupported platform: nothing to configure.
     }
   }
 
@@ -49,6 +72,7 @@ final class FlameAudioBackend implements AudioBackend {
 
   @override
   Future<void> play(AudioChannel channel, String path, {required double volume, bool loop = false}) async {
+    await _ready;
     final p = _players[channel]!;
     await p.stop();
     await p.setReleaseMode(loop ? ReleaseMode.loop : ReleaseMode.release);
