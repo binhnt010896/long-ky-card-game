@@ -153,7 +153,9 @@ class BattleBoardState extends State<BattleBoard> {
                 }
                 game.panBy(d.focalPointDelta);
               },
-              child: GameWidget<BoardGame>(game: game),
+              // Zoomed in, the map is bigger than its area: clip it to the area
+              // so it never spills over the top bar or the screen edge.
+              child: ClipRect(child: GameWidget<BoardGame>(game: game)),
             ),
           ),
         ),

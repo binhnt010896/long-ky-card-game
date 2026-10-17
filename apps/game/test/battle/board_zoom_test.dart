@@ -210,6 +210,16 @@ void main() {
           reason: 'the node moved, so the panel beside it moved too');
     });
 
+    testWidgets('the zoomed map is clipped to the board area', (tester) async {
+      await pumpBattle(tester, compact);
+      expect(find.ancestor(of: find.byType(GameWidget<BoardGame>), matching: find.byType(ClipRect)), findsWidgets);
+      final board = tester.getRect(find.byType(GameWidget<BoardGame>));
+      final clip = tester.getRect(find.ancestor(of: find.byType(GameWidget<BoardGame>), matching: find.byType(ClipRect)).first);
+      expect(clip.contains(board.topLeft) && clip.contains(board.bottomRight - const Offset(1, 1)), isTrue);
+      expect(clip.top, greaterThanOrEqualTo(tester.getRect(find.byKey(const Key('top-bar'))).bottom - 0.01),
+          reason: 'the clip starts below the top bar');
+    });
+
     testWidgets('resizing keeps the pan in range', (tester) async {
       await pumpBattle(tester, regular);
       final game = boardGame(tester);
