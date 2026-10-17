@@ -377,9 +377,13 @@ final class EdgeDef {
 String edgeKey(String a, String b) => a.compareTo(b) <= 0 ? '$a~$b' : '$b~$a';
 
 final class MapDef {
-  const MapDef({required this.id, required this.nodes, required this.edges});
+  const MapDef({required this.id, required this.nodes, required this.edges, this.imagePath});
 
   final String id;
+
+  /// The painted map, under `assets/images/` (for example `maps/ch1.png`).
+  /// The board draws a placeholder when the file is not shipped.
+  final String? imagePath;
   final List<NodeDef> nodes;
   final List<EdgeDef> edges;
 }

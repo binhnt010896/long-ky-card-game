@@ -262,5 +262,8 @@
   "longKyOpenFailed": "Could not open Long Ký.",
   "actionClose": "Close",
   "briefingLoss": "You lose if",
-  "lossTroopsOver": "Our losses pass {n},000 troops"
+  "lossTroopsOver": "Our losses pass {n},000 troops",
+  "boardZoomIn": "Zoom in",
+  "boardZoomOut": "Zoom out",
+  "boardZoomReset": "Show the whole map"
 }

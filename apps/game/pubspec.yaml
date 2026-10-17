@@ -48,7 +48,7 @@ flutter:
     - assets/images/officers/tran-quoc-tuan/
     - assets/images/officers/tran-thai-tong/
     - assets/images/officers/tran-thu-do/
-    # Narration, music and effects, named by content id (build-spec section 6).
+    - assets/images/maps/    # Narration, music and effects, named by content id (build-spec section 6).
     # The files come with the audio production; until then they are skipped.
     - assets/audio/voice/
     - assets/audio/music/

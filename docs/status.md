@@ -1,6 +1,6 @@
 # Status and next steps (handoff)
 
-Last updated 2026-10-16. Source of truth stays `docs/build-spec.md` (implementation) and `docs/plan.md` (design intent); rules in `CLAUDE.md`.
+Last updated 2026-10-17. Source of truth stays `docs/build-spec.md` (implementation) and `docs/plan.md` (design intent); rules in `CLAUDE.md`.
 
 ## Done: T-01 to T-29, all on `main`
 
@@ -25,6 +25,14 @@ State at last push: analyze clean; tests app 528, `lk_rules` 156, `lk_content` 3
 
 Commands: see `README.md`. Flutter 3.47.7 (needs `/opt/fl/flutter/bin` on PATH in the cloud container). Commit messages end with the attribution lines; no force-push.
 
+## Update 2026-10-17: feedback from phone testing
+
+- **Board zoom and pan** (`features/battle/board`): pinch, drag (once zoomed), mouse wheel, double tap, and +, − and "whole map" buttons. Medallions and tokens grow with the zoom (capped) so officers standing together can be tapped one by one. `BoardLayout` takes `zoom` and `pan`; the scene and the inspector use the zoomed layout.
+- **Thinner borders** on the board (nodes, tokens, edges, arrows, selection).
+- **Text size:** the setting now runs 80–150% (it was 100–150%). On a phone the battle HUD caps its text at 120% (`compactMaxTextScale`), because the officer strip and buttons are cut off beyond that. Default buttons are 16 px.
+- **Art on the board:** the map (`maps/ch1.png`, named by the new optional `image` field in `maps/ch1.json`, `MapDef.imagePath`) and the officer and commander portraits (`portraitArt` in the content) are drawn when shipped, with the old vector placeholders otherwise. **The repo still holds no art or audio files** (only `.gitkeep`), so nothing painted can show yet. Paths: `docs/review/` and `dart run packages/lk_content/bin/validate.dart --release` list every file expected.
+- Test phone: an earlier test left the app's text size at 150% on the owner's phone; set it back to 100% (Settings, Text size).
+
 ## Needs the owner (the agent cannot do these)
 
 1. **T-24 inputs:** Long Ký deep-link template (`LONG_KY_LINK_TEMPLATE`, with `{id}` and optional `{kind}`), Long Ký store URL (`LONG_KY_STORE_URL`), the unlock secret (`LK_UNLOCK_SECRET`, same one Long Ký uses). Without them "Read more" is hidden and every code is refused. Long Ký must open `longkygame://unlock?code=LK-XXXX-XXXX` (the scheme is the game's own choice; confirm it).
@@ -44,7 +52,8 @@ Commands: see `README.md`. Flutter 3.47.7 (needs `/opt/fl/flutter/bin` on PATH i
 ## Known gaps in the app (candidates for the next session)
 
 - Settings is not reachable from the battle menu (Resume/Leave only).
-- Orders are picked from a list; no tap-a-node mode and no orders drawn on the map. Preview only covers where the ordered officer fights.
+- Orders are picked from a list; no tap-a-node mode and no orders drawn on the map.
+- At zoom 1 on a phone the Bình Lệ Nguyên cluster is still tight (four neighbours, three officers, an arrow); node positions are placeholders until the painted map. Preview only covers where the ordered officer fights.
 - Chapter names are not in the content (UI says "Chương n" / "Chapter n").
 - Windows has no incoming unlock link or installer; desktop uses typed codes and the QR.
 - Briefing text for `ch1_m2` and others should mention the new win/loss rules once the narration is rewritten.

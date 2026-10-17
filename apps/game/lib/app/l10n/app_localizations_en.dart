@@ -974,4 +974,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String lossTroopsOver(int n) {
     return 'Our losses pass $n,000 troops';
   }
+
+  @override
+  String get boardZoomIn => 'Zoom in';
+
+  @override
+  String get boardZoomOut => 'Zoom out';
+
+  @override
+  String get boardZoomReset => 'Show the whole map';
 }

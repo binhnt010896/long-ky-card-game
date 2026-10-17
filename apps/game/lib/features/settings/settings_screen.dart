@@ -68,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
                   value: s.textScale,
                   min: GameSettings.minTextScale,
                   max: GameSettings.maxTextScale,
-                  divisions: 5,
+                  divisions: 7,
                   label: l.percentValue((s.textScale * 100).round()),
                   onChanged: cubit.setTextScale,
                 ),

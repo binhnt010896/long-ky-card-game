@@ -1675,6 +1675,24 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Quân ta hao tổn quá {n} nghìn người'**
   String lossTroopsOver(int n);
+
+  /// Tooltip of the board's zoom-in button.
+  ///
+  /// In vi, this message translates to:
+  /// **'Phóng to bản đồ'**
+  String get boardZoomIn;
+
+  /// Tooltip of the board's zoom-out button.
+  ///
+  /// In vi, this message translates to:
+  /// **'Thu nhỏ bản đồ'**
+  String get boardZoomOut;
+
+  /// Tooltip of the button that shows the whole map again.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xem toàn bản đồ'**
+  String get boardZoomReset;
 }
 
 class _AppLocalizationsDelegate

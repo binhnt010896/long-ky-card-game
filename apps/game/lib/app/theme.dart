@@ -46,18 +46,18 @@ ThemeData buildLongKyTheme() {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        minimumSize: const Size(240, 52),
+        minimumSize: const Size(220, 48),
         backgroundColor: LongKyColors.goldLeaf,
         foregroundColor: LongKyColors.lacquer,
-        textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 18, fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w600),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(240, 52),
+        minimumSize: const Size(220, 48),
         foregroundColor: LongKyColors.ivory,
         side: const BorderSide(color: LongKyColors.goldLeaf),
-        textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 18, fontWeight: FontWeight.w500),
+        textStyle: const TextStyle(fontFamily: longKyFontFamily, fontSize: 16, fontWeight: FontWeight.w500),
       ),
     ),
     dividerTheme: const DividerThemeData(color: LongKyColors.lacquerRaised),

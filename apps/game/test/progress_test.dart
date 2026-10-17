@@ -66,7 +66,7 @@ void main() {
       });
       expect(p.settings.languageCode, 'vi');
       expect(p.settings.musicVolume, 1.0);
-      expect(p.settings.textScale, 1.0);
+      expect(p.settings.textScale, 0.8);
       expect(p.settings.reduceMotion, isFalse);
       expect(p.stars, isEmpty);
     });

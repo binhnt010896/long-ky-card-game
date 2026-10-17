@@ -18,7 +18,7 @@ final class GameSettings {
   /// Vietnamese is the primary language and the default.
   static const String defaultLanguage = 'vi';
   static const List<String> languages = ['vi', 'en'];
-  static const double minTextScale = 1.0;
+  static const double minTextScale = 0.8;
   static const double maxTextScale = 1.5;
 
   final String languageCode;
@@ -26,7 +26,7 @@ final class GameSettings {
   final double voiceVolume;
   final double effectsVolume;
 
-  /// Text size, 100–150%.
+  /// Text size, 80–150% (100% is the default).
   final double textScale;
   final bool reduceMotion;
 

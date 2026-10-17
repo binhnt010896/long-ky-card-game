@@ -1,5 +1,6 @@
 {
   "id": "ch1",
+  "image": "maps/ch1.png",
   "todo": [
     "x, y are placeholders until the painted Chapter 1 map exists.",
     "en node names (Border (toward Yunnan), Thao River, Lô River) drafted from vi, need review."

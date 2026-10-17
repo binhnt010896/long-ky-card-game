@@ -76,6 +76,7 @@ final class TokenView {
     required this.initials,
     required this.troops,
     required this.isKing,
+    this.artPath,
   });
 
   final String id;
@@ -90,6 +91,9 @@ final class TokenView {
   /// In units of 1,000 men.
   final int troops;
   final bool isKing;
+
+  /// The portrait under `assets/images/`, when the content names one.
+  final String? artPath;
 
   Selection get selection => Selection(kind == TokenKind.officer ? SelectionKind.officer : SelectionKind.army, id);
 }
@@ -134,6 +138,7 @@ final class BoardScene {
     required this.arrows,
     required this.badges,
     required this.selection,
+    this.mapImagePath,
   });
 
   final BoardLayout layout;
@@ -143,6 +148,9 @@ final class BoardScene {
   final List<ArrowView> arrows;
   final List<BadgeView> badges;
   final Selection? selection;
+
+  /// The painted map under `assets/images/`, when the content names one.
+  final String? mapImagePath;
 
   NodeView node(String id) => nodes.firstWhere((n) => n.id == id);
 
@@ -191,8 +199,10 @@ final class BoardScene {
     required Size size,
     required String languageCode,
     Selection? selection,
+    double zoom = 1.0,
+    Offset pan = Offset.zero,
   }) {
-    final layout = BoardLayout(ruleset.map, size);
+    final layout = BoardLayout(ruleset.map, size, zoom: zoom, pan: pan);
     final vi = languageCode == 'vi';
     String text(LocalizedText t) => vi ? t.vi : t.en;
 
@@ -237,6 +247,7 @@ final class BoardScene {
           initials: initialsOf(def.name.vi),
           troops: state.officers[officers[i]]!.troops,
           isKing: def.isKing,
+          artPath: def.portraitArt,
         ));
         tokenCenters[officers[i]] = above[i];
       }
@@ -252,6 +263,7 @@ final class BoardScene {
           initials: initialsOf(commander?.name.vi ?? armies[i]),
           troops: a.troops,
           isKing: false,
+          artPath: commander?.portraitArt,
         ));
         tokenCenters[armies[i]] = below[i];
       }
@@ -318,6 +330,7 @@ final class BoardScene {
       arrows: arrows,
       badges: badges,
       selection: selection,
+      mapImagePath: ruleset.map.imagePath,
     );
   }
 
@@ -348,9 +361,9 @@ final class BoardScene {
 
       final c = n.center;
       // Below first, then above, right, left, then the diagonals; each at
-      // three distances, nearest first.
+      // six distances, nearest first.
       final candidates = <Rect>[];
-      for (final extra in [0.0, 0.9, 1.8]) {
+      for (final extra in [0.0, 0.7, 1.4, 2.1, 2.8, 3.5]) {
         for (final angle in [math.pi / 2, -math.pi / 2, 0.0, math.pi, math.pi / 4, 3 * math.pi / 4, -math.pi / 4, -3 * math.pi / 4]) {
           final dir = Offset(math.cos(angle), math.sin(angle));
           final dist = reach(angle) + 3 + extra * size.height;

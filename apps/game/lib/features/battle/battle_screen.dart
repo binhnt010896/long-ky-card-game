@@ -73,6 +73,9 @@ class BattleScreen extends StatefulWidget {
   State<BattleScreen> createState() => _BattleScreenState();
 }
 
+/// The most the text size setting may enlarge the battle HUD on a phone.
+const double compactMaxTextScale = 1.2;
+
 class _BattleScreenState extends State<BattleScreen> {
   final GlobalKey<BattleBoardState> _boardKey = GlobalKey<BattleBoardState>();
   Selection? _selection;
@@ -263,7 +266,14 @@ class _BattleScreenState extends State<BattleScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final mode = BattleLayoutMode.forWidth(constraints.maxWidth);
-          return SafeArea(
+          // On a phone the strip, the hand and the phase button have no room
+          // to grow: past 120% their labels are cut off and collide.
+          final mq = MediaQuery.of(context);
+          return MediaQuery(
+            data: mq.copyWith(
+              textScaler: mode.isCompact ? mq.textScaler.clamp(maxScaleFactor: compactMaxTextScale) : mq.textScaler,
+            ),
+            child: SafeArea(
             child: BlocListener<BattleCubit, BattleViewState>(
               // A player who goes on without reading the rest has seen enough.
               listener: (context, view) {
@@ -299,6 +309,7 @@ class _BattleScreenState extends State<BattleScreen> {
                 ),
               ),
             ),
+            ),
           );
         },
       ),
@@ -317,6 +328,10 @@ class _BattleScreenState extends State<BattleScreen> {
       events: view.lastEvents,
       step: view.step,
       onBusyChanged: (busy) => setState(() => _busy = busy),
+      // The inspector follows the selection, which moves when the map does.
+      onViewChanged: () {
+        if (_selection != null && mounted) setState(() {});
+      },
     ),
   );
 
@@ -597,7 +612,7 @@ class _BattleScreenState extends State<BattleScreen> {
   /// Clear space between the selected node and the panel: the node, the token
   /// fan beside it and a margin.
   double _inspectorGap(Size boardSize) {
-    final layout = BoardLayout(widget.ruleset.map, boardSize);
+    final layout = _boardKey.currentState?.game.scene?.layout ?? BoardLayout(widget.ruleset.map, boardSize);
     return layout.nodeRadius + layout.tokenRadius * 2.5 + 16;
   }
 
@@ -610,7 +625,7 @@ class _BattleScreenState extends State<BattleScreen> {
       SelectionKind.officer => state.officers[s.id]?.nodeId,
       SelectionKind.army => state.armies[s.id]?.nodeId,
     };
-    final layout = BoardLayout(widget.ruleset.map, boardRect.size);
+    final layout = _boardKey.currentState?.game.scene?.layout ?? BoardLayout(widget.ruleset.map, boardRect.size);
     final local = nodeId == null ? boardRect.size.center(Offset.zero) : layout.nodeCenter(nodeId);
     return boardRect.topLeft + local;
   }

@@ -972,4 +972,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String lossTroopsOver(int n) {
     return 'Quân ta hao tổn quá $n nghìn người';
   }
+
+  @override
+  String get boardZoomIn => 'Phóng to bản đồ';
+
+  @override
+  String get boardZoomOut => 'Thu nhỏ bản đồ';
+
+  @override
+  String get boardZoomReset => 'Xem toàn bản đồ';
 }

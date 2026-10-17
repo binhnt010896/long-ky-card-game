@@ -133,6 +133,7 @@ void main() {
         if (c.art != null) c.art!,
       for (final o in content.officers.values) ...[?o.portraitArt, ?o.cardArt],
       for (final c in content.commanders.values) ...[?c.portraitArt, ?c.cardArt],
+      for (final m in content.maps.values) ?m.imagePath,
     };
 
     test('there is art named for every card, officer and Yuan commander', () {

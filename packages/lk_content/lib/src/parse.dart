@@ -342,9 +342,9 @@ final class ContentParser {
       if (edge.from == edge.to) issues.error(Rule.schema, 'loopEdge', e.file, e.path, 'an edge must join two nodes');
       return edge;
     });
-    _image(o, 'image', required: false);
+    final image = _image(o, 'image', required: false);
     _todo(o);
-    return MapDef(id: id, nodes: nodes, edges: edges);
+    return MapDef(id: id, nodes: nodes, edges: edges, imagePath: image);
   }
 
   // -- Missions --------------------------------------------------------------

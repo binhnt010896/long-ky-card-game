@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/painting.dart';
@@ -6,13 +7,17 @@ import 'package:lk_rules/lk_rules.dart';
 
 import '../../../app/theme.dart';
 import 'board_animator.dart';
+import 'board_art.dart';
 import 'board_scene.dart';
 
-/// Draws a [BoardScene]. Everything is vector placeholder art: lacquer
+/// Draws a [BoardScene]. Painted art (the map, officer and commander
+/// portraits) is drawn when it is shipped; everything else, and the stand-in
+/// for any art that is missing, is vector placeholder art: lacquer
 /// medallions, river and road edges, tokens and intent arrows (build-spec
-/// section 6). Painted art replaces it in T-21.
+/// section 6).
 final class BoardPainter {
   final Map<String, TextPainter> _text = {};
+  BoardArtCache? _art;
 
   static const Color _smoke = Color(0xFF6B635C);
 
@@ -27,7 +32,8 @@ final class BoardPainter {
   /// [animator] holds the effects that are playing: tokens that travel are
   /// drawn on their way, intents are hidden until the step has played out,
   /// and battle, forage and defection marks go on top.
-  void paint(Canvas canvas, BoardScene scene, {BoardAnimator? animator}) {
+  void paint(Canvas canvas, BoardScene scene, {BoardAnimator? animator, BoardArtCache? art}) {
+    _art = art;
     final busy = animator != null && animator.isBusy;
     _paintMapPanel(canvas, scene);
     for (final e in scene.edges) {
@@ -75,6 +81,7 @@ final class BoardPainter {
       initials: t.initials,
       troops: t.troops,
       isKing: t.isKing,
+      artPath: t.artPath,
     );
   }
 
@@ -100,13 +107,13 @@ final class BoardPainter {
           r,
           Paint()
             ..style = PaintingStyle.stroke
-            ..strokeWidth = 4 * (1 - p) + 1
+            ..strokeWidth = 3 * (1 - p) + 1
             ..color = color.withValues(alpha: 1 - p),
         );
         // Crossed blades.
         final k = n.radius * 0.8 * (0.6 + 0.4 * math.sin(math.pi * p));
         final blade = Paint()
-          ..strokeWidth = 3.5
+          ..strokeWidth = 2.5
           ..strokeCap = StrokeCap.round
           ..color = LongKyColors.ivory.withValues(alpha: 1 - 0.6 * p);
         canvas.drawLine(n.center + Offset(-k, -k), n.center + Offset(k, k), blade);
@@ -120,7 +127,7 @@ final class BoardPainter {
           n.radius * (2.2 - 1.2 * p),
           Paint()
             ..style = PaintingStyle.stroke
-            ..strokeWidth = 3
+            ..strokeWidth = 2
             ..color = LongKyColors.goldLeaf.withValues(alpha: 0.2 + 0.8 * p),
         );
       case DefectEffect():
@@ -136,11 +143,18 @@ final class BoardPainter {
   void _paintMapPanel(Canvas canvas, BoardScene scene) {
     final r = RRect.fromRectAndRadius(scene.layout.mapRect.inflate(6), const Radius.circular(10));
     canvas.drawRRect(r, Paint()..color = LongKyColors.lacquerRaised);
+    final map = _art?.image(scene.mapImagePath);
+    if (map != null) {
+      canvas.save();
+      canvas.clipRRect(r);
+      _drawCover(canvas, map, scene.layout.mapRect.inflate(6), Paint()..filterQuality = FilterQuality.medium);
+      canvas.restore();
+    }
     canvas.drawRRect(
       r,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5
+        ..strokeWidth = 1
         ..color = LongKyColors.goldLeaf.withValues(alpha: 0.35),
     );
   }
@@ -151,7 +165,7 @@ final class BoardPainter {
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 6
+          ..strokeWidth = 4
           ..strokeCap = StrokeCap.round
           ..color = LongKyColors.riverBlue,
       );
@@ -159,7 +173,7 @@ final class BoardPainter {
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 1.5
+          ..strokeWidth = 1
           ..color = LongKyColors.goldLeaf.withValues(alpha: 0.7),
       );
     } else {
@@ -168,7 +182,7 @@ final class BoardPainter {
         e.a,
         e.b,
         Paint()
-          ..strokeWidth = 2.5
+          ..strokeWidth = 1.8
           ..strokeCap = StrokeCap.round
           ..color = LongKyColors.ivory.withValues(alpha: 0.55),
         dash: 9,
@@ -188,7 +202,7 @@ final class BoardPainter {
         p,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.5
+          ..strokeWidth = 1.8
           ..color = LongKyColors.goldLeaf,
       );
     }
@@ -222,7 +236,7 @@ final class BoardPainter {
       n.radius,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = math.max(2.5, n.radius * 0.14)
+        ..strokeWidth = math.max(1.5, n.radius * 0.07)
         ..color = ring,
     );
     if (n.isCapital) {
@@ -231,7 +245,7 @@ final class BoardPainter {
         n.radius + 4,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5
+          ..strokeWidth = 1
           ..color = ring,
       );
     }
@@ -253,7 +267,7 @@ final class BoardPainter {
   void _terrainGlyph(Canvas canvas, Offset c, double s, Terrain t, Color color) {
     final stroke = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.8
+      ..strokeWidth = 1.3
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..color = color;
@@ -300,7 +314,7 @@ final class BoardPainter {
   void _smokeMark(Canvas canvas, NodeView n) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
+      ..strokeWidth = 1.4
       ..strokeCap = StrokeCap.round
       ..color = _smoke;
     for (final dx in [-0.4, 0.0, 0.4]) {
@@ -314,31 +328,60 @@ final class BoardPainter {
 
   // -- Tokens ------------------------------------------------------------------
 
+  /// Draws [image] to fill [dst], cropping the overflow (like BoxFit.cover).
+  /// The crop favours the upper part of the picture, where a portrait's face is.
+  void _drawCover(Canvas canvas, ui.Image image, Rect dst, Paint paint) {
+    final iw = image.width.toDouble();
+    final ih = image.height.toDouble();
+    final scale = math.max(dst.width / iw, dst.height / ih);
+    final sw = dst.width / scale;
+    final sh = dst.height / scale;
+    final top = (ih * 0.38 - sh / 2).clamp(0.0, math.max(0.0, ih - sh)).toDouble();
+    final left = (iw - sw) / 2;
+    canvas.drawImageRect(image, Rect.fromLTWH(left, top, sw, sh), dst, paint);
+  }
+
   void _paintToken(Canvas canvas, BoardScene scene, TokenView t) {
     final r = t.radius;
+    final portrait = _art?.image(t.artPath);
     if (t.kind == TokenKind.officer) {
       canvas.drawCircle(t.center, r, Paint()..color = LongKyColors.lacquerRaised);
+      if (portrait != null) {
+        canvas.save();
+        canvas.clipPath(Path()..addOval(Rect.fromCircle(center: t.center, radius: r - 0.5)));
+        _drawCover(canvas, portrait, Rect.fromCircle(center: t.center, radius: r), Paint()..filterQuality = FilterQuality.medium);
+        canvas.restore();
+      }
       canvas.drawCircle(
         t.center,
         r,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = t.isKing ? 3.5 : 2
+          ..strokeWidth = t.isKing ? 2.2 : 1.4
           ..color = LongKyColors.goldLeaf,
       );
     } else {
       final rect = RRect.fromRectAndRadius(Rect.fromCircle(center: t.center, radius: r), Radius.circular(r * 0.35));
       canvas.drawRRect(rect, Paint()..color = LongKyColors.cinnabar);
+      if (portrait != null) {
+        canvas.save();
+        canvas.clipRRect(rect);
+        _drawCover(canvas, portrait, rect.outerRect, Paint()..filterQuality = FilterQuality.medium);
+        canvas.restore();
+      }
       canvas.drawRRect(
         rect,
         Paint()
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2
+          ..strokeWidth = 1.4
           ..color = LongKyColors.ivory.withValues(alpha: 0.8),
       );
     }
-    final initials = _label(t.initials, math.max(9.0, r * 0.85), LongKyColors.ivory, bold: true, shadow: false);
-    initials.paint(canvas, t.center - Offset(initials.width / 2, initials.height / 2));
+    // A portrait says who it is; without one, the initials do.
+    if (portrait == null) {
+      final initials = _label(t.initials, math.max(9.0, r * 0.85), LongKyColors.ivory, bold: true, shadow: false);
+      initials.paint(canvas, t.center - Offset(initials.width / 2, initials.height / 2));
+    }
 
     // Troops in units of 1,000, in a small badge at the lower right.
     final bc = t.center + Offset(r * 0.78, r * 0.78);
@@ -354,7 +397,7 @@ final class BoardPainter {
     final color = intentColor(a.intent);
     final alpha = a.predicted ? 0.75 : 1.0;
     final paint = Paint()
-      ..strokeWidth = a.intent == IntentKind.assault ? 5 : 3.5
+      ..strokeWidth = a.intent == IntentKind.assault ? 3.5 : 2.5
       ..strokeCap = StrokeCap.round
       ..color = color.withValues(alpha: alpha);
     final d = a.end - a.start;
@@ -390,7 +433,7 @@ final class BoardPainter {
     canvas.drawCircle(c, r + 2, Paint()..color = LongKyColors.lacquer);
     final ring = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
+      ..strokeWidth = 1.4
       ..color = color;
     if (predicted) {
       for (var i = 0; i < 8; i += 2) {
@@ -401,7 +444,7 @@ final class BoardPainter {
     }
     final line = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.2
+      ..strokeWidth = 1.6
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..color = color;
@@ -450,7 +493,7 @@ final class BoardPainter {
       radius,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 3
+        ..strokeWidth = 2
         ..color = LongKyColors.ivory,
     );
     canvas.drawCircle(
@@ -458,7 +501,7 @@ final class BoardPainter {
       radius + 3,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5
+        ..strokeWidth = 1
         ..color = LongKyColors.goldLeaf,
     );
   }

@@ -505,5 +505,11 @@
   "briefingLoss": "Thua nếu",
   "@briefingLoss": {"description": "Briefing: heading of the extra ways to lose a mission."},
   "lossTroopsOver": "Quân ta hao tổn quá {n} nghìn người",
-  "@lossTroopsOver": {"description": "A mission that is lost when the troops lost pass a limit: used in the briefing and on the Result screen.", "placeholders": {"n": {"type": "int"}}}
+  "@lossTroopsOver": {"description": "A mission that is lost when the troops lost pass a limit: used in the briefing and on the Result screen.", "placeholders": {"n": {"type": "int"}}},
+  "boardZoomIn": "Phóng to bản đồ",
+  "@boardZoomIn": {"description": "Tooltip of the board's zoom-in button."},
+  "boardZoomOut": "Thu nhỏ bản đồ",
+  "@boardZoomOut": {"description": "Tooltip of the board's zoom-out button."},
+  "boardZoomReset": "Xem toàn bản đồ",
+  "@boardZoomReset": {"description": "Tooltip of the button that shows the whole map again."}
 }

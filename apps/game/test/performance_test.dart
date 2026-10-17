@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lk_rules/lk_rules.dart';
 import 'package:long_ky_game/features/battle/board/board_animator.dart';
 import 'package:long_ky_game/features/battle/board/board_painter.dart';
-import 'package:long_ky_game/features/battle/board/board_scene.dart';
 
 import 'battle/board_support.dart';
 

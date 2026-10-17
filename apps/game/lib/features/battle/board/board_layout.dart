@@ -10,8 +10,8 @@ import 'package:lk_rules/lk_rules.dart';
 /// rectangle with the painted map's aspect ratio (16:9 until the painted
 /// map exists), centred in the viewport.
 final class BoardLayout {
-  BoardLayout(this.map, this.size)
-      : mapRect = _fit(size, mapAspect),
+  BoardLayout(this.map, this.size, {this.zoom = 1.0, this.pan = Offset.zero})
+      : mapRect = _zoomed(size, zoom, pan),
         _nodes = {for (final n in map.nodes) n.id: n} {
     unit = mapRect.height;
     // Medallions never overlap: no larger than 45% of the closest pair.
@@ -22,7 +22,7 @@ final class BoardLayout {
       }
     }
     nodeRadius = math.min((unit * 0.055).clamp(minNodeRadius, maxNodeRadius), closest * 0.45).toDouble();
-    tokenRadius = nodeRadius * 0.72;
+    tokenRadius = math.max(nodeRadius * 0.72, minTokenRadius);
   }
 
   /// Placeholder until the painted Chapter 1 map is supplied.
@@ -30,6 +30,15 @@ final class BoardLayout {
   static const double padding = 12;
   static const double minNodeRadius = 12;
   static const double maxNodeRadius = 40;
+  static const double minTokenRadius = 11;
+
+  /// Zoom limits: 1 shows the whole map; 4 is close enough to tell apart
+  /// every officer standing at one node.
+  static const double minZoom = 1;
+  static const double maxZoom = 4;
+
+  /// How far past the map edge the view may be panned.
+  static const double panMargin = 24;
 
   /// Touch targets are at least 48 logical pixels (build-spec section 6).
   static const double minTouchRadius = 24;
@@ -39,6 +48,11 @@ final class BoardLayout {
 
   final MapDef map;
   final Size size;
+
+  /// 1 shows the whole map; larger values magnify it about the viewport
+  /// centre, then [pan] moves it.
+  final double zoom;
+  final Offset pan;
   final Rect mapRect;
   final Map<String, NodeDef> _nodes;
   late final double unit;
@@ -47,6 +61,34 @@ final class BoardLayout {
 
   /// Width of the viewport counts as compact below 900 logical pixels.
   bool get isCompact => size.width < 900;
+
+  static Rect _zoomed(Size size, double zoom, Offset pan) {
+    final base = _fit(size, mapAspect);
+    return Rect.fromCenter(
+      center: size.center(Offset.zero) + pan,
+      width: base.width * zoom,
+      height: base.height * zoom,
+    );
+  }
+
+  /// The largest pan that keeps the map in view at [zoom]: none while the
+  /// map fits, otherwise up to its edge plus [panMargin].
+  static Offset clampPan(Size size, double zoom, Offset pan) {
+    if (zoom <= minZoom) return Offset.zero;
+    final base = _fit(size, mapAspect);
+    double limit(double scaled, double view) => math.max(0.0, (scaled - view) / 2 + panMargin);
+    final maxX = limit(base.width * zoom, size.width);
+    final maxY = limit(base.height * zoom, size.height);
+    return Offset(pan.dx.clamp(-maxX, maxX).toDouble(), pan.dy.clamp(-maxY, maxY).toDouble());
+  }
+
+  /// The pan that keeps the map point under [focal] still when the zoom
+  /// goes from [zoom] to [newZoom].
+  static Offset panForZoom(Size size, double zoom, Offset pan, double newZoom, Offset focal) {
+    final c = size.center(Offset.zero);
+    final d = focal - c;
+    return d - (d - pan) * (newZoom / zoom);
+  }
 
   static Rect _fit(Size size, double aspect) {
     final w = math.max(size.width - 2 * padding, 1);
@@ -158,7 +200,7 @@ final class BoardLayout {
   }
 
   /// Font size of node name labels.
-  double get labelFontSize => (unit * 0.028).clamp(11.0, 18.0).toDouble();
+  double get labelFontSize => (unit * 0.026).clamp(10.0, 14.0).toDouble();
 
   /// Rough size of a label before it is painted (Be Vietnam Pro averages
   /// about 0.56 em per letter in semibold).
