@@ -343,7 +343,7 @@ class _BattleScreenState extends State<BattleScreen> {
   /// motion, and not for the cards the mission plays by itself).
   void _maybeCutscene(BattleViewState view) {
     if (view.step == _cutsceneStep || MediaQuery.disableAnimationsOf(context)) return;
-    final callout = calloutFor(widget.ruleset, view.state, view.lastEvents);
+    final callout = calloutFor(widget.ruleset, view.state, view.lastEvents, previous: view.previous);
     if (callout != null && widget.ruleset.officers.containsKey(callout.officerId)) {
       _cutsceneStep = view.step;
       setState(() => _callout = callout);

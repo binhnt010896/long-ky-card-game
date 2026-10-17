@@ -3,9 +3,19 @@ import 'package:lk_rules/lk_rules.dart';
 
 /// What the battle screen shows: the game state and the events so far.
 final class BattleViewState {
-  const BattleViewState({required this.state, this.events = const [], this.lastEvents = const [], this.step = 0});
+  const BattleViewState({
+    required this.state,
+    this.events = const [],
+    this.lastEvents = const [],
+    this.step = 0,
+    this.previous,
+  });
 
   final GameState state;
+
+  /// The state before the latest step, so that what the step did can be
+  /// judged by what was set up (for example the orders of a resolved turn).
+  final GameState? previous;
 
   /// Every event since the mission started, oldest first.
   final List<GameEvent> events;
@@ -111,6 +121,7 @@ class BattleCubit extends Cubit<BattleViewState> {
       events: [...state.events, ...r.events],
       lastEvents: r.events,
       step: state.step + 1,
+      previous: game,
     );
     emit(next);
     onChanged?.call(next);

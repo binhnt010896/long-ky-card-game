@@ -2,6 +2,7 @@ import 'package:lk_rules/lk_rules.dart';
 
 import '../../audio/audio_service.dart';
 import 'battle_cubit.dart';
+import 'turn_orders.dart';
 
 /// The effect to play for what happened in one step, or null for none.
 /// Effects share a channel, so one step plays only its most important sound
@@ -60,13 +61,13 @@ class BattleAudio {
     final events = view.lastEvents;
     final effect = effectFor(events);
     if (effect != null) audio.playEffect(effect);
-    final voice = _voiceFor(events);
+    final voice = _voiceFor(events, view.previous);
     if (voice != null) audio.playVoice(voice);
   }
 
   /// The voice line of the step, if it has one: how the mission or free play
   /// ended, an officer's skill, or the king's shout when the turn is resolved.
-  String? _voiceFor(List<GameEvent> events) {
+  String? _voiceFor(List<GameEvent> events, GameState? previous) {
     bool? won;
     for (final e in events) {
       if (e is MissionEnded) won = e.outcome == Outcome.won;
@@ -84,7 +85,9 @@ class BattleAudio {
         if (audio.hasVoice(id)) return id;
       }
     }
-    if (events.any((e) => e is PhaseChanged && e.phase == Phase.resolution)) {
+    // The shout is for a turn in which someone advances or attacks.
+    final resolving = events.any((e) => e is PhaseChanged && e.phase == Phase.resolution);
+    if (resolving && previous != null && turnAdvances(previous)) {
       _endTurns++;
       final id = _endTurns.isOdd ? AudioPaths.endTurn : AudioPaths.endTurnAlt;
       if (audio.hasVoice(id)) return id;

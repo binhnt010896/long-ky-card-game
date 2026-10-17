@@ -408,18 +408,26 @@ void main() {
         for (final p in b.played)
           if (p.channel == AudioChannel.voice) p.path,
       ];
-      void step(List<GameEvent> events) =>
-          sounds.onStep(BattleViewState(state: state, lastEvents: events));
+      GameState ordered(Order order) => state.copyWith(
+        officers: {...state.officers, 'tran-thai-tong': state.officers['tran-thai-tong']!.copyWith(order: order)},
+      );
+      final advancing = ordered(Order.move('song-lo'));
+      final quiet = ordered(Order.hold);
+      void step(List<GameEvent> events, {GameState? before}) =>
+          sounds.onStep(BattleViewState(state: state, lastEvents: events, previous: before));
 
-      step(const [PhaseChanged(Phase.resolution)]);
-      step(const [PhaseChanged(Phase.resolution)]);
+      step(const [PhaseChanged(Phase.resolution)], before: advancing);
+      step(const [PhaseChanged(Phase.resolution)], before: quiet);
+      step(const [PhaseChanged(Phase.resolution)], before: ordered(Order.raid('mong-co-1258')));
+      step(const [PhaseChanged(Phase.resolution)], before: advancing);
       step(const [PhaseChanged(Phase.resolution)]);
       step(const [SkillUsed('tran-thu-do', 'dau-than-chua-roi')]);
       step(const [SkillUsed('tran-khanh-du', 'x')]);
-      step(const [PhaseChanged(Phase.resolution), MissionEnded(Outcome.won)]);
+      step(const [PhaseChanged(Phase.resolution), MissionEnded(Outcome.won)], before: advancing);
       step(const [MissionEnded(Outcome.lost)]);
       step(const [FreePlayEnded(playerWon: true)]);
       await Future<void>.delayed(Duration.zero);
+      // A turn with nobody advancing or attacking (or with no orders to judge) is silent.
       expect(voices(), [
         'voice/end-turn.mp3',
         'voice/end-turn-2.mp3',

@@ -8,6 +8,7 @@ import '../../../app/theme.dart';
 import '../../../art/art_image.dart';
 import '../../../art/art_library.dart';
 import '../labels.dart';
+import '../turn_orders.dart';
 
 /// Why an officer is shown: the king's shout when the turn is resolved, or
 /// an officer using an activated skill.
@@ -22,18 +23,17 @@ final class Callout {
 }
 
 /// The callout for the events of one step, or null: the king when the turn is
-/// resolved (Orders → Resolution), an officer when they use a skill. Nothing
+/// resolved (Orders → Resolution) with at least one officer advancing or
+/// attacking, an officer when they use a skill. Nothing
 /// when the mission ends in that step: the ending is what the player sees.
-Callout? calloutFor(
-  Ruleset ruleset,
-  GameState state,
-  Iterable<GameEvent> events,
-) {
+Callout? calloutFor(Ruleset ruleset, GameState state, Iterable<GameEvent> events, {GameState? previous}) {
   if (events.any((e) => e is MissionEnded || e is FreePlayEnded)) return null;
   for (final e in events) {
     if (e is SkillUsed) return Callout(e.officerId, CalloutKind.skill);
   }
-  if (events.any((e) => e is PhaseChanged && e.phase == Phase.resolution)) {
+  // The king shouts only for a turn in which someone advances or attacks.
+  final resolving = events.any((e) => e is PhaseChanged && e.phase == Phase.resolution);
+  if (resolving && previous != null && turnAdvances(previous)) {
     for (final entry in ruleset.officers.entries) {
       final o = state.officers[entry.key];
       if (entry.value.isKing && o != null && o.status == OfficerStatus.active) {
