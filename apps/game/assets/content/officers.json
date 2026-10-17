@@ -164,11 +164,11 @@
     "loyaltyLocked": false,
     "isKing": false,
     "skill": {
-      "id": "nhap-tong",
+      "id": "thanh-da",
       "kind": "activated",
       "usesPerMission": 2,
       "target": "ownNode",
-      "name": { "vi": "Nhập Tống", "en": "Nhập Tống" },
+      "name": { "vi": "Thanh dã", "en": "Clearing the Fields" },
       "text": {
         "vi": "Sơ tán một nút đang giữ mà không tốn Lòng dân, sau đó Triều đình −1.",
         "en": "Evacuate a node you hold at no Support cost, then Court −1."
@@ -183,7 +183,8 @@
     "sourceRefs": ["znews-10-cau-noi"],
     "todo": [
       "title: not given in build-spec section 5.",
-      "en text drafted from vi, needs review."
+      "en text drafted from vi, needs review.",
+      "skill renamed from 'Nhập Tống' to 'Thanh dã' at the owner's request: Nhập Tống means fleeing to the Song court for help, a cowardly act that should not be a skill. The effect is unchanged (evacuate a node, Court −1). 'Thanh dã' (clearing the fields so the invader finds nothing) is the name of the strategy the card 'Vườn không nhà trống' stands for; the history reviewer must confirm the name, and a source for the skill itself is still needed (sourceRefs cites the article about his saying)."
     ]
   }
 ]

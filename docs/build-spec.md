@@ -423,7 +423,7 @@ Node `riceStock` starts equal to `riceYield × 3`.
 | `le-phu-tran` | none yet | 6/7/6/6 | 9, locked | passive `shieldKing` | none |
 | `tran-quoc-tuan` | `tran-hung-dao` | 9/8/10/7 | 10, locked | passive `borderWatch` | `troopCap` 6 |
 | `tran-khanh-du` | `tran-khanh-du` | 7/9/7/4 | 8 | passive `raider` | none in Chapter 1 |
-| `tran-nhat-hieu` | none yet | 4/3/6/6 | 5 | activated `nhap-tong`: evacuate own node at no Support cost, then Court −1; twice per mission | none |
+| `tran-nhat-hieu` | none yet | 4/3/6/6 | 5 | activated `thanh-da` (was `nhap-tong`, renamed: Nhập Tống means fleeing to Song): evacuate own node at no Support cost, then Court −1; twice per mission | none |
 
 Lê Phụ Trần, Trần Nhật Hiệu and Ngột Lương Hợp Thai are not in Long Ký's `people.json` yet; `longKyPersonId` is `null` until they are added there.
 

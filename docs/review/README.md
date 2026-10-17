@@ -8,7 +8,7 @@ debrief and tutorial steps) with:
 - `sourceRefs` and `sources`: the citations of that item (ids from `sources.json`, and the work they name),
 - `todo`: the open notes of the item, e.g. "en text drafted from vi, needs review".
 
-Content hash when exported: `2da155e80f9fa507`. Regenerate after any content change:
+Content hash when exported: `d4197cf0ea5c4c3c`. Regenerate after any content change:
 
 ```bash
 dart run packages/lk_content/bin/export_text.dart --out docs/review/content-text.csv
