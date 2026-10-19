@@ -176,7 +176,7 @@ class _BattlePageState extends State<BattlePage> {
     _soundSub?.cancel();
     final audio = _audio;
     if (audio != null) {
-      final sounds = BattleAudio(audio, missionId: widget.missionId, chapter: ruleset.mission.chapter);
+      final sounds = BattleAudio(audio, missionId: widget.missionId, chapter: ruleset.mission.chapter, ruleset: ruleset);
       _sounds = sounds;
       sounds.start();
       _soundSub = cubit.stream.listen(sounds.onStep);

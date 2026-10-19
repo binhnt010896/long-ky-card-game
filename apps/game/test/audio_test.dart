@@ -348,7 +348,7 @@ void main() {
       final sounds = BattleAudio(
         audio,
         missionId: 'ch1_m2',
-        chapter: rules.mission.chapter,
+        chapter: rules.mission.chapter, ruleset: rules,
       );
       final cubit = BattleCubit(GameEngine(rules), seed: 1);
       addTearDown(cubit.close);
@@ -379,7 +379,7 @@ void main() {
       final sounds = BattleAudio(
         serviceWith(b, {}),
         missionId: 'ch1_m2',
-        chapter: 1,
+        chapter: 1, ruleset: rules,
       );
       final cubit = BattleCubit(GameEngine(rules), seed: 1);
       addTearDown(cubit.close);
@@ -402,7 +402,7 @@ void main() {
         'voice/defeated.mp3',
         'voice/ch1_m2_debrief.mp3',
       });
-      final sounds = BattleAudio(audio, missionId: 'ch1_m2', chapter: 1);
+      final sounds = BattleAudio(audio, missionId: 'ch1_m2', chapter: 1, ruleset: rules);
       final state = GameEngine(rules).newGame(1).state;
       List<String> voices() => [
         for (final p in b.played)
@@ -411,13 +411,15 @@ void main() {
       GameState ordered(Order order) => state.copyWith(
         officers: {...state.officers, 'tran-thai-tong': state.officers['tran-thai-tong']!.copyWith(order: order)},
       );
-      final advancing = ordered(Order.move('song-lo'));
+      final advancing = ordered(Order.move(state.armies.values.first.nodeId));
+      final retreating = ordered(Order.move('thang-long'));
       final quiet = ordered(Order.hold);
       void step(List<GameEvent> events, {GameState? before}) =>
           sounds.onStep(BattleViewState(state: state, lastEvents: events, previous: before));
 
       step(const [PhaseChanged(Phase.resolution)], before: advancing);
       step(const [PhaseChanged(Phase.resolution)], before: quiet);
+      step(const [PhaseChanged(Phase.resolution)], before: retreating);
       step(const [PhaseChanged(Phase.resolution)], before: ordered(Order.raid('mong-co-1258')));
       step(const [PhaseChanged(Phase.resolution)], before: advancing);
       step(const [PhaseChanged(Phase.resolution)]);
@@ -427,7 +429,7 @@ void main() {
       step(const [MissionEnded(Outcome.lost)]);
       step(const [FreePlayEnded(playerWon: true)]);
       await Future<void>.delayed(Duration.zero);
-      // A turn with nobody advancing or attacking (or with no orders to judge) is silent.
+      // A turn with nobody advancing or attacking (holding, retreating, or no orders to judge) is silent.
       expect(voices(), [
         'voice/end-turn.mp3',
         'voice/end-turn-2.mp3',
@@ -444,7 +446,7 @@ void main() {
       final sounds = BattleAudio(
         serviceWith(b, assets),
         missionId: 'ch1_m2',
-        chapter: 1,
+        chapter: 1, ruleset: rules,
       );
       sounds.onStep(
         BattleViewState(

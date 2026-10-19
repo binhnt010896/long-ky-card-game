@@ -44,11 +44,14 @@ String? effectFor(Iterable<GameEvent> events) {
 /// Plays the battle's music, its effects and the debrief narration. Safe to
 /// use with a silent [AudioService]: nothing plays and nothing fails.
 class BattleAudio {
-  BattleAudio(this.audio, {required this.missionId, required this.chapter});
+  BattleAudio(this.audio, {required this.missionId, required this.chapter, required this.ruleset});
 
   final AudioService audio;
   final String missionId;
   final int chapter;
+
+  /// For judging whether a resolved turn advances (see `turnAdvances`).
+  final Ruleset ruleset;
 
   /// The battle's music starts, replacing the menu music, and plays throughout.
   Future<void> start() => audio.playMusic(AudioPaths.battleMusic);
@@ -87,7 +90,7 @@ class BattleAudio {
     }
     // The shout is for a turn in which someone advances or attacks.
     final resolving = events.any((e) => e is PhaseChanged && e.phase == Phase.resolution);
-    if (resolving && previous != null && turnAdvances(previous)) {
+    if (resolving && previous != null && turnAdvances(ruleset, previous)) {
       _endTurns++;
       final id = _endTurns.isOdd ? AudioPaths.endTurn : AudioPaths.endTurnAlt;
       if (audio.hasVoice(id)) return id;
